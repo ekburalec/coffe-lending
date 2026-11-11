@@ -1,0 +1,39 @@
+/* Первый экран: оффер + CTA */
+
+.hero {
+    padding-block: var(--space-8) var(--space-9);
+}
+
+.hero__eyebrow {
+    margin-bottom: var(--space-4);
+    color: var(--page-muted-color);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.hero__title {
+    max-width: 16ch;
+    font-size: var(--text-h1);
+    line-height: var(--leading-tight);
+}
+
+.hero__lead {
+    max-width: var(--text-measure);
+    margin-top: var(--space-5);
+    font-size: var(--text-lead);
+}
+
+.hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+}
+
+@media (min-width: 960px) {
+    .hero {
+        padding-block: var(--space-9) var(--space-10);
+    }
+}

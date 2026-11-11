@@ -1,0 +1,35 @@
+/* Всплывающие уведомления (assets/js/modules/notify.js) */
+
+.notify-container {
+    position: fixed;
+    right: var(--space-4);
+    bottom: var(--space-4);
+    left: var(--space-4);
+    z-index: var(--z-notify);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2);
+    pointer-events: none;
+}
+
+.notify {
+    max-width: 420px;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    background-color: var(--notify-bg);
+    color: var(--notify-color);
+    box-shadow: var(--shadow-soft);
+    font-size: var(--text-small);
+    pointer-events: auto;
+}
+
+.notify--success {
+    background-color: var(--notify-success-bg);
+    color: var(--notify-success-color);
+}
+
+.notify--error {
+    background-color: var(--notify-error-bg);
+    color: var(--notify-error-color);
+}

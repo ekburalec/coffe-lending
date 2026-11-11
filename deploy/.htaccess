@@ -1,0 +1,46 @@
+# Копируется в корень dist/ скриптом bin/build-dist.php. Правила — docs/specs/deploy.md.
+# Цель: после выгрузки посетители сразу видят новую версию, статика не залипает в кеше.
+
+AddDefaultCharset UTF-8
+Options -Indexes
+
+# MIME-типы, которых может не быть в конфиге хостинга
+<IfModule mod_mime.c>
+    AddType image/webp .webp
+    AddType image/avif .avif
+    AddType image/svg+xml .svg
+    AddType font/woff2 .woff2
+    AddType text/javascript .js
+    AddType application/manifest+json .webmanifest
+</IfModule>
+
+# Сжатие текстовых форматов
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml text/plain text/xml application/xml
+</IfModule>
+
+# Отключаем долгий кеш хостинга по умолчанию (если включён mod_expires)
+<IfModule mod_expires.c>
+    ExpiresActive Off
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Убираем суффикс -gzip из ETag, чтобы ревалидация (304) работала со сжатием
+    RequestHeader edit "If-None-Match" "^\"(.*)-gzip\"$" "\"$1\""
+    Header edit "ETag" "^\"(.*)-gzip\"$" "\"$1\""
+
+    # HTML: браузер каждый раз сверяется с сервером — новые ссылки ?v= подхватываются сразу
+    <FilesMatch "\.(html?)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+
+    # CSS и JS: подключаются с ?v=хэш, при изменении ссылка меняется
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=86400"
+    </FilesMatch>
+
+    # Картинки, иконки, шрифты: без ?v=, поэтому кеш короткий и с перепроверкой
+    <FilesMatch "\.(webp|avif|png|jpe?g|gif|svg|ico|woff2?|webmanifest)$">
+        Header set Cache-Control "public, max-age=86400, must-revalidate"
+    </FilesMatch>
+</IfModule>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <!-- Заглушка шаблона: замените на знак проекта (docs/modules/web-app.md) -->
+    <rect width="512" height="512" rx="96" fill="#2F5BEA"/>
+    <rect x="136" y="136" width="240" height="240" rx="48" fill="none" stroke="#FFFFFF" stroke-width="40"/>
+</svg>

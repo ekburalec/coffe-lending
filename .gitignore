@@ -1,0 +1,6 @@
+# Служебные файлы macOS
+.DS_Store
+
+# Дистрибутив для хостинга — собирается php bin/build-dist.php
+/dist/
+/*-dist-*.zip

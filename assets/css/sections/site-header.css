@@ -1,0 +1,86 @@
+/* Шапка сайта: логотип, навигация по разделам, главный CTA */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    border-bottom: 1px solid var(--site-header-border);
+    background-color: var(--site-header-bg);
+    backdrop-filter: blur(12px);
+}
+
+.site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    min-height: 64px;
+}
+
+.site-header__logo {
+    color: var(--site-header-logo-color);
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: var(--weight-heading);
+    text-decoration: none;
+}
+
+.site-header__nav {
+    display: none;
+}
+
+.site-header__list {
+    display: flex;
+    gap: var(--space-5);
+}
+
+.site-header__link {
+    color: var(--site-header-link-color);
+    font-weight: var(--weight-medium);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.site-header__link:hover {
+    color: var(--site-header-link-hover-color);
+}
+
+.site-header__logo,
+.site-header__cta {
+    white-space: nowrap;
+}
+
+/* Длинное название на узком экране обрезается многоточием, кнопка не сжимается */
+.site-header__logo {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.site-header__cta {
+    flex-shrink: 0;
+    min-height: 40px;
+    padding-inline: var(--space-5);
+}
+
+@media (min-width: 960px) {
+    .site-header__nav {
+        display: block;
+    }
+}
+
+@media (max-width: 639px) {
+    .site-header__inner {
+        gap: var(--space-3);
+    }
+
+    .site-header__logo {
+        font-size: 1rem;
+    }
+
+    .site-header__cta {
+        width: auto;
+        padding-inline: var(--space-4);
+        font-size: var(--text-small);
+    }
+}

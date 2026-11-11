@@ -1,0 +1,75 @@
+/* Кнопки и ссылки-кнопки: primary (заливка) и secondary (обводка). */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 48px;
+    padding: var(--space-3) var(--space-6);
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-size: var(--text-button);
+    font-weight: var(--weight-semibold);
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+.btn:disabled,
+.btn[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn[aria-busy='true'] {
+    cursor: progress;
+}
+
+/* --- Primary --- */
+
+.btn--primary {
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-border);
+    color: var(--btn-primary-color);
+}
+
+.btn--primary:hover {
+    background-color: var(--btn-primary-hover-bg);
+    border-color: var(--btn-primary-hover-border);
+    color: var(--btn-primary-hover-color);
+}
+
+.btn--primary:active {
+    background-color: var(--btn-primary-active-bg);
+}
+
+/* --- Secondary --- */
+
+.btn--secondary {
+    background-color: var(--btn-secondary-bg);
+    border-color: var(--btn-secondary-border);
+    color: var(--btn-secondary-color);
+}
+
+.btn--secondary:hover {
+    background-color: var(--btn-secondary-hover-bg);
+    border-color: var(--btn-secondary-hover-border);
+    color: var(--btn-secondary-hover-color);
+}
+
+.btn--secondary:active {
+    background-color: var(--btn-secondary-active-bg);
+}
+
+@media (max-width: 639px) {
+    .btn {
+        width: 100%;
+    }
+}

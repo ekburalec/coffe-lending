@@ -1,0 +1,30 @@
+/* Секция страницы: вертикальные отступы и фон.
+   Модификаторы задают контекст; тёмная секция — класс dark-mode на самой секции
+   (docs/specs/theming.md). */
+
+.section {
+    padding-block: var(--space-8);
+    background-color: var(--section-bg);
+    color: var(--page-color);
+}
+
+.section--surface {
+    background-color: var(--section-surface-bg);
+}
+
+.section__title {
+    max-width: 20ch;
+    margin-bottom: var(--space-5);
+    font-size: var(--text-h2);
+}
+
+.section__lead {
+    max-width: var(--text-measure);
+    font-size: var(--text-lead);
+}
+
+@media (min-width: 960px) {
+    .section {
+        padding-block: var(--space-9);
+    }
+}

@@ -1,0 +1,15 @@
+/* Контейнер: ширина контента и боковые поля */
+
+.container {
+    width: 100%;
+    max-width: calc(var(--container-width) + 2 * var(--container-padding));
+    margin-inline: auto;
+    padding-inline: var(--container-padding);
+}
+
+@media (min-width: 640px) {
+    .container {
+        max-width: calc(var(--container-width) + 2 * var(--container-padding-wide));
+        padding-inline: var(--container-padding-wide);
+    }
+}

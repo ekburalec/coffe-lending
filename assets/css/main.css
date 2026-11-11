@@ -1,0 +1,21 @@
+/* Точка входа стилей. Новый файл подключается только здесь. */
+
+/* base */
+@import url('./base/vars.css');
+@import url('./base/reset.css');
+@import url('./base/base.css');
+
+/* blocks */
+@import url('./blocks/container.css');
+@import url('./blocks/skip-link.css');
+@import url('./blocks/btn.css');
+@import url('./blocks/section.css');
+@import url('./blocks/notify.css');
+
+/* sections */
+@import url('./sections/site-header.css');
+@import url('./sections/hero.css');
+@import url('./sections/site-footer.css');
+
+/* utils */
+@import url('./utils/sr-only.css');

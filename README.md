@@ -14,7 +14,7 @@ AI-агентов. Правила работы — [AGENTS.md](AGENTS.md), до�
 
 1. Скопировать папку шаблона под именем проекта (без `dist/`), при желании — `git init`.
 2. Заполнить вместе с агентом, в этом порядке:
-   1. [docs/product/product.md](docs/product/product.md) — бриф;
+   1. [docs/product/product.md](docs/product/product.md) — бриф (последний вопрос — по какой структуре строим лендинг);
    2. [docs/design/direction.md](docs/design/direction.md) + референсы в [docs/design/refs/](docs/design/refs/);
    3. [docs/product/landing-content.md](docs/product/landing-content.md) — структура и тексты.
 3. Заменить заглушки каркаса:

@@ -1,0 +1,21 @@
+.cart-item { display: grid; grid-template-columns: 80px minmax(0, 1fr); align-items: start; gap: var(--space-4); padding-block: var(--space-5); border-bottom: var(--border-width) solid var(--cart-border); }
+.cart-item__image { width: 80px; height: 80px; object-fit: cover; border-radius: var(--radius-sm); }
+.cart-item__title { font-size: var(--font-base); font-weight: var(--weight-semibold); line-height: 1.4; }
+.cart-item__variant { margin-top: var(--space-1); color: var(--cart-muted); font-size: var(--font-xs); }
+.cart-item__price { margin-top: var(--space-2); font-size: var(--font-md); font-weight: var(--weight-semibold); }
+.cart-item__actions { display: flex; align-items: center; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2); margin-top: var(--space-3); }
+.cart-item__quantity { display: flex; align-items: center; gap: var(--space-2); border: var(--border-width) solid var(--cart-border); border-radius: var(--radius-pill); }
+.cart-item__quantity button { width: 44px; height: 44px; padding: 0; border: 0; border-radius: var(--radius-pill); background: var(--cart-control-bg); color: var(--cart-color); font-size: var(--font-lg); }
+.cart-item__quantity button:hover { background: var(--cart-control-hover-bg); }
+.cart-item__quantity button:disabled { opacity: var(--button-disabled-opacity); }
+.cart-item__quantity output { min-width: 20px; text-align: center; font-size: var(--font-sm); }
+.cart-item__remove { min-height: 44px; padding: var(--space-2); border: 0; background: var(--cart-control-bg); color: var(--cart-muted); font-size: var(--font-xs); text-decoration: underline; text-underline-offset: 4px; }
+.cart-item__remove:hover { color: var(--cart-color); }
+@media (max-width: 359px) { .cart-item { grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-3); } .cart-item__image { width: 64px; height: 64px; } }
+
+.cart-item__quantity button:active { background: var(--cart-control-active-bg); }
+.cart-item__quantity button:focus-visible { outline-color: var(--cart-control-focus-color); }
+.cart-item__remove:active { color: var(--cart-item-remove-active-color); }
+.cart-item__remove:focus-visible { outline-color: var(--cart-control-focus-color); }
+
+

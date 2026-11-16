@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Coffe & Go — кофе по пути, зёрна для домашнего утра и кофейные подарки. Посмотрите меню, выберите вкус и подходящий помол.">
+  <meta name="theme-color" content="#F7F0E6">
+  <title>Coffe & Go — кофе сейчас, любимый вкус домой</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к содержимому</a>
+  <header class="site-header" data-site-header>
+    <div class="container site-header__inner">
+      <a class="wordmark" href="#home" aria-label="Coffe & Go — на главную">Coffe &amp; Go<span class="wordmark__dot" aria-hidden="true">.</span></a>
+      <nav class="navigation" id="site-navigation" aria-label="Основная навигация" data-navigation>
+        <a class="navigation__link" href="#menu">Меню</a>
+        <a class="navigation__link" href="#coffee-home">Кофе домой</a>
+        <a class="navigation__link" href="#gifts">Подарки</a>
+        <a class="navigation__link" href="#reviews">Отзывы</a>
+        <a class="navigation__link" href="#faq">Вопросы</a>
+        <a class="navigation__link navigation__link--contact" href="#contacts">Как нас найти <span aria-hidden="true">↗</span></a>
+      </nav>
+      <div class="site-header__actions">
+        <button class="cart-toggle" type="button" data-cart-open aria-label="Открыть корзину, товаров: 0" disabled><img class="cart-toggle__icon" src="assets/images/cart.svg" width="20" height="20" alt=""><span class="cart-toggle__label">Корзина</span><span class="cart-toggle__count" data-cart-count>0</span></button>
+        <button class="site-header__toggle" type="button" aria-expanded="false" aria-controls="site-navigation" aria-label="Открыть меню" data-nav-toggle hidden><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <p class="eyebrow">Кофейня · кофе домой · подарки</p>
+          <h1 class="hero__title" id="hero-title">Кофе сейчас.<br>Любимый вкус — домой.</h1>
+          <p class="hero__description">Загляните на чашку и выберите зёрна для дома. Поможем со вкусом и бесплатно смелем под вашу кофеварку.</p>
+          <div class="hero__actions"><a class="button" href="#coffee-home">Выбрать кофе <span aria-hidden="true">↗</span></a><a class="button button--outline" href="#contacts">Как нас найти</a></div>
+          <div class="hero__offer"><p><strong>До 12:00 — капучино 250 мл в подарок</strong><br>при покупке тех же зёрен от 250 г.</p><p class="hero__offer-note">Покупка и оплата в кофейне до 12:00 · Один напиток на чек</p><a class="text-link" href="#faq">Условия предложения <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="hero__visual"><img class="hero__image" src="assets/images/hero.jpg" alt="Капучино с латте-артом и пакет кофе Coffe & Go" width="1536" height="1024" fetchpriority="high" decoding="async"><span class="hero__caption">Ваша маленькая<br>кофейная пауза.</span></div>
+      </div>
+    </section>
+
+    <section class="menu section" id="menu" aria-labelledby="menu-title">
+      <div class="container">
+        <div class="section__heading"><div><p class="eyebrow">В кофейне и с собой</p><h2 class="section__title" id="menu-title">Что будете пить?</h2></div><p class="section__intro">Знакомая классика, новые сочетания<br>и что-нибудь к чашке.</p></div>
+        <div class="menu__filters" role="group" aria-label="Категории меню" data-menu-filters hidden>
+          <button class="menu__filter is-active" type="button" aria-pressed="true" data-menu-filter="featured">Популярное</button>
+          <button class="menu__filter" type="button" aria-pressed="false" data-menu-filter="classic">Классика</button>
+          <button class="menu__filter" type="button" aria-pressed="false" data-menu-filter="author">Авторские</button>
+          <button class="menu__filter" type="button" aria-pressed="false" data-menu-filter="season">Сезонные</button>
+          <button class="menu__filter" type="button" aria-pressed="false" data-menu-filter="cold">Холодный кофе</button>
+          <button class="menu__filter" type="button" aria-pressed="false" data-menu-filter="other">Без кофе</button>
+          <button class="menu__filter" type="button" aria-pressed="false" data-menu-filter="dessert">Десерты</button>
+          <button class="menu__filter" type="button" aria-pressed="false" data-menu-filter="all">Всё меню</button>
+        </div>
+        <div class="menu__grid" data-menu-grid>
+          <article class="menu-card" data-menu-item data-category="classic" data-featured data-product data-product-id="menu-1" data-product-name="Капучино" data-product-price="230" data-product-size="250 мл" data-product-image="assets/images/cappuccino.jpg">
+            <img class="menu-card__image" src="assets/images/cappuccino.jpg" alt="Капучино" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Капучино</h3>
+              <p class="menu-card__meta"><span>250 мл</span><strong>230&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="classic" data-featured data-product data-product-id="menu-2" data-product-name="Латте" data-product-price="270" data-product-size="350 мл" data-product-image="assets/images/product-placeholder.jpg">
+            <img class="menu-card__image" src="assets/images/product-placeholder.jpg" alt="Изображение товара отсутствует" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Латте</h3>
+              <p class="menu-card__meta"><span>350 мл</span><strong>270&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="author" data-featured data-product data-product-id="menu-3" data-product-name="Раф «Ваниль и сливки»" data-product-price="310" data-product-size="300 мл" data-product-image="assets/images/raf.jpg">
+            <img class="menu-card__image" src="assets/images/raf.jpg" alt="Раф «Ваниль и сливки»" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Раф «Ваниль и сливки»</h3>
+              <p class="menu-card__meta"><span>300 мл</span><strong>310&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="dessert" data-featured data-product data-product-id="menu-4" data-product-name="Круассан сливочный" data-product-price="190" data-product-size="70 г" data-product-image="assets/images/product-placeholder.jpg">
+            <img class="menu-card__image" src="assets/images/product-placeholder.jpg" alt="Изображение товара отсутствует" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Круассан сливочный</h3>
+              <p class="menu-card__meta"><span>70 г</span><strong>190&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="classic" data-product data-product-id="menu-5" data-product-name="Эспрессо" data-product-price="150" data-product-size="30 мл" data-product-image="assets/images/espresso.jpg">
+            
+            <img class="menu-card__image" src="assets/images/espresso.jpg" alt="Эспрессо" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Эспрессо</h3>
+              <p class="menu-card__meta"><span>30 мл</span><strong>150&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="classic" data-product data-product-id="menu-6" data-product-name="Американо" data-product-price="180" data-product-size="250 мл" data-product-image="assets/images/americano.jpg">
+            
+            <img class="menu-card__image" src="assets/images/americano.jpg" alt="Американо" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Американо</h3>
+              <p class="menu-card__meta"><span>250 мл</span><strong>180&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="classic" data-product data-product-id="menu-7" data-product-name="Флэт уайт" data-product-price="260" data-product-size="200 мл" data-product-image="assets/images/product-placeholder.jpg">
+            
+            <img class="menu-card__image" src="assets/images/product-placeholder.jpg" alt="Изображение товара отсутствует" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Флэт уайт</h3>
+              <p class="menu-card__meta"><span>200 мл</span><strong>260&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="author" data-product data-product-id="menu-8" data-product-name="Латте «Солёная карамель»" data-product-price="320" data-product-size="350 мл" data-product-image="assets/images/salted-caramel-latte.jpg">
+            
+            <img class="menu-card__image" src="assets/images/salted-caramel-latte.jpg" alt="Латте «Солёная карамель»" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Латте «Солёная карамель»</h3>
+              <p class="menu-card__meta"><span>350 мл</span><strong>320&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="author" data-product data-product-id="menu-9" data-product-name="Раф «Фундук и какао»" data-product-price="330" data-product-size="300 мл" data-product-image="assets/images/hazelnut-cocoa-raf.jpg">
+            
+            <img class="menu-card__image" src="assets/images/hazelnut-cocoa-raf.jpg" alt="Раф «Фундук и какао»" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Раф «Фундук и какао»</h3>
+              <p class="menu-card__meta"><span>300 мл</span><strong>330&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="season" data-product data-product-id="menu-10" data-product-name="Пряный латте с корицей и кардамоном" data-product-price="330" data-product-size="350 мл" data-product-image="assets/images/spiced-latte.jpg">
+            
+            <img class="menu-card__image" src="assets/images/spiced-latte.jpg" alt="Пряный латте с корицей и кардамоном" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              <p class="menu-card__season">Осень — зима</p>
+              <h3 class="menu-card__title">Пряный латте с корицей и кардамоном</h3>
+              <p class="menu-card__meta"><span>350 мл</span><strong>330&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="season" data-product data-product-id="menu-11" data-product-name="Айс-латте «Апельсин и ваниль»" data-product-price="330" data-product-size="350 мл" data-product-image="assets/images/orange-vanilla-iced-latte.jpg">
+            
+            <img class="menu-card__image" src="assets/images/orange-vanilla-iced-latte.jpg" alt="Айс-латте «Апельсин и ваниль»" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              <p class="menu-card__season">Весна — лето</p>
+              <h3 class="menu-card__title">Айс-латте «Апельсин и ваниль»</h3>
+              <p class="menu-card__meta"><span>350 мл</span><strong>330&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="cold" data-product data-product-id="menu-12" data-product-name="Айс-американо" data-product-price="220" data-product-size="350 мл" data-product-image="assets/images/iced-americano.jpg">
+            
+            <img class="menu-card__image" src="assets/images/iced-americano.jpg" alt="Айс-американо" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Айс-американо</h3>
+              <p class="menu-card__meta"><span>350 мл</span><strong>220&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="cold" data-product data-product-id="menu-13" data-product-name="Айс-латте" data-product-price="290" data-product-size="350 мл" data-product-image="assets/images/iced-latte.jpg">
+            
+            <img class="menu-card__image" src="assets/images/iced-latte.jpg" alt="Айс-латте" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Айс-латте</h3>
+              <p class="menu-card__meta"><span>350 мл</span><strong>290&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="other" data-product data-product-id="menu-14" data-product-name="Какао" data-product-price="250" data-product-size="300 мл" data-product-image="assets/images/cocoa.jpg">
+            
+            <img class="menu-card__image" src="assets/images/cocoa.jpg" alt="Какао" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Какао</h3>
+              <p class="menu-card__meta"><span>300 мл</span><strong>250&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="other" data-product data-product-id="menu-15" data-product-name="Чай" data-product-price="220" data-product-size="400 мл" data-product-image="assets/images/tea.jpg">
+            
+            <img class="menu-card__image" src="assets/images/tea.jpg" alt="Чай" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Чай</h3>
+              <p class="menu-card__meta"><span>400 мл</span><strong>220&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="dessert" data-product data-product-id="menu-16" data-product-name="Чизкейк" data-product-price="320" data-product-size="120 г" data-product-image="assets/images/product-placeholder.jpg">
+            
+            <img class="menu-card__image" src="assets/images/product-placeholder.jpg" alt="Изображение товара отсутствует" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Чизкейк</h3>
+              <p class="menu-card__meta"><span>120 г</span><strong>320&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="dessert" data-product data-product-id="menu-17" data-product-name="Шоколадный брауни" data-product-price="240" data-product-size="90 г" data-product-image="assets/images/product-placeholder.jpg">
+            
+            <img class="menu-card__image" src="assets/images/product-placeholder.jpg" alt="Изображение товара отсутствует" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Шоколадный брауни</h3>
+              <p class="menu-card__meta"><span>90 г</span><strong>240&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="menu-card" data-menu-item data-category="dessert" data-product data-product-id="menu-18" data-product-name="Овсяное печенье" data-product-price="140" data-product-size="60 г" data-product-image="assets/images/product-placeholder.jpg">
+            
+            <img class="menu-card__image" src="assets/images/product-placeholder.jpg" alt="Изображение товара отсутствует" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="menu-card__body">
+              
+              <h3 class="menu-card__title">Овсяное печенье</h3>
+              <p class="menu-card__meta"><span>60 г</span><strong>140&nbsp;₽</strong></p>
+            <button class="button menu-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+        </div>
+        <p class="sr-only" aria-live="polite" data-menu-status></p>
+        <div class="section__bottom"><p class="section__note">Не знаете, с чего начать? Расскажите бариста, какой кофе любите.</p><a class="text-link" href="#coffee-home">А какой кофе домой? <span aria-hidden="true">↗</span></a></div>
+      </div>
+    </section>
+
+    <section class="coffee-home section" id="coffee-home" aria-labelledby="coffee-title">
+      <div class="container">
+        <div class="section__heading"><div><p class="eyebrow">Ваша кофейня — у вас дома</p><h2 class="section__title" id="coffee-title">Понравился кофе?<br>Заберите его домой.</h2></div><p class="section__intro">Три вкуса. Две фасовки.<br>Зёрна или бесплатный помол.</p></div>
+        <div class="coffee-home__grid">
+          <article class="product-card" data-product data-product-id="coffee-1" data-product-name="Бразилия" data-product-price="790" data-product-size="250 г" data-product-image="assets/images/brazil.jpg">
+            <img class="product-card__image" src="assets/images/brazil.jpg" alt="Пакет кофе Бразилия" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="product-card__body">
+              <h3 class="product-card__title">Бразилия</h3>
+              <p class="product-card__description">Шоколад, орех, карамель</p>
+              <dl class="product-card__prices"><div><dt>250 г</dt><dd>790&nbsp;₽</dd></div><div><dt>1 кг</dt><dd>2 790&nbsp;₽</dd></div></dl>
+            </div>
+          <div class="product-card__purchase">
+              <label class="product-card__label" for="coffee-size-1">Фасовка<select class="product-card__select" id="coffee-size-1" data-product-size><option value="250" data-price="790">250 г</option><option value="1000" data-price="2790">1 кг</option></select></label>
+              <label class="product-card__label" for="coffee-grind-1">Помол<select class="product-card__select" id="coffee-grind-1" data-product-grind><option>Зёрна</option><option>Для турки</option><option>Для гейзера</option><option>Для фильтра</option><option>Для френч-пресса</option><option>Для эспрессо</option></select></label>
+              <button class="button product-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="product-card" data-product data-product-id="coffee-2" data-product-name="Колумбия" data-product-price="950" data-product-size="250 г" data-product-image="assets/images/colombia.jpg">
+            <img class="product-card__image" src="assets/images/colombia.jpg" alt="Пакет кофе Колумбия" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="product-card__body">
+              <h3 class="product-card__title">Колумбия</h3>
+              <p class="product-card__description">Карамель, красное яблоко</p>
+              <dl class="product-card__prices"><div><dt>250 г</dt><dd>950&nbsp;₽</dd></div><div><dt>1 кг</dt><dd>3 390&nbsp;₽</dd></div></dl>
+            </div>
+          <div class="product-card__purchase">
+              <label class="product-card__label" for="coffee-size-2">Фасовка<select class="product-card__select" id="coffee-size-2" data-product-size><option value="250" data-price="950">250 г</option><option value="1000" data-price="3390">1 кг</option></select></label>
+              <label class="product-card__label" for="coffee-grind-2">Помол<select class="product-card__select" id="coffee-grind-2" data-product-grind><option>Зёрна</option><option>Для турки</option><option>Для гейзера</option><option>Для фильтра</option><option>Для френч-пресса</option><option>Для эспрессо</option></select></label>
+              <button class="button product-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+          <article class="product-card" data-product data-product-id="coffee-3" data-product-name="Эфиопия" data-product-price="1090" data-product-size="250 г" data-product-image="assets/images/ethiopia.jpg">
+            <img class="product-card__image" src="assets/images/ethiopia.jpg" alt="Пакет кофе Эфиопия" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="product-card__body">
+              <h3 class="product-card__title">Эфиопия</h3>
+              <p class="product-card__description">Цветочные ноты, цитрус</p>
+              <dl class="product-card__prices"><div><dt>250 г</dt><dd>1 090&nbsp;₽</dd></div><div><dt>1 кг</dt><dd>3 890&nbsp;₽</dd></div></dl>
+            </div>
+          <div class="product-card__purchase">
+              <label class="product-card__label" for="coffee-size-3">Фасовка<select class="product-card__select" id="coffee-size-3" data-product-size><option value="250" data-price="1090">250 г</option><option value="1000" data-price="3890">1 кг</option></select></label>
+              <label class="product-card__label" for="coffee-grind-3">Помол<select class="product-card__select" id="coffee-grind-3" data-product-grind><option>Зёрна</option><option>Для турки</option><option>Для гейзера</option><option>Для фильтра</option><option>Для френч-пресса</option><option>Для эспрессо</option></select></label>
+              <button class="button product-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button>
+            </div>
+          </article>
+        </div>
+        <div class="section__bottom"><p class="section__note">Подберём помол под турку, гейзер, фильтр или френч-пресс.<br>Вкусовые ноты — описание профиля, а не добавленные ингредиенты.</p><a class="text-link" href="#contacts">Выбрать в кофейне <span aria-hidden="true">↗</span></a></div>
+      </div>
+    </section>
+
+    <section class="atmosphere section" aria-labelledby="atmosphere-title">
+      <div class="container atmosphere__inner">
+        <img class="atmosphere__image" src="assets/images/interior.jpg" alt="Зал кофейни: свет из окна, деревянный стол, растения и кофемашина" width="1536" height="1024" loading="lazy" decoding="async">
+        <div class="atmosphere__content"><p class="eyebrow">Несколько минут для себя</p><h2 class="section__title" id="atmosphere-title">Загляните на чашку<br>и небольшую паузу.</h2><span class="atmosphere__rule" aria-hidden="true"></span><p class="atmosphere__description">Кофе по дороге, встреча за чашкой или спокойное утро. Иногда хороший план — просто сделать паузу.</p><a class="text-link" href="#menu">Найти свой напиток <span aria-hidden="true">↗</span></a></div>
+      </div>
+    </section>
+
+    <section class="gifts section" id="gifts" aria-labelledby="gifts-title">
+      <div class="container">
+        <div class="section__heading"><div><p class="eyebrow">Для тех, кто любит кофе</p><h2 class="section__title" id="gifts-title">Соберите кофейный подарок.</h2></div><p class="section__intro">Готовый набор<br>или ваше сочетание.</p></div>
+        <div class="gifts__grid">
+          <article class="gift-card" data-product data-product-id="gift-1" data-product-name="Кофе и чашка" data-product-price="1980" data-product-size="Набор" data-product-image="assets/images/gift-cup.jpg">
+            <img class="gift-card__image" src="assets/images/gift-cup.jpg" alt="Бразилия 250 г и керамическая чашка 300 мл" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="gift-card__body"><h3 class="gift-card__title">Кофе и чашка</h3><p class="gift-card__description">Бразилия 250 г и керамическая чашка 300 мл</p><p class="gift-card__price">1 980&nbsp;₽</p><p class="gift-card__note">Упаковка включена</p><button class="button gift-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button></div>
+          </article>
+          <article class="gift-card" data-product data-product-id="gift-2" data-product-name="Кофе с собой" data-product-price="3480" data-product-size="Набор" data-product-image="assets/images/gift-thermos.jpg">
+            <img class="gift-card__image" src="assets/images/gift-thermos.jpg" alt="Бразилия 250 г и фирменный термос 500 мл" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="gift-card__body"><h3 class="gift-card__title">Кофе с собой</h3><p class="gift-card__description">Бразилия 250 г и фирменный термос 500 мл</p><p class="gift-card__price">3 480&nbsp;₽</p><p class="gift-card__note">Упаковка включена</p><button class="button gift-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button></div>
+          </article>
+          <article class="gift-card" data-product data-product-id="gift-3" data-product-name="Три вкуса" data-product-price="3030" data-product-size="Набор" data-product-image="assets/images/gift-three.jpg">
+            <img class="gift-card__image" src="assets/images/gift-three.jpg" alt="Бразилия, Колумбия и Эфиопия — по 250 г" width="1254" height="1254" loading="lazy" decoding="async" data-image-fallback="product">
+            <div class="gift-card__body"><h3 class="gift-card__title">Три вкуса</h3><p class="gift-card__description">Бразилия, Колумбия и Эфиопия — по 250 г</p><p class="gift-card__price">3 030&nbsp;₽</p><p class="gift-card__note">Упаковка включена</p><button class="button gift-card__buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button></div>
+          </article>
+        </div>
+        <details class="gifts__more"><summary class="gifts__summary">Хочу собрать свой подарок <span aria-hidden="true">+</span></summary><div class="gifts__options"><p>Добавьте к кофе фирменную вещь. Упаковка — 200 ₽ отдельно.</p><ul class="gifts__merch"><li data-product data-product-id="merch-1" data-product-name="Чашка 300 мл" data-product-price="990" data-product-size="1 шт." data-product-image=""><span>Чашка 300 мл</span><strong>990 ₽</strong><button class="button gifts__merch-buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button></li><li data-product data-product-id="merch-2" data-product-name="Термокружка 400 мл" data-product-price="1890" data-product-size="1 шт." data-product-image=""><span>Термокружка 400 мл</span><strong>1 890 ₽</strong><button class="button gifts__merch-buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button></li><li data-product data-product-id="merch-3" data-product-name="Термос 500 мл" data-product-price="2490" data-product-size="1 шт." data-product-image=""><span>Термос 500 мл</span><strong>2 490 ₽</strong><button class="button gifts__merch-buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button></li><li data-product data-product-id="merch-4" data-product-name="Хлопковый шопер" data-product-price="690" data-product-size="1 шт." data-product-image=""><span>Хлопковый шопер</span><strong>690 ₽</strong><button class="button gifts__merch-buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button></li><li data-product data-product-id="gift-box" data-product-name="Подарочная коробка" data-product-price="200" data-product-size="1 шт." data-product-image=""><span>Подарочная коробка</span><strong>200 ₽</strong><button class="button gifts__merch-buy" type="button" data-add-to-cart disabled>В корзину <span aria-hidden="true">+</span></button></li></ul><a class="text-link" href="#contacts">Выбрать подарок в кофейне <span aria-hidden="true">↗</span></a></div></details>
+      </div>
+    </section>
+
+    <section class="steps section" aria-labelledby="steps-title">
+      <div class="container"><p class="eyebrow">Всё начинается со вкуса</p><h2 class="section__title" id="steps-title">От первой чашки — к домашнему ритуалу.</h2>
+        <ol class="steps__list">
+          <li class="steps__item"><span class="steps__number" aria-hidden="true">01</span><div><h3 class="steps__title">Выберите вкус</h3><p class="steps__text">Посмотрите три профиля или расскажите бариста, что вам нравится.</p></div></li>
+          <li class="steps__item"><span class="steps__number" aria-hidden="true">02</span><div><h3 class="steps__title">Попробуйте напиток</h3><p class="steps__text">По меню или в подарок при покупке зёрен до 12:00.</p></div></li>
+          <li class="steps__item"><span class="steps__number" aria-hidden="true">03</span><div><h3 class="steps__title">Заберите зёрна</h3><p class="steps__text">250 г или 1 кг — целые или с бесплатным помолом.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="reviews section" id="reviews" aria-labelledby="reviews-title">
+      <div class="container"><div class="section__heading"><div><p class="eyebrow">Кофе объединяет</p><h2 class="section__title" id="reviews-title">За что нас любят гости.</h2></div></div><div class="reviews__grid">
+          <figure class="review-card">
+            <figcaption class="review-card__author"><img class="review-card__avatar" data-image-fallback="review" src="assets/images/anna.jpg" alt="" width="1254" height="1254" loading="lazy" decoding="async"><span>Анна</span></figcaption>
+            <blockquote class="review-card__quote"><p>Зашла за капучино и выбрала кофе домой. Помогли разобраться во вкусах без сложных терминов.</p></blockquote>
+          </figure>
+          <figure class="review-card">
+            <figcaption class="review-card__author"><img class="review-card__avatar" data-image-fallback="review" src="assets/images/review-placeholder.jpg" alt="" width="1254" height="1254" loading="lazy" decoding="async"><span>Михаил</span></figcaption>
+            <blockquote class="review-card__quote"><p>Взял зёрна и попросил помол для гейзерной кофеварки. Удобно, что можно выбрать большую упаковку.</p></blockquote>
+          </figure>
+          <figure class="review-card">
+            <figcaption class="review-card__author"><img class="review-card__avatar" data-image-fallback="review" src="assets/images/elena.jpg" alt="" width="1254" height="1254" loading="lazy" decoding="async"><span>Елена</span></figcaption>
+            <blockquote class="review-card__quote"><p>Выбрала кофе с чашкой в подарок. Всё уже собрано и упаковано — осталось только подарить.</p></blockquote>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq section" id="faq" aria-labelledby="faq-title">
+      <div class="container faq__inner"><div class="faq__heading"><p class="eyebrow">Без сложных вопросов</p><h2 class="section__title" id="faq-title">Что важно знать<br>перед визитом.</h2><p class="section__intro">Про зёрна, подарки<br>и вашу утреннюю чашку.</p></div><div class="faq__list">
+          <details class="faq-item" open><summary class="faq-item__question">Как получить капучино в подарок?<span class="faq-item__icon" aria-hidden="true"></span></summary><div class="faq-item__answer"><p>Купите в кофейне пакет кофе от 250 г и оплатите покупку до 12:00. Приготовим капучино 250 мл на тех же зёрнах. Предложение действует ежедневно с открытия — один подарочный напиток на чек.</p></div></details>
+          <details class="faq-item"><summary class="faq-item__question">А если прийти после 12:00?<span class="faq-item__icon" aria-hidden="true"></span></summary><div class="faq-item__answer"><p>Можно купить кофе и напитки по обычным ценам меню. В 12:00 и позже утренний подарок не действует.</p></div></details>
+          <details class="faq-item"><summary class="faq-item__question">Можно попробовать кофе без покупки пакета?<span class="faq-item__icon" aria-hidden="true"></span></summary><div class="faq-item__answer"><p>Да, можно заказать напиток по цене меню. Бесплатная дегустация без покупки пакета не предусмотрена.</p></div></details>
+          <details class="faq-item"><summary class="faq-item__question">Как выбрать кофе, если я не разбираюсь в сортах?<span class="faq-item__icon" aria-hidden="true"></span></summary><div class="faq-item__answer"><p>Начните с привычного вкуса: шоколада и орехов, карамели и фруктов или цветочных нот и цитруса. Расскажите бариста, что любите и как готовите кофе — поможем сравнить варианты простыми словами.</p></div></details>
+          <details class="faq-item"><summary class="faq-item__question">Можно попросить помол?<span class="faq-item__icon" aria-hidden="true"></span></summary><div class="faq-item__answer"><p>Да, бесплатно смелем купленный кофе под турку, гейзерную кофеварку, фильтр или френч-пресс. Для эспрессо уточним ваше оборудование. Каждый профиль доступен по 250 г и 1 кг.</p></div></details>
+          <details class="faq-item"><summary class="faq-item__question">Как купить подарок?<span class="faq-item__icon" aria-hidden="true"></span></summary><div class="faq-item__answer"><p>Выберите готовый набор или соберите своё сочетание в кофейне. В готовых наборах упаковка включена; для собственного состава подарочная коробка стоит 200 ₽ отдельно. Кофе и фирменные вещи можно купить по отдельности.</p></div></details>
+          <details class="faq-item"><summary class="faq-item__question">Можно заказать или отложить товар через сайт?<span class="faq-item__icon" aria-hidden="true"></span></summary><div class="faq-item__answer"><p>Сайт помогает посмотреть ассортимент и цены. Выберите товары и соберите заказ на самовывоз в корзине. Покупать на месте в кофейне тоже можно. Доставка не предусмотрена.</p></div></details>
+        </div>
+      </div>
+    </section>
+
+
+
+
+  </main>
+  <footer class="site-footer">
+    <div class="contacts" id="contacts"><div class="container contacts__inner">
+      <section class="contacts__intro" aria-labelledby="contacts-title"><a class="wordmark" href="#home">Coffe &amp; Go<span class="wordmark__dot" aria-hidden="true">.</span></a>
+        <p class="eyebrow">До встречи за кофе</p><h2 class="contacts__title" id="contacts-title">Приходите за своей чашкой.</h2><p class="contacts__description">Кофе на сейчас, зёрна домой<br>или подарок — выбрать можно в кофейне.</p>
+        <div class="contacts__details"><p class="contacts__address">Екатеринбург, ул. Кофейная, 12</p><p class="contacts__hours">Ежедневно 08:00–21:00</p></div>
+      </section>
+      <div class="contacts__subscription"><section class="newsletter" aria-labelledby="newsletter-title"><div class="newsletter__inner"><h2 class="newsletter__title" id="newsletter-title">Кофейные новости</h2><p class="newsletter__description">Новые напитки, сезонное меню и идеи кофейных подарков.</p>
+        <form class="newsletter__form" data-newsletter novalidate aria-labelledby="newsletter-title">
+          <label class="newsletter__label" for="newsletter-email">Ваш email</label>
+          <div class="newsletter__row"><input class="newsletter__input" type="email" id="newsletter-email" name="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="newsletter-error" disabled data-newsletter-email><button class="button button--cream" type="submit" disabled data-newsletter-submit>Подписаться <span aria-hidden="true">↗</span></button></div>
+          <label class="newsletter__consent"><input class="newsletter__checkbox" type="checkbox" name="consent" required disabled data-newsletter-consent aria-describedby="newsletter-error"><span>Согласен получать новости и на обработку персональных данных.</span></label>
+          <p class="newsletter__error" id="newsletter-error" role="alert" hidden data-newsletter-error></p>
+
+          <noscript><p class="newsletter__hint">Для проверки формы включите JavaScript. Подписка пока недоступна.</p></noscript>
+        </form>
+      </div></section>
+        <div class="social-links"><h3 class="social-links__title">Мы в соцсетях</h3><ul class="social-links__list"><li><button class="social-links__item social-links__item--vk" type="button" disabled aria-label="ВКонтакте — ссылка пока не добавлена" title="ВКонтакте — ссылка пока не добавлена"><img class="social-links__icon" src="assets/images/social-vk.svg" width="20" height="20" alt=""></button></li><li><button class="social-links__item social-links__item--ok" type="button" disabled aria-label="Одноклассники — ссылка пока не добавлена" title="Одноклассники — ссылка пока не добавлена"><img class="social-links__icon" src="assets/images/social-ok.svg" width="20" height="20" alt=""></button></li><li><button class="social-links__item social-links__item--telegram" type="button" disabled aria-label="Telegram — ссылка пока не добавлена" title="Telegram — ссылка пока не добавлена"><img class="social-links__icon" src="assets/images/social-telegram.svg" width="20" height="20" alt=""></button></li><li><button class="social-links__item social-links__item--whatsapp" type="button" disabled aria-label="WhatsApp — ссылка пока не добавлена" title="WhatsApp — ссылка пока не добавлена"><img class="social-links__icon" src="assets/images/social-whatsapp.svg" width="20" height="20" alt=""></button></li></ul></div>
+      </div>
+    </div></div>
+    <div class="container site-footer__inner"><p>Кофе сейчас. Любимый вкус — домой.</p><p>© Coffe &amp; Go</p></div></footer>
+  <dialog class="cart" aria-labelledby="cart-title" data-cart-dialog>
+    <div class="cart__header"><div><p class="eyebrow">Coffe &amp; Go</p><h2 class="cart__title" id="cart-title">Ваша корзина</h2></div><button class="cart__close" type="button" aria-label="Закрыть корзину" data-cart-close autofocus>×</button></div>
+    <div class="cart__body">
+      <div class="cart__empty" data-cart-empty><p class="cart__empty-title">Начнём с вашей чашки?</p><p>Добавьте напиток, кофе домой или подарок.</p><button class="button" type="button" data-cart-shop>Выбрать в меню ↗</button></div>
+      <div data-cart-content hidden>
+        <div class="cart__items" data-cart-items></div>
+        <p class="cart__pickup">Самовывоз: Екатеринбург, ул. Кофейная, 12.<br>Ежедневно 08:00–21:00. Оплата при получении.</p>
+        <p class="cart__offer-note">Утренний капучино в подарок — при покупке и оплате зёрен в кофейне до 12:00. Один напиток на чек.</p>
+        <div class="cart__total"><span>Итого</span><strong data-cart-total>0 ₽</strong></div>
+        <button class="button cart__checkout-button" type="button" data-cart-checkout-open>Оформить самовывоз ↗</button>
+      </div>
+      <form class="checkout" data-checkout hidden novalidate>
+        <button class="checkout__back text-link" type="button" data-checkout-back>← Вернуться к товарам</button>
+        <h3 class="checkout__title">Заказ на самовывоз</h3>
+        <p class="checkout__summary">Оплата при получении. Итого: <strong data-checkout-total>0 ₽</strong></p>
+        <label class="checkout__label" for="order-name">Ваше имя<input class="checkout__input" id="order-name" name="name" autocomplete="given-name" maxlength="80" required aria-describedby="checkout-error" data-checkout-name></label>
+        <label class="checkout__label" for="order-phone">Телефон<input class="checkout__input" id="order-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 999 123-45-67" maxlength="24" required aria-describedby="checkout-error" data-checkout-phone></label>
+        <label class="checkout__label" for="order-comment">Комментарий к заказу <span class="checkout__optional">(необязательно)</span><textarea class="checkout__input checkout__input--textarea" id="order-comment" name="comment" rows="3" maxlength="500" placeholder="Например, помол кофе из подарочного набора"></textarea></label>
+        <label class="checkout__consent"><input type="checkbox" required name="consent" data-checkout-consent aria-describedby="checkout-error"><span>Согласен на обработку данных для оформления заказа.</span></label>
+        <p class="checkout__error" id="checkout-error" role="alert" data-checkout-error hidden></p>
+        <button class="button cart__checkout-button" type="submit">Подтвердить заказ</button>
+        <p class="checkout__status" role="status" data-checkout-status hidden></p>
+      </form>
+    </div>
+  </dialog>
+  <template id="cart-item-template"><article class="cart-item" data-cart-item><img class="cart-item__image" data-image-fallback="product" src="assets/images/favicon.svg" width="80" height="80" alt="" data-cart-image><div class="cart-item__content"><h3 class="cart-item__title" data-cart-name></h3><p class="cart-item__variant" data-cart-variant></p><p class="cart-item__price" data-cart-price></p><div class="cart-item__actions"><div class="cart-item__quantity"><button type="button" data-cart-action="decrease" aria-label="Уменьшить количество">−</button><output data-cart-quantity></output><button type="button" data-cart-action="increase" aria-label="Увеличить количество">+</button></div><button class="cart-item__remove" type="button" data-cart-action="remove">Удалить</button></div></div></article></template>
+  <div class="notification" role="status" aria-live="polite" hidden data-notification></div>
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
+

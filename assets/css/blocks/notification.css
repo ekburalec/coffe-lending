@@ -1,0 +1,2 @@
+.notification { position: fixed; z-index: 30; bottom: var(--space-6); left: 50%; width: max-content; max-width: calc(100% - var(--space-8)); transform: translateX(-50%); padding: var(--space-4) var(--space-6); border-radius: var(--radius-sm); background: var(--notification-bg); color: var(--notification-color); box-shadow: var(--shadow-floating); font-size: var(--font-sm); }
+

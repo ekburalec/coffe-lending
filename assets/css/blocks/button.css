@@ -1,0 +1,16 @@
+.button { display: inline-flex; justify-content: center; align-items: center; gap: var(--space-6); min-height: var(--touch-size); padding: var(--space-3) var(--space-6); border: var(--border-width) solid var(--button-border); border-radius: var(--radius-pill); color: var(--button-color); background: var(--button-bg); font-size: var(--font-sm); font-weight: var(--weight-semibold); line-height: 1.4; text-decoration: none; transition: background var(--transition-fast), border-color var(--transition-fast); }
+.button:hover { background: var(--button-hover-bg); }
+.button:active { background: var(--button-active-bg); }
+.button:disabled { opacity: var(--button-disabled-opacity); }
+.button--outline { color: var(--button-outline-color); border-color: var(--button-outline-border); background: var(--button-outline-bg); }
+.button--outline:hover { background: var(--button-outline-hover-bg); }
+.button--outline:active { background: var(--button-outline-active-bg); }
+.button--cream { color: var(--button-cream-color); border-color: var(--button-cream-bg); background: var(--button-cream-bg); }
+.button--cream:hover { background: var(--button-cream-hover-bg); }
+.button--cream:active { background: var(--button-cream-active-bg); }
+
+.button:focus-visible,
+.button--outline:focus-visible,
+.button--cream:focus-visible { outline-color: var(--button-focus-color); }
+
+

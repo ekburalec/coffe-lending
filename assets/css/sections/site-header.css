@@ -1,0 +1,19 @@
+.site-header { position: relative; top: 0; z-index: 10; background: var(--site-header-bg); border-bottom: var(--border-width) solid var(--site-header-border); transition: box-shadow var(--transition-fast), background-color var(--transition-fast); }
+.is-header-fixed { padding-top: var(--header-height); }
+.is-header-fixed .site-header { position: fixed; inset: 0 0 auto; }
+.site-header.is-scrolled { box-shadow: var(--site-header-scrolled-shadow); }
+.site-header__inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-8); min-height: calc(var(--header-height) - var(--border-width)); }
+.site-header__toggle { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 6px; width: var(--touch-size); height: var(--touch-size); padding: var(--space-3); color: var(--site-header-toggle-color); background: var(--color-transparent); border: 0; border-radius: var(--radius-sm); }
+.site-header__toggle span { width: 24px; height: 2px; background: currentColor; transition: transform var(--transition-fast); }
+.site-header__toggle.is-open span:first-child { transform: translateY(4px) rotate(45deg); }
+.site-header__toggle.is-open span:last-child { transform: translateY(-4px) rotate(-45deg); }
+.site-header__toggle:hover { background: var(--site-header-toggle-hover-bg); }
+.site-header__actions { display: flex; align-items: center; gap: var(--space-2); }
+@media (max-width: 1023px) { .site-header__actions { margin-left: auto; } .site-header__inner .navigation { order: 3; } }
+@media (max-width: 389px) { .site-header .wordmark { font-size: var(--font-card); } }
+@media (max-width: 1023px) { .is-header-fixed { padding-top: var(--header-height-mobile); } .site-header__inner { flex-wrap: wrap; min-height: calc(var(--header-height-mobile) - var(--border-width)); gap: 0; padding-block: var(--space-3); } .site-header__toggle { display: flex; } }
+
+.site-header__toggle:active { background: var(--site-header-toggle-active-bg); }
+.site-header__toggle:focus-visible { outline-color: var(--site-header-toggle-focus-color); }
+
+

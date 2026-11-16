@@ -1,0 +1,25 @@
+.checkout__back { margin-bottom: var(--space-5); padding: 0; border: 0; background: var(--checkout-control-bg); color: var(--checkout-color); }
+.checkout__title { font-family: var(--font-heading); font-size: var(--font-card); font-weight: var(--weight-normal); }
+.checkout__summary { margin-block: var(--space-4) var(--space-6); font-size: var(--font-sm); }
+.checkout__label { display: block; margin-top: var(--space-5); font-size: var(--font-sm); }
+.checkout__input { display: block; width: 100%; min-height: var(--touch-size); margin-top: var(--space-2); padding: var(--space-3) var(--space-4); border: var(--border-width) solid var(--checkout-border); border-radius: var(--radius-sm); background: var(--checkout-input-bg); color: var(--checkout-color); font: inherit; font-size: var(--font-base); }
+.checkout__input:hover { border-color: var(--checkout-hover-border); }
+.checkout__input[aria-invalid="true"] { border-color: var(--checkout-error-color); }
+.checkout__input--textarea { resize: vertical; min-height: 96px; }
+.checkout__optional { color: var(--checkout-muted); }
+.checkout__consent { display: flex; align-items: flex-start; gap: var(--space-3); margin-block: var(--space-6); font-size: var(--font-sm); }
+.checkout__consent input { flex-shrink: 0; width: 20px; height: 20px; margin: var(--space-1) 0 0; accent-color: var(--color-green); }
+.checkout__consent input[aria-invalid="true"] { outline: 2px solid var(--checkout-error-color); }
+.checkout__error { margin-block: var(--space-4); color: var(--checkout-error-color); font-size: var(--font-sm); }
+.checkout__status { margin-top: var(--space-5); padding: var(--space-4); border-radius: var(--radius-sm); background: var(--checkout-status-bg); font-size: var(--font-sm); }
+
+.checkout__back:hover { color: var(--checkout-back-hover-color); }
+.checkout__back:active { color: var(--checkout-back-active-color); }
+.checkout__back:focus-visible { outline-color: var(--checkout-focus-color); }
+.checkout__input:not([aria-invalid="true"]):active { border-color: var(--checkout-active-border); }
+.checkout__input:focus-visible { outline-color: var(--checkout-focus-color); }
+.checkout__consent input:hover { box-shadow: var(--checkout-checkbox-hover-shadow); }
+.checkout__consent input:active { box-shadow: var(--checkout-checkbox-active-shadow); }
+.checkout__consent input:focus-visible { outline-color: var(--checkout-focus-color); }
+
+

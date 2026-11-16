@@ -1,0 +1,12 @@
+*, *::before, *::after { box-sizing: border-box; }
+body, h1, h2, h3, p, ul, ol, figure, blockquote, dl, dd { margin: 0; }
+ul, ol { padding: 0; }
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+button, input { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+

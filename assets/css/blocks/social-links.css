@@ -1,0 +1,15 @@
+.social-links__title { margin-bottom: var(--space-3); font-size: var(--font-sm); font-weight: var(--weight-normal); }
+.social-links__list { display: flex; gap: var(--space-2); list-style: none; }
+.social-links__item { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: var(--space-3); border: var(--border-width) solid var(--social-links-border); border-radius: var(--radius-pill); background: var(--social-links-bg); color: var(--social-links-color); transition: background-color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast); }
+.social-links__item:hover, .social-links__item:focus-visible { border-color: var(--social-links-hover-border); transform: translateY(var(--social-links-hover-lift)) scale(var(--social-links-hover-scale)); }
+.social-links__item--vk:hover, .social-links__item--vk:focus-visible { background: var(--social-links-vk-hover-bg); }
+.social-links__item--ok:hover, .social-links__item--ok:focus-visible { background: var(--social-links-ok-hover-bg); }
+.social-links__item--telegram:hover, .social-links__item--telegram:focus-visible { background: var(--social-links-telegram-hover-bg); }
+.social-links__item--whatsapp:hover, .social-links__item--whatsapp:focus-visible { background: var(--social-links-whatsapp-hover-bg); }
+.social-links__item, .social-links__item:disabled { cursor: pointer; }
+.social-links__icon { width: 20px; height: 20px; }
+
+.social-links__item:active { transform: translateY(var(--social-links-active-lift)) scale(var(--social-links-active-scale)); filter: brightness(var(--social-links-active-brightness)); }
+.social-links__item:focus-visible { outline-color: var(--social-links-focus-color); }
+
+

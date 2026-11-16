@@ -1,0 +1,10 @@
+.menu-card { display: flex; flex-direction: column; min-width: 0; color: var(--menu-card-color); }
+.menu-card__image { width: 100%; aspect-ratio: 1.12; object-fit: cover; border-radius: var(--radius-md); }
+.menu-card__body { display: flex; flex-direction: column; flex-grow: 1; padding-top: var(--space-4); }
+.menu-card__title { flex-grow: 1; font-size: var(--font-md); line-height: 1.4; font-weight: var(--weight-medium); }
+.menu-card__meta { display: flex; justify-content: space-between; gap: var(--space-2); margin-top: var(--space-2); color: var(--menu-card-meta-color); font-size: var(--font-sm); }
+.menu-card__meta strong { color: var(--menu-card-color); font-weight: var(--weight-semibold); white-space: nowrap; }
+.menu-card__season { color: var(--menu-card-meta-color); font-size: var(--font-xs); margin-bottom: var(--space-2); }
+.menu-card__buy { width: 100%; margin-top: var(--space-4); gap: var(--space-2); padding-inline: var(--space-3); }
+@media (max-width: 767px) { .menu-card__body { padding-top: var(--space-3); } .menu-card__title { font-size: var(--font-base); } .menu-card__meta { flex-wrap: wrap; } }
+

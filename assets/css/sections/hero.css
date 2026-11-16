@@ -1,0 +1,18 @@
+.hero { padding-top: var(--space-8); }
+.hero__inner { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: var(--space-12); min-height: 600px; padding-bottom: var(--space-12); border-bottom: var(--border-width) solid var(--section-border); }
+.hero__content { padding-block: var(--space-8); }
+.hero__title { max-width: 600px; font-family: var(--font-heading); font-size: var(--font-h1); font-weight: var(--weight-normal); line-height: var(--line-heading); letter-spacing: var(--tracking-tight); }
+
+.hero__description { max-width: 450px; margin-top: var(--space-6); font-size: var(--font-base); }
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-8); }
+.hero__offer { max-width: 480px; margin-top: var(--space-8); padding: var(--space-5) var(--space-6); border-radius: var(--radius-md); background: var(--hero-offer-bg); font-size: var(--font-sm); line-height: 1.5; }
+.hero__offer strong { font-weight: var(--weight-semibold); }
+.hero__offer-note { margin-top: var(--space-2); color: var(--hero-offer-note-color); font-size: var(--font-xs); }
+.hero__offer .text-link { min-height: 32px; font-size: var(--font-xs); margin-top: var(--space-1); }
+.hero__visual { position: relative; align-self: stretch; min-height: 530px; overflow: hidden; border-radius: var(--radius-lg); }
+.hero__image { width: 100%; height: 100%; object-fit: cover; object-position: 65% center; }
+.hero__caption { position: absolute; bottom: var(--space-6); right: var(--space-6); color: var(--hero-caption-color); font-family: var(--font-heading); font-size: var(--font-card); font-style: italic; line-height: 1.2; text-align: right; text-shadow: var(--hero-caption-shadow); }
+
+@media (max-width: 1023px) { .hero__inner { gap: var(--space-6); } .hero__visual { min-height: 500px; } }
+@media (max-width: 767px) { .hero { padding-top: var(--space-2); } .hero__inner { grid-template-columns: 1fr; gap: var(--space-6); padding-bottom: var(--space-8); min-height: 0; } .hero__content { padding-block: var(--space-6) 0; } .hero__title { font-size: var(--font-h1-mobile); } .hero__description { margin-top: var(--space-5); } .hero__actions { flex-direction: column; margin-top: var(--space-6); } .hero__offer { margin-top: var(--space-6); padding: var(--space-4); max-width: none; } .hero__visual { min-height: 0; height: 300px; border-radius: var(--radius-md); } .hero__image { object-position: 60% center; } .hero__caption { font-size: var(--font-lg); bottom: var(--space-4); right: var(--space-4); } }
+

@@ -1,0 +1,7 @@
+.faq { padding-top: var(--space-8); }
+.faq__inner { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: var(--space-16); }
+.faq__heading .section__intro { margin-top: var(--space-6); }
+.faq__list { border-top: var(--border-width) solid var(--section-border); }
+@media (max-width: 1023px) { .faq__inner { gap: var(--space-8); } }
+@media (max-width: 767px) { .faq__inner { grid-template-columns: 1fr; gap: var(--space-6); } .faq__heading .section__intro { margin-top: var(--space-4); } }
+

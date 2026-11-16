@@ -1,0 +1,4 @@
+.coffee-home { border-top: var(--border-width) solid var(--section-border); }
+.coffee-home__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+@media (max-width: 767px) { .coffee-home__grid { grid-template-columns: 1fr; gap: var(--space-6); } }
+

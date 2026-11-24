@@ -49,6 +49,6 @@ function logoutController(): void
 function dashboardController(): void
 {
     requireAdmin();
-    $sections = require APP_ROOT . '/config/admin.php';
+    $sections = adminSections();
     adminPage('Управление кофейней', 'dashboard', ['sections' => $sections]);
 }

@@ -4,6 +4,8 @@ import os
 from pathlib import Path
 import re
 import secrets
+import sqlite3
+import json
 import subprocess
 import tempfile
 import time
@@ -24,10 +26,22 @@ def run():
         jar = http.cookiejar.CookieJar()
         client = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
 
-        def request(path, data=None):
+        def request(path, data=None, files=None):
             body = urllib.parse.urlencode(data).encode() if data is not None else None
+            headers = {}
+            if files:
+                boundary = "coffee-" + secrets.token_hex(12)
+                chunks = []
+                for name, value in (data or {}).items():
+                    chunks.append(f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"\r\n\r\n{value}\r\n'.encode())
+                for name, (filename, mime, content) in files.items():
+                    chunks.append(f'--{boundary}\r\nContent-Disposition: form-data; name="{name}"; filename="{filename}"\r\nContent-Type: {mime}\r\n\r\n'.encode() + content + b"\r\n")
+                chunks.append(f"--{boundary}--\r\n".encode())
+                body = b"".join(chunks)
+                headers["Content-Type"] = "multipart/form-data; boundary=" + boundary
+            req = urllib.request.Request("http://localhost:8093" + path, body, headers)
             try:
-                response = client.open("http://localhost:8093" + path, body, timeout=5)
+                response = client.open(req, timeout=5)
             except urllib.error.HTTPError as error:
                 response = error
             return response.status, response.read().decode(), response.headers
@@ -51,7 +65,28 @@ def run():
             assert request("/config/seed.json")[0] == 404
             assert request("/var/site.sqlite")[0] == 404
             assert request("/app/core/bootstrap.php")[0] == 404
-            print("PASS: isolated migration, login, CSRF rotation, private paths")
+            csrf = token(html)
+            db = sqlite3.connect(str(Path(directory) / "site.sqlite"))
+            assert db.execute("SELECT count(*) FROM records WHERE kind='products'").fetchone()[0] == 9
+            status, html, _ = request("/admin/edit?section=categories&new=1", {"csrf": csrf, "name": "Тест", "sort_order": 4, "visible": 1})
+            assert status == 200 and "Изменения сохранены" in html
+            category_id = db.execute("SELECT id FROM records WHERE kind='categories' AND json_extract(payload, '$.name')='Тест'").fetchone()[0]
+            product = {"csrf": csrf, "name": "Новый напиток", "category": category_id, "description": "Вкус", "ingredients": "Вода", "portion": "200 мл", "price": 125, "available": 1, "visible": 1, "sort_order": 1, "alt": "Чашка", "image": ""}
+            file = (ROOT / "assets/img/menu/photo_1.webp").read_bytes()
+            status, html, _ = request("/admin/edit?section=products&new=1", product, {"image_upload": ("drink.webp", "image/webp", file)})
+            assert status == 200 and "Изменения сохранены" in html, html[:200]
+            product_id, payload = db.execute("SELECT id,payload FROM records WHERE kind='products' AND json_extract(payload, '$.name')='Новый напиток'").fetchone()
+            image = json.loads(payload)["image"]
+            assert (Path(directory) / "uploads" / Path(image).name).is_file()
+            assert (Path(directory) / "uploads" / Path(image).name.replace(".webp", "@2x.webp")).is_file()
+            product["image"] = image
+            product["price"] = -1
+            assert request("/admin/edit?section=products&id=" + product_id, product)[0] == 422
+            assert request("/admin/edit?section=categories&id=" + category_id, {"csrf": csrf, "action": "delete", "confirm_delete": 1})[0] == 422
+            product["price"] = 125
+            assert request("/admin/edit?section=products&new=1", product, {"image_upload": ("bad.svg", "image/svg+xml", b"<svg/>")})[0] == 422
+            db.close()
+            print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation")
         finally:
             process.terminate()
             process.wait(timeout=5)

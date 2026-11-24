@@ -269,3 +269,6 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/modules/php-app.md](docs/modules/php-app.md) | PHP-приложение: запуск, роутер и приватные данные |
 
 | [docs/modules/admin-auth.md](docs/modules/admin-auth.md) | Авторизация, сессии и CSRF админки |
+
+| [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
+| [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |

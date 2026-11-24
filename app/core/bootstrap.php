@@ -24,3 +24,7 @@ set_exception_handler(function (Throwable $error): void {
 require_once APP_ROOT . '/app/models/auth.php';
 require_once APP_ROOT . '/app/services/auth.php';
 require_once APP_ROOT . '/app/controllers/auth.php';
+
+require_once APP_ROOT . '/app/services/images.php';
+require_once APP_ROOT . '/app/validators/admin.php';
+require_once APP_ROOT . '/app/controllers/admin.php';

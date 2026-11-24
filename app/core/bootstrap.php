@@ -20,3 +20,7 @@ set_exception_handler(function (Throwable $error): void {
     http_response_code(500);
     render('error', ['title' => 'Временная ошибка', 'message' => 'Не удалось выполнить действие. Попробуйте позже.']);
 });
+
+require_once APP_ROOT . '/app/models/auth.php';
+require_once APP_ROOT . '/app/services/auth.php';
+require_once APP_ROOT . '/app/controllers/auth.php';

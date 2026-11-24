@@ -314,3 +314,21 @@
     --notify-bg: var(--color-dark-text);
     --notify-color: var(--color-dark-bg);
 }
+
+/* admin */
+:root {
+ --admin-bg: var(--color-bg); --admin-color: var(--color-text);
+ --admin-surface: var(--color-card); --admin-border: var(--color-text-muted);
+ --admin-focus: var(--color-accent); --admin-error: #9c2929;
+ --admin-button-bg: var(--color-accent); --admin-button-color: var(--color-on-accent);
+ --admin-button-hover-bg: var(--color-accent-dark); --admin-button-active-bg: var(--color-heading);
+ --admin-card-width: 240px; --admin-form-width: 760px; --admin-preview-width: 240px;
+ --admin-disabled-opacity: .5;
+}
+.dark-mode {
+ --admin-bg: var(--color-dark-bg); --admin-color: var(--color-dark-text);
+ --admin-surface: var(--color-dark-surface); --admin-border: var(--color-dark-muted);
+ --admin-focus: var(--color-dark-accent); --admin-error: #ffb0a0;
+ --admin-button-bg: var(--color-dark-accent); --admin-button-color: var(--color-dark-bg);
+ --admin-button-hover-bg: var(--color-dark-text); --admin-button-active-bg: var(--color-dark-muted);
+}

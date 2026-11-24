@@ -267,3 +267,5 @@ dist/                    ← результат сборки, не в git, ру�
 План и прогресс: [ADMIN-PLAN.md](ADMIN-PLAN.md).
 
 | [docs/modules/php-app.md](docs/modules/php-app.md) | PHP-приложение: запуск, роутер и приватные данные |
+
+| [docs/modules/admin-auth.md](docs/modules/admin-auth.md) | Авторизация, сессии и CSRF админки |

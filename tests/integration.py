@@ -99,6 +99,14 @@ def run():
             assert request("/admin/edit?section=delivery", delivery)[0] == 200
             delivery["threshold"] = "12.5"
             assert request("/admin/edit?section=delivery", delivery)[0] == 422
+            for section in ["navigation", "content", "images", "faq", "announcements", "reviews", "rating"]:
+                assert request("/admin/edit?section=" + section)[0] == 200, section
+            announcement = {"csrf": csrf, "text": "Праздничный график", "starts": "2026-12-31T08:00", "ends": "2026-12-31T20:00", "sort_order": 0, "visible": 1}
+            assert request("/admin/edit?section=announcements&new=1", announcement)[0] == 200
+            announcement["ends"] = "2026-12-30T20:00"
+            assert request("/admin/edit?section=announcements&new=1", announcement)[0] == 422
+            assert request("/admin/edit?section=rating", {"csrf": csrf, "value": "4.9", "count": 100, "source": ""})[0] == 422
+            assert request("/admin/edit?section=navigation&new=1", {"csrf": csrf, "name": "Плохой пункт", "target": "#missing"})[0] == 422
             db.close()
             print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation")
         finally:

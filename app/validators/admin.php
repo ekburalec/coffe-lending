@@ -7,6 +7,11 @@ function adminSections(): array
     if (isset($sections['products'])) {
         $sections['products']['fields']['category']['options'] = array_column(listRecords('categories'), 'name', 'id');
     }
+    if (isset($sections['navigation'])) {
+        $targets = ['#welcome' => 'Первый экран', '#menu' => 'Меню', '#occasions' => 'Поводы зайти', '#space' => 'О кофейне', '#delivery' => 'Самовывоз и доставка', '#faq' => 'FAQ', '#contacts' => 'Контакты'];
+        foreach (listRecords('categories', true) as $category) $targets['#' . $category['id']] = $category['name'];
+        $sections['navigation']['fields']['target']['options'] = $targets;
+    }
     foreach ($sections as &$section) {
         if (!($section['singleton'] ?? false) && !($section['fixed'] ?? false)) {
             $section['fields']['sort_order'] = ['label' => 'Порядок', 'type' => 'number', 'min' => 0, 'max' => 100000, 'default' => 0];
@@ -44,7 +49,20 @@ function validateAdminRecord(string $kind, array $data): array
 {
     $errors = [];
     if ($kind === 'delivery' && empty($data['pickup_enabled']) && empty($data['delivery_enabled'])) $errors['pickup_enabled'] = 'Оставьте доступным хотя бы один способ получения.';
-    if ($kind === 'products' && !findRecord('categories', $data['category'] ?? '')) $errors['category'] = 'Категория не существует.';
+    if ($kind === 'faq' && ($data['mode'] ?? '') === 'manual' && trim($data['answer'] ?? '') === '') $errors['answer'] = 'Напишите ответ.';
+    if ($kind === 'rating' && ($data['value'] ?? '') !== '') {
+        if (!preg_match('/^[0-5](?:[.,][0-9])?$/D', $data['value']) || (float) str_replace(',', '.', $data['value']) > 5) $errors['value'] = 'Рейтинг от 0 до 5, максимум один знак после точки.';
+        if (empty($data['source']) || (int) ($data['count'] ?? 0) < 1) $errors['source'] = 'Для публикации нужны источник и количество оценок.';
+    }
+    if ($kind === 'announcements') {
+        foreach (['starts', 'ends'] as $name) {
+            if (($data[$name] ?? '') === '') continue;
+            $date = DateTimeImmutable::createFromFormat('!Y-m-d\\TH:i', $data[$name]);
+            if (!$date || $date->format('Y-m-d\\TH:i') !== $data[$name]) $errors[$name] = 'Укажите дату и время.';
+        }
+        if (!empty($data['starts']) && !empty($data['ends']) && $data['ends'] < $data['starts']) $errors['ends'] = 'Окончание должно быть не раньше начала.';
+    }
+    if ($kind === 'products'  && !findRecord('categories', $data['category'] ?? '')) $errors['category'] = 'Категория не существует.';
     if (in_array($kind, ['hours', 'exceptions'], true) && empty($data['closed'])) {
         foreach (['opens', 'closes'] as $name) if (!preg_match('/^(?:[01][0-9]|2[0-3]):[0-5][0-9]$/D', $data[$name] ?? '')) $errors[$name] = 'Укажите время ЧЧ:ММ.';
         if (!$errors && $data['closes'] <= $data['opens']) $errors['closes'] = 'Закрытие должно быть позже открытия в тот же день.';

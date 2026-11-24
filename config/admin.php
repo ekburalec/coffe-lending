@@ -44,4 +44,36 @@ return [
         'pickup_time' => ['label' => 'Ориентир самовывоза', 'required' => true, 'max' => 120],
         'delivery_time' => ['label' => 'Ориентир доставки', 'required' => true, 'max' => 120],
     ]],
+    'navigation' => ['title' => 'Навигация сайта', 'fields' => [
+        'name' => ['label' => 'Подпись пункта', 'required' => true, 'max' => 100],
+        'target' => ['label' => 'Раздел страницы', 'type' => 'select', 'required' => true],
+    ]],
+    'content' => ['title' => 'Тексты блоков', 'fixed' => true, 'fields' => [
+        'text' => ['label' => 'Текст (без HTML)', 'type' => 'textarea', 'required' => true, 'max' => 5000],
+    ]],
+    'images' => ['title' => 'Фотографии блоков', 'fixed' => true, 'fields' => [
+        'name' => ['label' => 'Название в админке', 'required' => true, 'max' => 200],
+        'image' => ['label' => 'Фотография', 'type' => 'image', 'required' => true],
+        'alt' => ['label' => 'Описание фотографии', 'required' => true, 'max' => 300],
+    ]],
+    'faq' => ['title' => 'Вопросы и ответы', 'fields' => [
+        'question' => ['label' => 'Вопрос', 'required' => true, 'max' => 300],
+        'mode' => ['label' => 'Ответ', 'type' => 'select', 'options' => ['manual' => 'Текст ниже', 'hours' => 'Из расписания', 'delivery' => 'Из тарифов доставки', 'timing' => 'Из сроков получения']],
+        'answer' => ['label' => 'Свободный ответ (используется только в режиме «Текст ниже»)', 'type' => 'textarea', 'max' => 5000],
+    ]],
+    'announcements' => ['title' => 'Объявления', 'fields' => [
+        'text' => ['label' => 'Текст объявления', 'type' => 'textarea', 'required' => true, 'max' => 1000],
+        'starts' => ['label' => 'Начало (местное время, необязательно)', 'type' => 'datetime-local'],
+        'ends' => ['label' => 'Окончание включительно (местное время, необязательно)', 'type' => 'datetime-local'],
+    ]],
+    'reviews' => ['title' => 'Реальные отзывы', 'fields' => [
+        'name' => ['label' => 'Автор', 'required' => true, 'max' => 150],
+        'text' => ['label' => 'Текст отзыва', 'type' => 'textarea', 'required' => true, 'max' => 3000],
+        'source' => ['label' => 'Ссылка на реальный источник', 'type' => 'url', 'required' => true, 'max' => 2000],
+    ]],
+    'rating' => ['title' => 'Рейтинг из внешнего источника', 'singleton' => true, 'fields' => [
+        'value' => ['label' => 'Рейтинг от 0 до 5 (например, 4.9; пусто — не показывать)', 'max' => 4],
+        'count' => ['label' => 'Количество оценок', 'type' => 'number', 'min' => 0, 'max' => 10000000],
+        'source' => ['label' => 'Ссылка на источник рейтинга', 'type' => 'url', 'max' => 2000],
+    ]],
 ];

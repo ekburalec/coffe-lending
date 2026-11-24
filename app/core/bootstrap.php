@@ -28,3 +28,5 @@ require_once APP_ROOT . '/app/controllers/auth.php';
 require_once APP_ROOT . '/app/services/images.php';
 require_once APP_ROOT . '/app/validators/admin.php';
 require_once APP_ROOT . '/app/controllers/admin.php';
+
+require_once APP_ROOT . '/app/services/opening-hours.php';

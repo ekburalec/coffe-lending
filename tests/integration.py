@@ -85,6 +85,14 @@ def run():
             assert request("/admin/edit?section=categories&id=" + category_id, {"csrf": csrf, "action": "delete", "confirm_delete": 1})[0] == 422
             product["price"] = 125
             assert request("/admin/edit?section=products&new=1", product, {"image_upload": ("bad.svg", "image/svg+xml", b"<svg/>")})[0] == 422
+            contacts = {"csrf": csrf, "name": "Тест кофейня", "city": "Екатеринбург", "street": "Новый адрес", "phone": "+70000000000", "map_url": "javascript:alert(1)"}
+            assert request("/admin/edit?section=contacts", contacts)[0] == 422
+            contacts["map_url"] = "https://example.com/map"
+            assert request("/admin/edit?section=contacts", contacts)[0] == 200
+            assert request("/admin/edit?section=hours&id=1", {"csrf": csrf, "opens": "22:00", "closes": "08:00"})[0] == 422
+            special = {"csrf": csrf, "date": "2026-12-31", "closed": 1, "note": "Праздник", "visible": 1, "sort_order": 0}
+            assert request("/admin/edit?section=exceptions&new=1", special)[0] == 200
+            assert request("/admin/edit?section=exceptions&new=1", special)[0] == 422
             db.close()
             print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation")
         finally:

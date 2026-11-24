@@ -1,100 +1,1589 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Заглушки шаблона: title, description, Open Graph, JSON-LD и тексты страницы заменяются
-         по docs/product/product.md и docs/product/landing-content.md -->
-    <meta name="description" content="Описание страницы для поиска: что это, для кого и главный факт. От 50 до 160 символов.">
-    <meta name="theme-color" content="#2F5BEA">
-    <title>Название проекта — короткий оффер</title>
-    <!-- Превью ссылки в соцсетях и мессенджерах. canonical и og:url добавляет сборка dist (docs/specs/deploy.md) -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Название проекта">
-    <meta property="og:locale" content="ru_RU">
-    <meta property="og:title" content="Название проекта — короткий оффер">
-    <meta property="og:description" content="Одно-два предложения: что это и главный факт для превью ссылки.">
-    <meta property="og:image" content="assets/img/og-image.jpg">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Название проекта: короткий оффер">
-    <meta name="twitter:card" content="summary_large_image">
-    <!-- Структурированные данные для поисковиков и ИИ-агентов: тип — из schema.org под бизнес,
-         адреса делает абсолютными сборка dist -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Название проекта",
-        "description": "Что это и для кого — теми же фактами, что на странице.",
-        "url": "./",
-        "logo": "assets/icons/icon-512.png"
-    }
-    </script>
-    <link rel="icon" href="assets/icons/favicon.svg?v=27bf616ddb" type="image/svg+xml" sizes="any">
-    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png?v=16edc8a16f" sizes="180x180">
-    <!-- Веб-приложение: «На экран Домой» на iPhone и установка на Android (docs/modules/web-app.md) -->
-    <link rel="manifest" href="manifest.webmanifest?v=3cf6543446">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Проект">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="stylesheet" href="assets/css/main.css">
-    <script type="module" src="assets/js/main.js"></script>
-</head>
-<body>
-    <a class="skip-link" href="#main">Перейти к содержанию</a>
-
-    <header class="site-header">
-        <div class="container site-header__inner">
-            <a class="site-header__logo" href="./">Название проекта</a>
-            <nav class="site-header__nav" aria-label="Разделы страницы">
-                <ul class="site-header__list">
-                    <li><a class="site-header__link" href="#about">О проекте</a></li>
-                    <li><a class="site-header__link" href="#contacts">Контакты</a></li>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta
+            name="description"
+            content="Кофе от 190 ₽, авторские чаи и десерты в кофейне «Вкусный повод». Меню с ценами, самовывоз и доставка в Екатеринбурге. Соберите состав заказа на сайте.">
+        <meta name="theme-color" content="#211813">
+        <title>Вкусный повод | Кофе, чай и десерты в Екатеринбурге</title>
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Вкусный повод">
+        <meta property="og:locale" content="ru_RU">
+        <meta property="og:title" content="Вкусный повод. Кофе, чай и десерты">
+        <meta
+            property="og:description"
+            content="Повод для утреннего кофе, перерыва и встречи. Посмотрите меню и соберите состав заказа с самовывозом или доставкой.">
+        <meta property="og:image" content="assets/img/og-image.jpg">
+        <meta property="og:image:type" content="image/jpeg">
+        <meta property="og:image:width" content="1200">
+        <meta property="og:image:height" content="630">
+        <meta
+            property="og:image:alt"
+            content="Вкусный повод. Кофе, чай и десерты в Екатеринбурге">
+        <meta name="twitter:card" content="summary_large_image">
+        <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "CafeOrCoffeeShop",
+                        "name": "Вкусный повод",
+                        "description": "Кофе, чай и десерты в Екатеринбурге. Самовывоз и доставка.",
+                        "url": "./",
+                        "image": "assets/img/hero/photo_1.webp",
+                        "logo": "assets/icons/icon-512.png",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": "ул. Кофейная, 12",
+                            "addressLocality": "Екатеринбург",
+                            "addressCountry": "RU"
+                        },
+                        "openingHoursSpecification": [
+                            {
+                                "@type": "OpeningHoursSpecification",
+                                "dayOfWeek": [
+                                    "Monday",
+                                    "Tuesday",
+                                    "Wednesday",
+                                    "Thursday",
+                                    "Friday",
+                                    "Saturday",
+                                    "Sunday"
+                                ],
+                                "opens": "08:00",
+                                "closes": "22:00"
+                            }
+                        ],
+                        "priceRange": "190–350 ₽",
+                        "hasMenu": "./#menu"
+                    },
+                    {
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": "Можно ли прийти с ноутбуком?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Да. У общего стола есть розетки и Wi-Fi. Мы открыты ежедневно с 08:00 до 22:00"
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Есть ли альтернативное молоко?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "В текущем меню капучино готовится на обычном молоке, раф на сливках. Замены молока и изменения рецептуры не предусмотрены"
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Где посмотреть состав?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "У каждой позиции в меню указан состав. Молочные напитки содержат молочные продукты. В десертах есть молочные продукты, яйца и пшеничная мука, в брауни также грецкий орех"
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Сколько стоит доставка?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "150 ₽ в радиусе 3 км от кофейни. При сумме товаров от 1 000 ₽ доставка бесплатная. При самовывозе доплаты нет"
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Когда можно забрать или получить заказ?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Ориентир для самовывоза: 15–20 минут, для доставки: 40–60 минут в рабочие часы. Это ориентиры, а не гарантированное время. Выбор позиций на сайте не оформляет заказ"
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Можно ли оплатить и отправить заказ на сайте?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Нет. Здесь можно выбрать позиции, изменить количество и посмотреть итоговую сумму. Состав не отправляется в кофейню, оплата и ввод личных данных не требуются"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        </script>
+        <link
+            rel="icon"
+            href="assets/icons/favicon.svg?v=f28072225d"
+            type="image/svg+xml"
+            sizes="any">
+        <link
+            rel="apple-touch-icon"
+            href="assets/icons/apple-touch-icon.png?v=7bb3af1282"
+            sizes="180x180">
+        <link rel="manifest" href="manifest.webmanifest?v=9e01f8e11c">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="ВкусныйПовод">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <link
+            rel="preload"
+            href="assets/fonts/cormorant-garamond-cyrillic.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin>
+        <link
+            rel="preload"
+            href="assets/fonts/manrope-cyrillic.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin>
+        <link rel="stylesheet" href="assets/css/main.css">
+        <script type="module" src="assets/js/main.js"></script>
+    </head>
+    <body id="top">
+        <a class="skip-link" href="#main">Перейти к содержимому</a>
+        <header class="site-header dark-mode" data-site-header>
+            <aside
+                class="announcement-bar"
+                data-announcement-bar
+                aria-label="Информация кофейни"
+                tabindex="0"
+            >
+                <p class="sr-only">
+                    Ежедневно 08:00–22:00. Самовывоз без доплаты. Доставка бесплатно от 1 000 ₽.
+                </p>
+                <div class="announcement-bar__viewport">
+                    <div class="announcement-bar__track">
+                        <ul class="announcement-bar__group" aria-hidden="true">
+                            <li>Ежедневно 08:00–22:00</li>
+                            <li>Самовывоз без доплаты</li>
+                            <li>Доставка бесплатно от 1 000 ₽</li>
+                        </ul>
+                        <ul
+                            class="announcement-bar__group announcement-bar__group--duplicate"
+                            aria-hidden="true"
+                        >
+                            <li>Ежедневно 08:00–22:00</li>
+                            <li>Самовывоз без доплаты</li>
+                            <li>Доставка бесплатно от 1 000 ₽</li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+            <div class="site-header__panel">
+                <div class="container">
+                    <div class="site-header__inner">
+                        <a class="brand" href="#top">
+                            <span class="brand__name">Вкусный повод</span>
+                        </a>
+                        <nav
+                            class="site-header__nav"
+                            id="site-navigation"
+                            aria-label="Основная навигация"
+                            data-navigation
+                        >
+                            <ul class="site-header__list">
+                                <li><a class="site-header__link" href="#menu">Меню</a></li>
+                                <li><a class="site-header__link" href="#space">О кофейне</a></li>
+                                <li>
+                                    <a class="site-header__link" href="#delivery"
+                                        >Самовывоз и доставка</a
+                                    >
+                                </li>
+                                <li><a class="site-header__link" href="#contacts">Контакты</a></li>
+                            </ul>
+                        </nav>
+                        <button
+                            class="site-header__order"
+                            type="button"
+                            data-order-open
+                            aria-haspopup="dialog"
+                            aria-controls="order"
+                            hidden
+                        >
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" focusable="false"><path d="M5 7h14l1 14H4L5 7Zm4 0V5a3 3 0 0 1 6 0v2"/></svg>
+                            <span class="site-header__order-label">Корзина</span
+                            ><output
+                                class="site-header__count"
+                                data-order-counter
+                                aria-label="Позиций в заказе: 0"
+                                >0</output
+                            >
+                        </button>
+                        <a class="btn btn--primary site-header__cta" href="#menu">Заказать</a>
+                        <button
+                            class="site-header__toggle"
+                            type="button"
+                            aria-label="Открыть меню"
+                            aria-expanded="false"
+                            aria-controls="site-navigation"
+                            data-navigation-toggle
+                            data-label-open="Открыть меню"
+                            data-label-close="Закрыть меню"
+                            hidden
+                        >
+                            <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                aria-hidden="true"
+                                focusable="false"
+                            >
+                                <path d="M4 7h16M4 12h16M4 17h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div
+            class="site-header__spacer dark-mode"
+            data-header-spacer
+            aria-hidden="true"
+            hidden
+        ></div>
+        <main id="main" tabindex="-1">
+            <section class="hero dark-mode" id="welcome" aria-labelledby="hero-title">
+                <div class="container hero__inner">
+                    <div class="hero__copy">
+                        <p class="section__eyebrow">Вкусный повод · кофейня в Екатеринбурге</p>
+                        <h1 class="hero__title" id="hero-title">
+                            Кофе, чай и десерты для вашего вкусного повода
+                        </h1>
+                        <p class="hero__lead">
+                            Капучино по пути, ягодный чай в перерыве или десерт к встрече. Выбирайте
+                            в меню, заглядывайте в кофейню или собирайте заказ с самовывозом и
+                            доставкой.
+                        </p>
+                        <div class="hero__actions">
+                            <a class="btn btn--primary" href="#menu">Заказать</a
+                            ><a class="text-link" href="#space">Заглянуть в кофейню</a>
+                        </div>
+                        <p class="hero__facts">Ежедневно 08:00–22:00 · Самовывоз и доставка</p>
+                        <p class="hero__note">
+                            На сайте можно собрать состав заказа без отправки и оплаты.
+                        </p>
+                    </div>
+                    <figure class="hero__visual media-frame">
+                        <img
+                            class="media-frame__image"
+                            src="assets/img/hero/photo_1.webp"
+                            srcset="
+                                assets/img/hero/photo_1.webp    1x,
+                                assets/img/hero/photo_1@2x.webp 2x
+                            "
+                            width="560"
+                            height="700"
+                            alt="Капучино и чизкейк на деревянном столе"
+                            loading="eager"
+                            fetchpriority="high">
+                    </figure>
+                </div>
+            </section>
+            <section class="section menu" id="menu" aria-labelledby="menu-title">
+                <div class="container">
+                    <div class="menu__intro">
+                        <div>
+                            <p class="section__eyebrow">Что вам сегодня по вкусу?</p>
+                            <h2
+                                class="section__title"
+                                id="menu-title"
+                                data-order-menu-focus
+                                tabindex="-1"
+                            >
+                                Кофе, чай и что-нибудь к ним
+                            </h2>
+                            <p class="section__lead">
+                                Начните с привычного капучино или попробуйте чай с ягодами. К
+                                напитку можно добавить чизкейк, брауни или медовик.
+                            </p>
+                        </div>
+                    </div>
+                    <nav class="menu__categories" aria-label="Категории меню">
+                        <a class="text-link" href="#coffee">Кофе</a
+                        ><a class="text-link" href="#tea">Чай</a
+                        ><a class="text-link" href="#desserts">Десерты</a>
+                    </nav>
+                    <p class="menu__note">
+                        Выбирайте позиции и смотрите итоговую сумму. Состав заказа не отправляется в
+                        кофейню.
+                    </p>
+                    <noscript
+                        ><p class="menu__note">
+                            Для выбора позиций включите JavaScript. Меню, составы и цены доступны
+                            без него.
+                        </p></noscript
+                    >
+                    <div class="menu__category" id="coffee">
+                        <h3 class="menu__category-title">Кофе</h3>
+                        <ul class="menu__products">
+                            <li
+                                class="product-card product-card--featured"
+                                data-product="americano"
+                            >
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_1.webp"
+                                    srcset="
+                                        assets/img/menu/photo_1.webp    1x,
+                                        assets/img/menu/photo_1@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Американо в керамической чашке"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-americano"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-americano"
+                                        data-product-name
+                                    >
+                                        Американо
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Чёрный кофе на основе эспрессо. Для тех, кто любит вкус кофе
+                                        без молока.
+                                    </p>
+                                    <p class="product-card__portion">250 мл</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>Эспрессо, вода.</p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="190"
+                                            data-unit-price
+                                            >190 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="americano"
+                                            aria-label="Добавить в заказ: Американо"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                            <li
+                                class="product-card product-card--compact"
+                                data-product="cappuccino"
+                            >
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_2.webp"
+                                    srcset="
+                                        assets/img/menu/photo_2.webp    1x,
+                                        assets/img/menu/photo_2@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Капучино с молочной пеной"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-cappuccino"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-cappuccino"
+                                        data-product-name
+                                    >
+                                        Капучино
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Эспрессо с молоком и мягкой молочной пеной.
+                                    </p>
+                                    <p class="product-card__portion">300 мл</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>Эспрессо, молоко.</p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="270"
+                                            data-unit-price
+                                            >270 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="cappuccino"
+                                            aria-label="Добавить в заказ: Капучино"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                            <li
+                                class="product-card product-card--compact"
+                                data-product="vanilla-raf"
+                            >
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_3.webp"
+                                    srcset="
+                                        assets/img/menu/photo_3.webp    1x,
+                                        assets/img/menu/photo_3@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Ванильный раф в стеклянном стакане"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-vanilla-raf"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-vanilla-raf"
+                                        data-product-name
+                                    >
+                                        Ванильный раф
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Кофе со сливками и ванильным сахаром. Мягкий, сливочный и
+                                        сладкий.
+                                    </p>
+                                    <p class="product-card__portion">300 мл</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>Эспрессо, сливки, ванильный сахар.</p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="340"
+                                            data-unit-price
+                                            >340 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="vanilla-raf"
+                                            aria-label="Добавить в заказ: Ванильный раф"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="menu__category" id="tea">
+                        <h3 class="menu__category-title">Чай</h3>
+                        <ul class="menu__products">
+                            <li
+                                class="product-card product-card--featured"
+                                data-product="black-tea"
+                            >
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_4.webp"
+                                    srcset="
+                                        assets/img/menu/photo_4.webp    1x,
+                                        assets/img/menu/photo_4@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Чёрный чай в прозрачной чашке"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-black-tea"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-black-tea"
+                                        data-product-name
+                                    >
+                                        Чёрный чай
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Листовой чай с привычным насыщенным вкусом.
+                                    </p>
+                                    <p class="product-card__portion">400 мл</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>Чёрный листовой чай, вода.</p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="220"
+                                            data-unit-price
+                                            >220 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="black-tea"
+                                            aria-label="Добавить в заказ: Чёрный чай"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                            <li
+                                class="product-card product-card--compact"
+                                data-product="sea-buckthorn-tea"
+                            >
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_5.webp"
+                                    srcset="
+                                        assets/img/menu/photo_5.webp    1x,
+                                        assets/img/menu/photo_5@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Облепиховый чай с апельсином"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-sea-buckthorn-tea"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-sea-buckthorn-tea"
+                                        data-product-name
+                                    >
+                                        Облепиховый с апельсином
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Кислинка облепихи и цитрусовый аромат на основе чёрного чая.
+                                    </p>
+                                    <p class="product-card__portion">400 мл</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>Чёрный чай, облепиха, апельсин, сахар, вода.</p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="350"
+                                            data-unit-price
+                                            >350 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="sea-buckthorn-tea"
+                                            aria-label="Добавить в заказ: Облепиховый с апельсином"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                            <li
+                                class="product-card product-card--compact"
+                                data-product="berry-mint-tea"
+                            >
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_6.webp"
+                                    srcset="
+                                        assets/img/menu/photo_6.webp    1x,
+                                        assets/img/menu/photo_6@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Ягодный чай с малиной, смородиной и мятой"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-berry-mint-tea"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-berry-mint-tea"
+                                        data-product-name
+                                    >
+                                        Ягодный с мятой
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Малина и смородина с мятой. Яркий ягодный вкус с лёгкой
+                                        кислинкой.
+                                    </p>
+                                    <p class="product-card__portion">400 мл</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>Чёрный чай, малина, смородина, мята, сахар, вода.</p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="350"
+                                            data-unit-price
+                                            >350 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="berry-mint-tea"
+                                            aria-label="Добавить в заказ: Ягодный с мятой"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="menu__category" id="desserts">
+                        <h3 class="menu__category-title">Десерты</h3>
+                        <ul class="menu__products">
+                            <li
+                                class="product-card product-card--featured"
+                                data-product="cheesecake"
+                            >
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_7.webp"
+                                    srcset="
+                                        assets/img/menu/photo_7.webp    1x,
+                                        assets/img/menu/photo_7@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Кусочек чизкейка на светлой тарелке"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-cheesecake"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-cheesecake"
+                                        data-product-name
+                                    >
+                                        Чизкейк
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Нежная сырная начинка на рассыпчатой основе.
+                                    </p>
+                                    <p class="product-card__portion">130 г</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>
+                                            Сливочный сыр, сливки, яйца, пшеничная мука, сливочное
+                                            масло, сахар.
+                                        </p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="320"
+                                            data-unit-price
+                                            >320 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="cheesecake"
+                                            aria-label="Добавить в заказ: Чизкейк"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                            <li class="product-card product-card--compact" data-product="brownie">
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_8.webp"
+                                    srcset="
+                                        assets/img/menu/photo_8.webp    1x,
+                                        assets/img/menu/photo_8@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Шоколадный брауни с грецким орехом"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-brownie"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-brownie"
+                                        data-product-name
+                                    >
+                                        Шоколадный брауни
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Плотный шоколадный десерт с грецким орехом.
+                                    </p>
+                                    <p class="product-card__portion">100 г</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>
+                                            Шоколад (какао, какао-масло, сахар), сливочное масло,
+                                            яйца, пшеничная мука, сахар, грецкий орех.
+                                        </p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="280"
+                                            data-unit-price
+                                            >280 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="brownie"
+                                            aria-label="Добавить в заказ: Шоколадный брауни"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                            <li
+                                class="product-card product-card--compact"
+                                data-product="honey-cake"
+                            >
+                                <img
+                                    class="product-card__image"
+                                    src="assets/img/menu/photo_9.webp"
+                                    srcset="
+                                        assets/img/menu/photo_9.webp    1x,
+                                        assets/img/menu/photo_9@2x.webp 2x
+                                    "
+                                    width="480"
+                                    height="360"
+                                    alt="Кусочек медовика со сметанным кремом"
+                                    loading="lazy">
+                                <article
+                                    class="product-card__body"
+                                    aria-labelledby="product-honey-cake"
+                                >
+                                    <h4
+                                        class="product-card__title"
+                                        id="product-honey-cake"
+                                        data-product-name
+                                    >
+                                        Медовик
+                                    </h4>
+                                    <p class="product-card__description">
+                                        Медовые коржи со сметанным кремом.
+                                    </p>
+                                    <p class="product-card__portion">140 г</p>
+                                    <details class="product-card__ingredients">
+                                        <summary>Состав</summary>
+                                        <p>
+                                            Мёд, пшеничная мука, яйца, сливочное масло, сметана,
+                                            сахар.
+                                        </p>
+                                    </details>
+                                    <div class="product-card__bottom">
+                                        <data
+                                            class="product-card__price"
+                                            value="330"
+                                            data-unit-price
+                                            >330 ₽</data
+                                        ><button
+                                            class="btn btn--secondary"
+                                            type="button"
+                                            data-order-add="honey-cake"
+                                            aria-label="Добавить в заказ: Медовик"
+                                            hidden
+                                        >
+                                            Добавить
+                                        </button>
+                                    </div>
+                                </article>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="menu__footer">
+                        <p class="section__note">
+                            В молочных напитках и десертах есть молочные продукты. Десерты содержат
+                            яйца и пшеничную муку, брауни также содержит грецкий орех.
+                        </p>
+                        <button
+                            class="text-link text-link--button"
+                            type="button"
+                            data-order-open
+                            aria-haspopup="dialog"
+                            aria-controls="order"
+                            hidden
+                        >
+                            Посмотреть состав заказа
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <section
+                class="section section--surface occasions"
+                id="occasions"
+                aria-labelledby="occasions-title"
+            >
+                <div class="container">
+                    <p class="section__eyebrow">По пути и по настроению</p>
+                    <h2 class="section__title" id="occasions-title">
+                        У каждого свой вкусный повод
+                    </h2>
+                    <p class="section__lead">
+                        Иногда нужен кофе по дороге. Иногда хочется отложить дела и встретиться с
+                        теми, кого давно не видели.
+                    </p>
+                    <ul class="occasions__list">
+                        <li class="occasions__item">
+                            <h3 class="occasions__title">Утро по пути</h3>
+                            <div class="occasions__copy">
+                                <p>
+                                    Возьмите американо или капучино перед работой. А к общему
+                                    перерыву можно выбрать напитки и десерты для коллег.
+                                </p>
+                                <a class="text-link" href="#coffee">Выбрать кофе</a>
+                            </div>
+                        </li>
+                        <li class="occasions__item">
+                            <h3 class="occasions__title">Пауза между делами</h3>
+                            <div class="occasions__copy">
+                                <p>
+                                    Загляните между занятиями или смените обстановку с ноутбуком. За
+                                    общим столом есть розетки и Wi-Fi.
+                                </p>
+                                <a class="text-link" href="#tea">Посмотреть чай и десерты</a>
+                            </div>
+                        </li>
+                        <li class="occasions__item">
+                            <h3 class="occasions__title">Встреча без особого повода</h3>
+                            <div class="occasions__copy">
+                                <p>
+                                    Позовите друга на ягодный чай, разделите десерт или проведите
+                                    вечер вдвоём. Для встречи не обязательно ждать праздника.
+                                </p>
+                                <a class="text-link" href="#space">Посмотреть кофейню</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="section space dark-mode" id="space" aria-labelledby="space-title">
+                <div class="container space__inner">
+                    <div class="space__copy">
+                        <p class="section__eyebrow">Можно остаться</p>
+                        <h2 class="section__title" id="space-title">Место для паузы и встреч</h2>
+                        <p class="section__lead">
+                            Забегайте за кофе с собой или выбирайте столик и оставайтесь. Можно
+                            поговорить с друзьями, выпить чай вдвоём или устроиться с ноутбуком.
+                        </p>
+                        <p>
+                            Для работы есть общий стол с розетками и Wi-Fi. Для разговоров и встреч
+                            есть отдельные столики.
+                        </p>
+                        <ul class="space__facts">
+                            <li>Столики для встреч</li>
+                            <li>Wi-Fi</li>
+                            <li>Розетки у общего стола</li>
+                        </ul>
+                        <a class="text-link" href="#contacts">Адрес и часы работы</a>
+                    </div>
+                    <figure class="space__visual media-frame">
+                        <img
+                            class="media-frame__image"
+                            src="assets/img/space/photo_1.webp"
+                            srcset="
+                                assets/img/space/photo_1.webp    1x,
+                                assets/img/space/photo_1@2x.webp 2x
+                            "
+                            width="720"
+                            height="450"
+                            alt="Столики и общий стол у окна в кофейне"
+                            loading="lazy">
+                    </figure>
+                </div>
+            </section>
+            <section
+                class="section section--surface delivery"
+                id="delivery"
+                aria-labelledby="delivery-title"
+            >
+                <div class="container">
+                    <p class="section__eyebrow">Как вам удобнее</p>
+                    <h2 class="section__title" id="delivery-title">С собой или с доставкой</h2>
+                    <p class="section__lead">
+                        Выберите напитки и десерты, затем способ получения. Стоимость доставки будет
+                        видна отдельно в составе заказа.
+                    </p>
+                    <div class="delivery__panels">
+                        <article class="delivery__panel">
+                            <h3 class="delivery__title">Самовывоз</h3>
+                            <p>Без доплаты. Ориентир приготовления: 15–20 минут в рабочие часы.</p>
+                            <p>Екатеринбург, ул. Кофейная, 12. Ежедневно 08:00–22:00.</p>
+                        </article>
+                        <article class="delivery__panel">
+                            <h3 class="delivery__title">Доставка</h3>
+                            <p>
+                                В радиусе 3 км от кофейни. Стоимость: 150 ₽, при сумме товаров от 1
+                                000 ₽ бесплатно.
+                            </p>
+                            <p>Ориентир времени: 40–60 минут в рабочие часы.</p>
+                        </article>
+                    </div>
+                    <p class="section__note delivery__note">
+                        Время указано ориентировочно. На сайте доступен только просмотр состава
+                        заказа, без отправки и оплаты.
+                    </p>
+                    <a class="text-link" href="#menu">Выбрать напитки и десерты</a>
+                </div>
+            </section>
+            <section class="section faq" id="faq" aria-labelledby="faq-title">
+                <div class="container faq__inner">
+                    <div>
+                        <p class="section__eyebrow">Перед выбором</p>
+                        <h2 class="section__title" id="faq-title">
+                            Несколько ответов к вашему кофе
+                        </h2>
+                    </div>
+                    <div class="faq__list">
+                        <details class="faq__item">
+                            <summary class="faq__question">Можно ли прийти с ноутбуком?</summary>
+                            <p class="faq__answer">
+                                Да. У общего стола есть розетки и Wi-Fi. Мы открыты ежедневно с
+                                08:00 до 22:00
+                            </p>
+                        </details>
+                        <details class="faq__item">
+                            <summary class="faq__question">Есть ли альтернативное молоко?</summary>
+                            <p class="faq__answer">
+                                В текущем меню капучино готовится на обычном молоке, раф на сливках.
+                                Замены молока и изменения рецептуры не предусмотрены
+                            </p>
+                        </details>
+                        <details class="faq__item">
+                            <summary class="faq__question">Где посмотреть состав?</summary>
+                            <p class="faq__answer">
+                                У каждой позиции в меню указан состав. Молочные напитки содержат
+                                молочные продукты. В десертах есть молочные продукты, яйца и
+                                пшеничная мука, в брауни также грецкий орех
+                            </p>
+                        </details>
+                        <details class="faq__item">
+                            <summary class="faq__question">Сколько стоит доставка?</summary>
+                            <p class="faq__answer">
+                                150 ₽ в радиусе 3 км от кофейни. При сумме товаров от 1 000 ₽
+                                доставка бесплатная. При самовывозе доплаты нет
+                            </p>
+                        </details>
+                        <details class="faq__item">
+                            <summary class="faq__question">
+                                Когда можно забрать или получить заказ?
+                            </summary>
+                            <p class="faq__answer">
+                                Ориентир для самовывоза: 15–20 минут, для доставки: 40–60 минут в
+                                рабочие часы. Это ориентиры, а не гарантированное время. Выбор
+                                позиций на сайте не оформляет заказ
+                            </p>
+                        </details>
+                        <details class="faq__item">
+                            <summary class="faq__question">
+                                Можно ли оплатить и отправить заказ на сайте?
+                            </summary>
+                            <p class="faq__answer">
+                                Нет. Здесь можно выбрать позиции, изменить количество и посмотреть
+                                итоговую сумму. Состав не отправляется в кофейню, оплата и ввод
+                                личных данных не требуются
+                            </p>
+                        </details>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="site-footer dark-mode" id="contacts">
+            <div class="container">
+                <div class="site-footer__inner">
+                    <div>
+                        <a class="brand" href="#top"
+                            ><span class="brand__name">Вкусный повод</span></a
+                        >
+                        <p class="site-footer__caption">Кофе, чай и десерты в Екатеринбурге</p>
+                    </div>
+                    <div>
+                        <h2 class="site-footer__title">Адрес</h2>
+                        <address>Екатеринбург,<br>ул. Кофейная, 12</address>
+                    </div>
+                    <div>
+                        <h2 class="site-footer__title">Часы работы</h2>
+                        <p>Ежедневно<br>08:00–22:00</p>
+                    </div>
+                    <div>
+                        <h2 class="site-footer__title">Телефон</h2>
+                        <p>+7 (343) 000-00-00</p>
+                    </div>
+                </div>
+                <div class="site-footer__bottom">
+                    <p>© Вкусный повод</p>
+                    <a class="text-link" href="#top">Наверх</a>
+                </div>
+            </div>
+        </footer>
+        <dialog
+            class="order-preview"
+            id="order"
+            aria-labelledby="order-title"
+            data-order-preview
+            data-label-delivery="Доставка"
+            data-label-pickup="Самовывоз"
+            data-hint-pickup="Самовывоз без доплаты."
+            data-hint-empty="Добавьте позиции, чтобы рассчитать доставку."
+            data-hint-paid="Доставка в радиусе 3 км: 150 ₽."
+            data-hint-free="Доставка бесплатная: сумма товаров от 1 000 ₽."
+            data-counter-label="Позиций в заказе: {количество}"
+            data-message-added="Добавлено: {название}"
+            data-message-changed="Количество изменено: {название}, {количество}"
+            data-message-removed="Удалено: {название}"
+            data-delivery-fee="150"
+            data-free-delivery-from="1000"
+            data-order-drawer
+        >
+            <div class="order-preview__header">
+                <div class="order-preview__heading">
+                    <p class="order-preview__eyebrow">Вкусный повод</p>
+                    <h2 class="order-preview__title" id="order-title">Ваша корзина</h2>
+                </div>
+                <button
+                    class="order-preview__close"
+                    type="button"
+                    aria-label="Закрыть корзину"
+                    data-order-close
+                    autofocus
+                >
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        aria-hidden="true"
+                        focusable="false"
+                    >
+                        <path d="m6 6 12 12M6 18 18 6" />
+                    </svg>
+                </button>
+            </div>
+            <div class="order-preview__content">
+                <div class="order-preview__empty" data-order-empty>
+                    <h3>Здесь появится ваш вкусный повод</h3>
+                    <p>Добавьте напиток или десерт из меню, чтобы посмотреть состав и сумму.</p>
+                    <a
+                        class="btn btn--primary"
+                        href="#menu"
+                        data-order-empty-link
+                        data-order-dismiss
+                        >Перейти к меню</a
+                    >
+                </div>
+                <ul class="order-preview__items" aria-label="Выбранные позиции" data-order-items>
+                    <li class="order-preview__row" data-order-row="americano" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_1.webp"
+                            srcset="
+                                assets/img/order/photo_1.webp    1x,
+                                assets/img/order/photo_1@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Американо"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Американо</h3>
+                            <p class="order-preview__portion">250 мл</p>
+                            <p class="order-preview__unit">Цена за штуку: 190 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="americano"
+                                    aria-label="Уменьшить количество: Американо"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="americano"
+                                    aria-label="Увеличить количество: Американо"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="americano"
+                                aria-label="Удалить из заказа: Американо"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
+                    <li class="order-preview__row" data-order-row="cappuccino" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_2.webp"
+                            srcset="
+                                assets/img/order/photo_2.webp    1x,
+                                assets/img/order/photo_2@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Капучино"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Капучино</h3>
+                            <p class="order-preview__portion">300 мл</p>
+                            <p class="order-preview__unit">Цена за штуку: 270 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="cappuccino"
+                                    aria-label="Уменьшить количество: Капучино"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="cappuccino"
+                                    aria-label="Увеличить количество: Капучино"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="cappuccino"
+                                aria-label="Удалить из заказа: Капучино"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
+                    <li class="order-preview__row" data-order-row="vanilla-raf" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_3.webp"
+                            srcset="
+                                assets/img/order/photo_3.webp    1x,
+                                assets/img/order/photo_3@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Ванильный раф"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Ванильный раф</h3>
+                            <p class="order-preview__portion">300 мл</p>
+                            <p class="order-preview__unit">Цена за штуку: 340 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="vanilla-raf"
+                                    aria-label="Уменьшить количество: Ванильный раф"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="vanilla-raf"
+                                    aria-label="Увеличить количество: Ванильный раф"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="vanilla-raf"
+                                aria-label="Удалить из заказа: Ванильный раф"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
+                    <li class="order-preview__row" data-order-row="black-tea" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_4.webp"
+                            srcset="
+                                assets/img/order/photo_4.webp    1x,
+                                assets/img/order/photo_4@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Чёрный чай"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Чёрный чай</h3>
+                            <p class="order-preview__portion">400 мл</p>
+                            <p class="order-preview__unit">Цена за штуку: 220 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="black-tea"
+                                    aria-label="Уменьшить количество: Чёрный чай"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="black-tea"
+                                    aria-label="Увеличить количество: Чёрный чай"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="black-tea"
+                                aria-label="Удалить из заказа: Чёрный чай"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
+                    <li class="order-preview__row" data-order-row="sea-buckthorn-tea" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_5.webp"
+                            srcset="
+                                assets/img/order/photo_5.webp    1x,
+                                assets/img/order/photo_5@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Облепиховый с апельсином"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Облепиховый с апельсином</h3>
+                            <p class="order-preview__portion">400 мл</p>
+                            <p class="order-preview__unit">Цена за штуку: 350 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="sea-buckthorn-tea"
+                                    aria-label="Уменьшить количество: Облепиховый с апельсином"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="sea-buckthorn-tea"
+                                    aria-label="Увеличить количество: Облепиховый с апельсином"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="sea-buckthorn-tea"
+                                aria-label="Удалить из заказа: Облепиховый с апельсином"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
+                    <li class="order-preview__row" data-order-row="berry-mint-tea" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_6.webp"
+                            srcset="
+                                assets/img/order/photo_6.webp    1x,
+                                assets/img/order/photo_6@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Ягодный с мятой"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Ягодный с мятой</h3>
+                            <p class="order-preview__portion">400 мл</p>
+                            <p class="order-preview__unit">Цена за штуку: 350 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="berry-mint-tea"
+                                    aria-label="Уменьшить количество: Ягодный с мятой"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="berry-mint-tea"
+                                    aria-label="Увеличить количество: Ягодный с мятой"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="berry-mint-tea"
+                                aria-label="Удалить из заказа: Ягодный с мятой"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
+                    <li class="order-preview__row" data-order-row="cheesecake" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_7.webp"
+                            srcset="
+                                assets/img/order/photo_7.webp    1x,
+                                assets/img/order/photo_7@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Чизкейк"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Чизкейк</h3>
+                            <p class="order-preview__portion">130 г</p>
+                            <p class="order-preview__unit">Цена за штуку: 320 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="cheesecake"
+                                    aria-label="Уменьшить количество: Чизкейк"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="cheesecake"
+                                    aria-label="Увеличить количество: Чизкейк"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="cheesecake"
+                                aria-label="Удалить из заказа: Чизкейк"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
+                    <li class="order-preview__row" data-order-row="brownie" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_8.webp"
+                            srcset="
+                                assets/img/order/photo_8.webp    1x,
+                                assets/img/order/photo_8@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Шоколадный брауни"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Шоколадный брауни</h3>
+                            <p class="order-preview__portion">100 г</p>
+                            <p class="order-preview__unit">Цена за штуку: 280 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="brownie"
+                                    aria-label="Уменьшить количество: Шоколадный брауни"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="brownie"
+                                    aria-label="Увеличить количество: Шоколадный брауни"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="brownie"
+                                aria-label="Удалить из заказа: Шоколадный брауни"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
+                    <li class="order-preview__row" data-order-row="honey-cake" hidden>
+                        <img
+                            class="order-preview__image"
+                            src="assets/img/order/photo_9.webp"
+                            srcset="
+                                assets/img/order/photo_9.webp    1x,
+                                assets/img/order/photo_9@2x.webp 2x
+                            "
+                            width="80"
+                            height="80"
+                            alt="Медовик"
+                            loading="lazy">
+                        <div class="order-preview__details">
+                            <h3 class="order-preview__name">Медовик</h3>
+                            <p class="order-preview__portion">140 г</p>
+                            <p class="order-preview__unit">Цена за штуку: 330 ₽</p>
+                            <span class="order-preview__line-total" data-order-line-total>0 ₽</span>
+                        </div>
+                        <div class="order-preview__actions">
+                            <div class="order-preview__quantity">
+                                <button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-decrease="honey-cake"
+                                    aria-label="Уменьшить количество: Медовик"
+                                >
+                                    −</button
+                                ><span class="order-preview__count" data-order-quantity>0</span
+                                ><button
+                                    class="order-preview__step"
+                                    type="button"
+                                    data-order-increase="honey-cake"
+                                    aria-label="Увеличить количество: Медовик"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <button
+                                class="order-preview__remove"
+                                type="button"
+                                data-order-remove="honey-cake"
+                                aria-label="Удалить из заказа: Медовик"
+                            >
+                                Удалить
+                            </button>
+                        </div>
+                    </li>
                 </ul>
-            </nav>
-            <a class="btn btn--primary site-header__cta" href="#contacts">Главное действие</a>
-        </div>
-    </header>
-
-    <main id="main">
-        <section class="hero" id="top" aria-labelledby="hero-title">
-            <div class="container">
-                <p class="hero__eyebrow">Надзаголовок: категория или место</p>
-                <h1 class="hero__title" id="hero-title">Оффер: конкретная польза для клиента</h1>
-                <p class="hero__lead">Подзаголовок раскрывает оффер фактами: что получит клиент, сколько стоит, как быстро.</p>
-                <div class="hero__actions">
-                    <a class="btn btn--primary" href="#contacts">Главное действие</a>
-                    <a class="btn btn--secondary" href="#about">Второстепенное действие</a>
+                <div class="order-preview__summary" data-order-summary hidden>
+                    <div class="order-preview__summary-inner">
+                        <fieldset
+                            class="order-preview__fieldset"
+                            data-order-controls
+                            hidden
+                            aria-describedby="delivery-hint"
+                        >
+                            <legend class="order-preview__legend">Способ получения</legend>
+                            <div class="order-preview__choices">
+                                <div class="order-preview__choice">
+                                    <input
+                                        id="pickup"
+                                        type="radio"
+                                        name="receiving"
+                                        value="pickup"
+                                        checked
+                                        data-receiving><label for="pickup">Самовывоз</label>
+                                </div>
+                                <div class="order-preview__choice">
+                                    <input
+                                        id="courier"
+                                        type="radio"
+                                        name="receiving"
+                                        value="delivery"
+                                        data-receiving><label for="courier">Доставка</label>
+                                </div>
+                            </div>
+                            <p class="order-preview__note" id="delivery-hint">
+                                Доставка 150 ₽, от 1 000 ₽ бесплатно. Самовывоз без доплаты.
+                            </p>
+                        </fieldset>
+                        <dl class="order-preview__calculation">
+                            <div class="order-preview__calculation-row">
+                                <dt>Товары</dt>
+                                <dd data-order-subtotal>0 ₽</dd>
+                            </div>
+                            <div class="order-preview__calculation-row">
+                                <dt data-order-delivery-label>Самовывоз</dt>
+                                <dd data-order-delivery>0 ₽</dd>
+                            </div>
+                            <div
+                                class="order-preview__calculation-row order-preview__calculation-row--total"
+                            >
+                                <dt>Итого</dt>
+                                <dd>
+                                    <output data-order-total aria-live="polite" aria-atomic="true"
+                                        >0 ₽</output
+                                    >
+                                </dd>
+                            </div>
+                        </dl>
+                        <p class="order-preview__note" data-order-delivery-hint>
+                            Самовывоз без доплаты.
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="section section--surface" id="about" aria-labelledby="about-title">
-            <div class="container">
-                <h2 class="section__title" id="about-title">Заголовок раздела отвечает на вопрос клиента</h2>
-                <p class="section__lead">Блоки лендинга верстаются по утверждённым текстам из docs/product/landing-content.md.</p>
-            </div>
-        </section>
-
-        <section class="section dark-mode" id="contacts" aria-labelledby="contacts-title">
-            <div class="container">
-                <h2 class="section__title" id="contacts-title">Финальный призыв к действию</h2>
-                <p class="section__lead">Повтор главного CTA и контакты. Тёмная секция — пример контекста .dark-mode.</p>
-                <div class="hero__actions">
-                    <a class="btn btn--primary" href="#top">Главное действие</a>
+                <div class="order-preview__more" data-order-more hidden>
+                    <a class="text-link" href="#menu" data-order-dismiss>Добавить ещё что-нибудь</a>
                 </div>
+                <p class="order-preview__notice">
+                    Состав заказа не отправляется в кофейню. Оплата не требуется.
+                </p>
             </div>
-        </section>
-    </main>
-
-    <footer class="site-footer">
-        <div class="container site-footer__inner">
-            <p class="site-footer__name">Название проекта</p>
-            <p>© 2026</p>
-        </div>
-    </footer>
-</body>
+        </dialog>
+    </body>
 </html>

@@ -227,13 +227,19 @@ dist/                    ← результат сборки, не в git, ру�
 
 | Документ | Что описывает |
 |----------|---------------|
-| — | пока нет |
+| [docs/product/logic/order-preview.md](docs/product/logic/order-preview.md) | Выбор позиций, количество и расчёт самовывоза/доставки без отправки и оплаты |
 
 ### Модули (`docs/modules/`)
 
 | Документ | Что описывает |
 |----------|---------------|
 | [docs/modules/web-app.md](docs/modules/web-app.md) | Веб-приложение: манифест и иконки для «На экран Домой» |
+| [docs/modules/build-dist.md](docs/modules/build-dist.md) | Сборка dist и генерация llms.txt / llms-full.txt в публичном и предварительном режимах |
+| [docs/modules/order-preview.md](docs/modules/order-preview.md) | Локальный состав заказа, пересчёт сумм, доступность и состояние без JS |
+| [docs/modules/order-drawer.md](docs/modules/order-drawer.md) | Боковая модальная корзина, открытие, закрытие, фокус и прокрутка |
+| [docs/modules/site-navigation.md](docs/modules/site-navigation.md) | Мобильная навигация, клавиатура, смена размера и состояние без JS |
+| [docs/modules/fixed-header.md](docs/modules/fixed-header.md) | Фиксированная шапка, компенсация высоты и отступы якорей |
+| [docs/modules/announcement-bar.md](docs/modules/announcement-bar.md) | Бегущая строка, пауза, доступность и уменьшение движения |
 | [docs/design/og-image/README.md](docs/design/og-image/README.md) | Картинка превью ссылки `og:image` 1200×630: шаблон и сборка `bin/build-og-image.php` |
 
 ### Интеграции (`docs/integrations/`)
@@ -242,7 +248,7 @@ dist/                    ← результат сборки, не в git, ру�
 
 | Документ | Что описывает |
 |----------|---------------|
-| — | пока нет |
+| [docs/integrations/github-pages.md](docs/integrations/github-pages.md) | Ручная сборка и публикация только dist через GitHub Actions / Pages |
 
 ## Если документация противоречит сама себе
 

@@ -30,17 +30,17 @@ Options -Indexes
     Header edit "ETag" "^\"(.*)-gzip\"$" "\"$1\""
 
     # HTML: браузер каждый раз сверяется с сервером — новые ссылки ?v= подхватываются сразу
-    <FilesMatch "\.(html?)$">
+    <FilesMatch "\.(html?|txt|xml)$">
         Header set Cache-Control "no-cache"
     </FilesMatch>
 
-    # CSS и JS: подключаются с ?v=хэш, при изменении ссылка меняется
+    # CSS и JS: версии в ссылках + обязательная перепроверка сохранённой копии
     <FilesMatch "\.(css|js)$">
-        Header set Cache-Control "public, max-age=86400"
+        Header set Cache-Control "public, no-cache, max-age=0, must-revalidate"
     </FilesMatch>
 
-    # Картинки, иконки, шрифты: без ?v=, поэтому кеш короткий и с перепроверкой
+    # Графика, шрифты и манифест: перепроверка даже при сохранении прежнего имени
     <FilesMatch "\.(webp|avif|png|jpe?g|gif|svg|ico|woff2?|webmanifest)$">
-        Header set Cache-Control "public, max-age=86400, must-revalidate"
+        Header set Cache-Control "public, no-cache, max-age=0, must-revalidate"
     </FilesMatch>
 </IfModule>

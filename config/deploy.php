@@ -11,7 +11,8 @@ return [
     'site_url' => '',
 
     // Предварительная сборка, закрытая от поисковиков: robots.txt «Disallow: /»,
-    // <meta name="robots" content="noindex, nofollow"> на страницах, без sitemap.xml и llms.txt.
+    // <meta name="robots" content="noindex, nofollow"> на страницах, без sitemap.xml.
+    // llms.txt и llms-full.txt создаются и в предварительной сборке.
     // Можно без site_url. Для боевого запуска — false.
     'noindex' => true,
 ];

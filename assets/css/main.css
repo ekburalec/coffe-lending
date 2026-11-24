@@ -1,21 +1,24 @@
-/* Точка входа стилей. Новый файл подключается только здесь. */
-
-/* base */
+/* Точка входа: base → blocks → sections → utils. */
 @import url('./base/vars.css');
 @import url('./base/reset.css');
 @import url('./base/base.css');
-
-/* blocks */
 @import url('./blocks/container.css');
 @import url('./blocks/skip-link.css');
 @import url('./blocks/btn.css');
+@import url('./blocks/brand.css');
+@import url('./blocks/text-link.css');
+@import url('./blocks/media-frame.css');
 @import url('./blocks/section.css');
+@import url('./blocks/product-card.css');
 @import url('./blocks/notify.css');
-
-/* sections */
+@import url('./blocks/announcement-bar.css');
 @import url('./sections/site-header.css');
 @import url('./sections/hero.css');
+@import url('./sections/menu.css');
+@import url('./sections/occasions.css');
+@import url('./sections/space.css');
+@import url('./sections/delivery.css');
+@import url('./sections/faq.css');
+@import url('./sections/order-preview.css');
 @import url('./sections/site-footer.css');
-
-/* utils */
 @import url('./utils/sr-only.css');

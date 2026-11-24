@@ -1,0 +1,12 @@
+.media-frame {
+    padding: var(--frame-inset);
+    border-radius: var(--radius-lg);
+    background: var(--media-frame-bg);
+    box-shadow: var(--shadow-soft);
+}
+.media-frame__image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-inner);
+    object-fit: cover;
+}

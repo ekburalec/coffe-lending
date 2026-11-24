@@ -1,86 +1,131 @@
-/* Шапка сайта: логотип, навигация по разделам, главный CTA */
-
 .site-header {
-    position: sticky;
+    position: relative;
     top: 0;
     z-index: var(--z-header);
-    border-bottom: 1px solid var(--site-header-border);
-    background-color: var(--site-header-bg);
-    backdrop-filter: blur(12px);
+    max-height: var(--site-header-max-height);
+    overflow-y: auto;
+    background: var(--hero-bg);
+    color: var(--page-color);
 }
-
+.site-header.is-fixed {
+    position: fixed;
+    inset-inline: 0;
+}
+.site-header__spacer {
+    height: var(--site-header-height);
+    background: var(--hero-bg);
+}
+.site-header__panel {
+    padding-block: var(--space-5) var(--space-4);
+}
 .site-header__inner {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-5);
-    min-height: 64px;
+    gap: var(--space-4) var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-lg);
+    background: var(--site-header-bg);
 }
-
-.site-header__logo {
-    color: var(--site-header-logo-color);
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    font-weight: var(--weight-heading);
-    text-decoration: none;
-}
-
 .site-header__nav {
-    display: none;
+    margin-inline-start: auto;
 }
-
 .site-header__list {
     display: flex;
-    gap: var(--space-5);
+    flex-wrap: wrap;
+    gap: var(--space-4);
 }
-
 .site-header__link {
-    color: var(--site-header-link-color);
-    font-weight: var(--weight-medium);
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-size);
+    font-size: var(--text-small);
     text-decoration: none;
-    transition: color var(--transition-fast);
+    color: var(--site-header-link-color);
 }
-
 .site-header__link:hover {
     color: var(--site-header-link-hover-color);
+    text-decoration: underline;
+    text-underline-offset: var(--space-1);
 }
-
-.site-header__logo,
-.site-header__cta {
-    white-space: nowrap;
+.site-header__order {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-inline-start: auto;
+    min-height: var(--control-size);
+    font-size: var(--text-small);
+    text-decoration: none;
 }
-
-/* Длинное название на узком экране обрезается многоточием, кнопка не сжимается */
-.site-header__logo {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.site-header__count {
+    display: grid;
+    place-items: center;
+    min-width: var(--space-6);
+    height: var(--space-6);
+    padding-inline: var(--space-1);
+    border: var(--line-width) solid currentColor;
+    border-radius: var(--radius-pill);
+    font-variant-numeric: tabular-nums;
 }
-
-.site-header__cta {
-    flex-shrink: 0;
-    min-height: 40px;
-    padding-inline: var(--space-5);
+.site-header__toggle {
+    display: inline-grid;
+    place-items: center;
+    width: var(--control-size);
+    height: var(--control-size);
+    padding: var(--space-2);
+    background: transparent;
+    border: var(--line-width) solid var(--site-header-border);
+    border-radius: var(--radius-sm);
 }
-
-@media (min-width: 960px) {
+.site-header__toggle svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+}
+@media (max-width: 959px) {
     .site-header__nav {
-        display: block;
+        order: 5;
+        width: 100%;
+        margin: 0;
+        border-top: var(--line-width) solid var(--site-header-border);
+        padding-top: var(--space-3);
+    }
+    .site-header__list {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: var(--space-1);
+    }
+    .site-header__link {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
     }
 }
-
+@media (max-width: 1010px) {
+    .site-header__cta {
+        display: none;
+    }
+}
 @media (max-width: 639px) {
+    .site-header__panel {
+        padding-block: var(--space-4);
+    }
     .site-header__inner {
+        padding: var(--space-4);
         gap: var(--space-3);
     }
-
-    .site-header__logo {
-        font-size: 1rem;
+    .site-header__order-label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
     }
-
-    .site-header__cta {
-        width: auto;
-        padding-inline: var(--space-4);
-        font-size: var(--text-small);
+    .site-header__order {
+        margin-inline-start: auto;
     }
 }

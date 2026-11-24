@@ -1,8 +1,14 @@
-# Шаблон HTML-лендинга
+# Вкусный повод
 
-Заготовка для статических лендингов: HTML + чистый CSS (BEM, переменные) + нативный JS
-(ES modules), сборка дистрибутива для обычного хостинга одной командой, правила для
-AI-агентов. Правила работы — [AGENTS.md](AGENTS.md), документация — [docs/](docs/).
+Лендинг кофейни в Екатеринбурге: кофе, чай и десерты, самовывоз и доставка.
+HTML + чистый CSS (BEM, переменные) + нативный JS (ES modules).
+Выбор товаров и расчёт состава работают локально, без отправки и оплаты.
+Правила работы — [AGENTS.md](AGENTS.md), документация — [docs/](docs/).
+
+Первая версия реализована. Результаты проверок и скриншоты —
+[docs/product/qa-report.md](docs/product/qa-report.md).
+Фотографии сгенерированы; шрифты подключаются локально из `assets/fonts/`.
+Публикация пока не настроена: `config/deploy.php` содержит `noindex: true` и пустой домен.
 
 ## Что нужно
 
@@ -15,8 +21,8 @@ AI-агентов. Правила работы — [AGENTS.md](AGENTS.md), до�
 1. Скопировать папку шаблона под именем проекта (без `dist/`), при желании — `git init`.
 2. Заполнить вместе с агентом, в этом порядке:
    1. [docs/product/product.md](docs/product/product.md) — бриф (последний вопрос — по какой структуре строим лендинг);
-   2. [docs/design/direction.md](docs/design/direction.md) + референсы в [docs/design/refs/](docs/design/refs/);
-   3. [docs/product/landing-content.md](docs/product/landing-content.md) — структура и тексты.
+   2. [docs/product/landing-content.md](docs/product/landing-content.md) — структура и тексты;
+   3. [docs/design/direction.md](docs/design/direction.md) + референсы в [docs/design/refs/](docs/design/refs/).
 3. Заменить заглушки каркаса:
 
 | Что | Где |
@@ -53,11 +59,23 @@ php bin/build-dist.php
 Результат — папка `dist/`: её содержимое (вместе со скрытым `.htaccess`) выгружается в корень
 сайта. Подробности, SEO-проверки и чек-лист публикации — [docs/specs/deploy.md](docs/specs/deploy.md).
 
+CSS и JS объединяются по точкам входа и подключаются с `?v=хэш`; графика копируется
+только по используемым ссылкам. `.htaccess` требует перепроверки статики на Apache.
+
+Для GitHub Pages: в Settings → Pages выбрать **GitHub Actions**, затем после коммита
+и push запустить **Actions → Deploy Pages → Run workflow**. Workflow публикует только
+`dist/`. На GitHub Pages `.htaccess` не действует; обновление CSS/JS обеспечивают версии.
+Текущая предварительная сборка остаётся закрытой от индексации.
+
+Сборка также создаёт `llms.txt` (оглавление для ИИ-агентов) и `llms-full.txt`
+(текст из HTML). В предварительном режиме используются относительные ссылки;
+наличие этих файлов не отменяет запрет индексации. SEO/ИИ-чек-лист — в правиле деплоя.
+
 ## Что в шаблоне
 
 ```
 AGENTS.md, CLAUDE.md     ← правила для AI-агентов (CLAUDE.md подключает AGENTS.md)
-index.html               ← каркас страницы: шапка, первый экран, раздел, финальный CTA, подвал
+index.html               ← лендинг: шапка, первый экран, меню, получение, FAQ и подвал
 manifest.webmanifest     ← веб-приложение «На экран Домой»
 assets/css/              ← base (vars, reset, base), blocks (container, skip-link, btn, section, notify),
                            sections (site-header, hero, site-footer), utils (sr-only)

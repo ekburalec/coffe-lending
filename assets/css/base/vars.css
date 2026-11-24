@@ -1,222 +1,316 @@
-/* ==========================================================================
-   Переменные проекта. Дизайн-направление — docs/design/direction.md
-   Значения в шаблоне — нейтральная заглушка: замените их по direction.md.
-   Брейкпоинты (в media нельзя использовать var()): 640px, 960px, 1200px.
-   Правила именования — docs/specs/css-component-vars.md, тёмная тема — docs/specs/theming.md
-   ========================================================================== */
+/* Дизайн: docs/design/direction.md. Все значения компонентов находятся здесь. */
 
-/* --------------------------------------------------------------------------
-   Палитра
--------------------------------------------------------------------------- */
+/* Палитра, типографика, размеры и движение */
 :root {
-    --color-bg:           #FFFFFF;
-    --color-surface:      #F4F5F7;
-    --color-heading:      #14161A;
-    --color-text:         #33363D;
-    --color-text-muted:   #5F636B;
-    --color-line:         #E1E3E8;
-    --color-accent:       #2F5BEA;
-    --color-accent-dark:  #2347C0;
-    --color-on-accent:    #FFFFFF;
-
-    --color-dark-bg:      #14161A;
-    --color-dark-surface: #1E2127;
-    --color-dark-line:    #33363D;
-    --color-dark-text:    #E8E9EC;
-    --color-dark-muted:   #A9ADB5;
-    --color-dark-accent:  #8FA9FF;
-}
-
-/* --------------------------------------------------------------------------
-   Шрифты и размеры текста
-   Свои шрифты — @font-face в base.css, файлы woff2 в assets/fonts/
--------------------------------------------------------------------------- */
-:root {
-    --font-heading: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-    --font-body:    system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-
-    --text-h1:     clamp(2.25rem, 1.5rem + 3.2vw, 4rem);
-    --text-h2:     clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem);
-    --text-h3:     clamp(1.25rem, 1.15rem + 0.45vw, 1.5rem);
-    --text-lead:   clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
-    --text-body:   clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
-    --text-small:  0.875rem;
+    --color-bg: #f7f1e8;
+    --color-surface: #eee3d5;
+    --color-card: #fffbf5;
+    --color-heading: #241b16;
+    --color-text: #493b32;
+    --color-text-muted: #716257;
+    --color-line: #d5c4b1;
+    --color-accent: #8b442d;
+    --color-accent-dark: #713521;
+    --color-on-accent: #fffbf5;
+    --color-dark-bg: #211813;
+    --color-dark-surface: #30231c;
+    --color-dark-line: #66503f;
+    --color-dark-text: #f7e9d7;
+    --color-dark-muted: #cab39a;
+    --color-dark-accent: #edc79e;
+    --font-heading: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Manrope', system-ui, sans-serif;
+    --text-h1: clamp(2.375rem, 1.1rem + 4.1vw, 4.75rem);
+    --text-h2: clamp(2rem, 1.4rem + 2.1vw, 3.25rem);
+    --text-h3: clamp(1.25rem, 1.1rem + 0.4vw, 1.5rem);
+    --text-lead: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    --text-body: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+    --text-small: 0.875rem;
+    --text-eyebrow: 0.75rem;
     --text-button: 1rem;
-
-    --leading-tight:   1.1;
-    --leading-heading: 1.2;
-    --leading-body:    1.6;
-
-    --tracking-heading: -0.01em;
-
-    --weight-regular:  400;
-    --weight-medium:   500;
+    --text-price: 1.25rem;
+    --leading-tight: 1.03;
+    --leading-heading: 1.08;
+    --leading-body: 1.6;
+    --tracking-heading: -0.02em;
+    --tracking-eyebrow: 0.08em;
+    --weight-regular: 400;
+    --weight-medium: 500;
     --weight-semibold: 600;
-    --weight-bold:     700;
-    --weight-heading:  700;
-}
-
-/* --------------------------------------------------------------------------
-   Отступы, размеры, скругления, тени, движение, слои
--------------------------------------------------------------------------- */
-:root {
-    --space-1:  4px;
-    --space-2:  8px;
-    --space-3:  12px;
-    --space-4:  16px;
-    --space-5:  24px;
-    --space-6:  32px;
-    --space-7:  48px;
-    --space-8:  64px;
-    --space-9:  96px;
-    --space-10: 128px;
-
-    --container-width:        1200px;
-    --container-padding:      16px;
+    --weight-heading: 500;
+    --text-measure: 65ch;
+    --lead-measure: 48ch;
+    --hero-title-measure: 17ch;
+    --container-width: 1200px;
+    --container-padding: 16px;
     --container-padding-wide: 32px;
-    --text-measure:           65ch;
-
-    --radius-sm:   8px;
-    --radius-md:   16px;
-    --radius-lg:   24px;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-inner: 18px;
     --radius-pill: 999px;
-
-    --shadow-soft: 0 12px 32px -12px color-mix(in srgb, var(--color-heading) 20%, transparent);
-
+    --frame-inset: 6px;
+    --line-width: 1px;
+    --focus-width: 2px;
+    --focus-offset: 3px;
+    --control-size: 44px;
+    --button-height: 48px;
+    --icon-size: 24px;
+    --brand-size: 1.75rem;
+    --hero-photo-width: 560px;
+    --product-photo-width: 480px;
+    --interior-photo-width: 720px;
+    --header-gap: 24px;
+    --shadow-soft: 0 16px 48px rgb(36 27 22 / 8%);
     --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
-
     --transition-fast: 200ms var(--ease-out);
     --transition-base: 300ms var(--ease-out);
-
     --z-header: 20;
     --z-notify: 40;
-    --z-skip:   50;
+    --z-skip: 50;
+    --notify-width: 420px;
+    --stroke-width: 1.5px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+    --space-9: 96px;
+    --space-10: 128px;
 }
 
-/* --------------------------------------------------------------------------
-   page — фон и текст страницы
--------------------------------------------------------------------------- */
+/* page */
 :root {
-    --page-bg:            var(--color-bg);
-    --page-color:         var(--color-text);
+    --page-bg: var(--color-bg);
+    --page-color: var(--color-text);
     --page-heading-color: var(--color-heading);
-    --page-muted-color:   var(--color-text-muted);
-    --page-focus-color:   var(--color-accent);
+    --page-muted-color: var(--color-text-muted);
+    --page-focus-color: var(--color-accent);
 }
-
 .dark-mode {
-    --page-bg:            var(--color-dark-bg);
-    --page-color:         var(--color-dark-text);
+    --page-bg: var(--color-dark-bg);
+    --page-color: var(--color-dark-text);
     --page-heading-color: var(--color-dark-text);
-    --page-muted-color:   var(--color-dark-muted);
-    --page-focus-color:   var(--color-dark-accent);
+    --page-muted-color: var(--color-dark-muted);
+    --page-focus-color: var(--color-dark-accent);
 }
 
-/* --------------------------------------------------------------------------
-   section
--------------------------------------------------------------------------- */
+/* section */
 :root {
-    --section-bg:         var(--color-bg);
+    --section-bg: var(--color-bg);
     --section-surface-bg: var(--color-surface);
+    --section-eyebrow-color: var(--color-accent);
 }
-
 .dark-mode {
-    --section-bg:         var(--color-dark-bg);
+    --section-bg: var(--color-dark-bg);
     --section-surface-bg: var(--color-dark-surface);
+    --section-eyebrow-color: var(--color-dark-accent);
 }
 
-/* --------------------------------------------------------------------------
-   skip-link
--------------------------------------------------------------------------- */
+/* brand */
 :root {
-    --skip-link-bg:    var(--color-heading);
+    --brand-color: var(--color-heading);
+}
+.dark-mode {
+    --brand-color: var(--color-dark-text);
+}
+
+/* skip-link */
+:root {
+    --skip-link-bg: var(--color-heading);
     --skip-link-color: var(--color-bg);
 }
-
 .dark-mode {
-    --skip-link-bg:    var(--color-dark-text);
+    --skip-link-bg: var(--color-dark-text);
     --skip-link-color: var(--color-dark-bg);
 }
 
-/* --------------------------------------------------------------------------
-   btn
--------------------------------------------------------------------------- */
+/* btn */
 :root {
-    --btn-primary-color:        var(--color-on-accent);
-    --btn-primary-bg:           var(--color-accent);
-    --btn-primary-border:       var(--color-accent);
-    --btn-primary-hover-color:  var(--color-on-accent);
-    --btn-primary-hover-bg:     var(--color-accent-dark);
+    --btn-primary-bg: var(--color-accent);
+    --btn-primary-color: var(--color-on-accent);
+    --btn-primary-border: var(--color-accent);
+    --btn-primary-hover-bg: var(--color-accent-dark);
+    --btn-primary-hover-color: var(--color-on-accent);
     --btn-primary-hover-border: var(--color-accent-dark);
-    --btn-primary-active-bg:    var(--color-heading);
-
-    --btn-secondary-color:        var(--color-accent);
-    --btn-secondary-bg:           transparent;
-    --btn-secondary-border:       color-mix(in srgb, var(--color-accent) 40%, transparent);
-    --btn-secondary-hover-color:  var(--color-accent-dark);
-    --btn-secondary-hover-bg:     color-mix(in srgb, var(--color-accent) 8%, transparent);
-    --btn-secondary-hover-border: var(--color-accent);
-    --btn-secondary-active-bg:    color-mix(in srgb, var(--color-accent) 16%, transparent);
+    --btn-primary-active-bg: var(--color-heading);
+    --btn-secondary-bg: transparent;
+    --btn-secondary-color: var(--color-accent);
+    --btn-secondary-border: var(--color-text-muted);
+    --btn-secondary-hover-bg: var(--color-surface);
+    --btn-secondary-hover-color: var(--color-accent-dark);
+    --btn-secondary-hover-border: var(--color-accent-dark);
+    --btn-secondary-active-bg: var(--color-surface);
+    --btn-disabled-bg: var(--color-surface);
+    --btn-disabled-color: var(--color-text-muted);
 }
-
 .dark-mode {
-    --btn-primary-color:        var(--color-dark-bg);
-    --btn-primary-bg:           var(--color-dark-accent);
-    --btn-primary-border:       var(--color-dark-accent);
-    --btn-primary-hover-color:  var(--color-dark-bg);
-    --btn-primary-hover-bg:     var(--color-dark-text);
+    --btn-primary-bg: var(--color-dark-accent);
+    --btn-primary-color: var(--color-dark-bg);
+    --btn-primary-border: var(--color-dark-accent);
+    --btn-primary-hover-bg: var(--color-dark-text);
+    --btn-primary-hover-color: var(--color-dark-bg);
     --btn-primary-hover-border: var(--color-dark-text);
-    --btn-primary-active-bg:    var(--color-dark-muted);
-
-    --btn-secondary-color:        var(--color-dark-accent);
-    --btn-secondary-border:       color-mix(in srgb, var(--color-dark-accent) 45%, transparent);
-    --btn-secondary-hover-color:  var(--color-dark-text);
-    --btn-secondary-hover-bg:     color-mix(in srgb, var(--color-dark-accent) 12%, transparent);
-    --btn-secondary-hover-border: var(--color-dark-accent);
-    --btn-secondary-active-bg:    color-mix(in srgb, var(--color-dark-accent) 20%, transparent);
+    --btn-primary-active-bg: var(--color-dark-muted);
+    --btn-secondary-color: var(--color-dark-accent);
+    --btn-secondary-border: var(--color-dark-muted);
+    --btn-secondary-hover-bg: var(--color-dark-surface);
+    --btn-secondary-hover-color: var(--color-dark-text);
+    --btn-secondary-hover-border: var(--color-dark-text);
+    --btn-secondary-active-bg: var(--color-dark-surface);
+    --btn-disabled-bg: var(--color-dark-surface);
+    --btn-disabled-color: var(--color-dark-muted);
 }
 
-/* --------------------------------------------------------------------------
-   site-header
--------------------------------------------------------------------------- */
+/* text-link */
 :root {
-    --site-header-bg:         color-mix(in srgb, var(--color-bg) 92%, transparent);
-    --site-header-border:     var(--color-line);
-    --site-header-logo-color: var(--color-heading);
+    --text-link-color: var(--color-accent);
+    --text-link-hover-color: var(--color-accent-dark);
+}
+.dark-mode {
+    --text-link-color: var(--color-dark-accent);
+    --text-link-hover-color: var(--color-dark-text);
+}
+
+/* media-frame */
+:root {
+    --media-frame-bg: var(--color-surface);
+}
+.dark-mode {
+    --media-frame-bg: var(--color-dark-surface);
+}
+
+/* announcement-bar */
+:root {
+    --announcement-bar-bg: var(--color-dark-accent);
+    --announcement-bar-color: var(--color-dark-bg);
+    --announcement-bar-duration: 32s;
+}
+.dark-mode {
+    --announcement-bar-bg: var(--color-dark-accent);
+    --announcement-bar-color: var(--color-dark-bg);
+}
+
+/* site-header */
+:root {
+    --site-header-height: 0px;
+    --site-header-max-height: 75dvh;
+    --site-header-bg: var(--color-card);
     --site-header-link-color: var(--color-text);
     --site-header-link-hover-color: var(--color-accent);
+    --site-header-border: var(--color-line);
 }
-
 .dark-mode {
-    --site-header-bg:         color-mix(in srgb, var(--color-dark-bg) 92%, transparent);
-    --site-header-border:     var(--color-dark-line);
-    --site-header-logo-color: var(--color-dark-text);
+    --site-header-bg: var(--color-dark-surface);
     --site-header-link-color: var(--color-dark-text);
     --site-header-link-hover-color: var(--color-dark-accent);
+    --site-header-border: var(--color-dark-line);
 }
 
-/* --------------------------------------------------------------------------
-   site-footer
--------------------------------------------------------------------------- */
+/* hero */
 :root {
-    --site-footer-bg:    var(--color-dark-bg);
+    --hero-bg: var(--color-bg);
+    --hero-rule: var(--color-line);
+}
+.dark-mode {
+    --hero-bg: var(--color-dark-bg);
+    --hero-rule: var(--color-dark-line);
+}
+
+/* product-card */
+:root {
+    --product-card-bg: var(--color-card);
+    --product-card-color: var(--color-text);
+    --product-card-title-color: var(--color-heading);
+    --product-card-muted-color: var(--color-text-muted);
+    --product-card-border: var(--color-line);
+}
+.dark-mode {
+    --product-card-bg: var(--color-dark-surface);
+    --product-card-color: var(--color-dark-text);
+    --product-card-title-color: var(--color-dark-text);
+    --product-card-muted-color: var(--color-dark-muted);
+    --product-card-border: var(--color-dark-line);
+}
+
+/* occasions */
+:root {
+    --occasions-border: var(--color-line);
+    --occasions-marker-color: var(--color-accent);
+}
+.dark-mode {
+    --occasions-border: var(--color-dark-line);
+    --occasions-marker-color: var(--color-dark-accent);
+}
+
+/* delivery */
+:root {
+    --delivery-panel-bg: var(--color-card);
+    --delivery-panel-border: var(--color-line);
+}
+.dark-mode {
+    --delivery-panel-bg: var(--color-dark-surface);
+    --delivery-panel-border: var(--color-dark-line);
+}
+
+/* faq */
+:root {
+    --faq-border: var(--color-line);
+    --faq-open-bg: var(--color-card);
+}
+.dark-mode {
+    --faq-border: var(--color-dark-line);
+    --faq-open-bg: var(--color-dark-surface);
+}
+
+/* order-preview */
+:root {
+    --order-preview-width: 540px;
+    --order-preview-panel-bg: var(--color-bg);
+    --order-preview-backdrop-bg: rgb(33 24 19 / 58%);
+    --order-preview-image-size: 80px;
+    --order-preview-bg: var(--color-card);
+    --order-preview-border: var(--color-line);
+    --order-preview-control-border: var(--color-text-muted);
+    --order-preview-selected-bg: var(--color-surface);
+    --order-preview-accent: var(--color-accent);
+}
+.dark-mode {
+    --order-preview-bg: var(--color-dark-surface);
+    --order-preview-panel-bg: var(--color-dark-bg);
+    --order-preview-border: var(--color-dark-line);
+    --order-preview-control-border: var(--color-dark-muted);
+    --order-preview-selected-bg: var(--color-dark-bg);
+    --order-preview-accent: var(--color-dark-accent);
+}
+
+/* site-footer */
+:root {
+    --site-footer-bg: var(--color-dark-bg);
     --site-footer-color: var(--color-dark-muted);
     --site-footer-title-color: var(--color-dark-text);
+    --site-footer-border: var(--color-dark-line);
 }
-
-/* --------------------------------------------------------------------------
-   notify
--------------------------------------------------------------------------- */
-:root {
-    --notify-bg:            var(--color-heading);
-    --notify-color:         var(--color-bg);
-    --notify-success-bg:    #1F7A45;
-    --notify-success-color: #FFFFFF;
-    --notify-error-bg:      #B42318;
-    --notify-error-color:   #FFFFFF;
-}
-
 .dark-mode {
-    --notify-bg:    var(--color-dark-text);
+    --site-footer-bg: var(--color-dark-bg);
+    --site-footer-color: var(--color-dark-muted);
+    --site-footer-title-color: var(--color-dark-text);
+    --site-footer-border: var(--color-dark-line);
+}
+
+/* notify */
+:root {
+    --notify-bg: var(--color-heading);
+    --notify-color: var(--color-bg);
+    --notify-success-bg: var(--color-heading);
+    --notify-success-color: var(--color-bg);
+    --notify-error-bg: #9d2b20;
+    --notify-error-color: #fffbf5;
+}
+.dark-mode {
+    --notify-bg: var(--color-dark-text);
     --notify-color: var(--color-dark-bg);
 }

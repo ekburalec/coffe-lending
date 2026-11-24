@@ -1,20 +1,40 @@
-/* Подвал сайта: название, контакты, копирайт */
-
 .site-footer {
-    padding-block: var(--space-7);
-    background-color: var(--site-footer-bg);
+    padding-block: var(--space-8) var(--space-6);
+    background: var(--site-footer-bg);
     color: var(--site-footer-color);
+    text-align: center;
+}
+.site-footer__inner {
+    display: grid;
+    gap: var(--space-6);
+}
+.site-footer__title {
+    margin-bottom: var(--space-3);
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    font-weight: var(--weight-semibold);
+    color: var(--site-footer-title-color);
+    letter-spacing: normal;
+}
+.site-footer__caption {
+    max-width: var(--lead-measure);
+    margin-top: var(--space-4);
+    margin-inline: auto;
     font-size: var(--text-small);
 }
-
-.site-footer__inner {
+.site-footer__bottom {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    gap: var(--space-4);
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-5);
+    padding-top: var(--space-5);
+    margin-top: var(--space-7);
+    border-top: var(--line-width) solid var(--site-footer-border);
+    font-size: var(--text-small);
 }
-
-.site-footer__name {
-    color: var(--site-footer-title-color);
-    font-weight: var(--weight-semibold);
+@media (min-width: 960px) {
+    .site-footer__inner {
+        grid-template-columns: 2fr 1.5fr 1fr 1fr;
+    }
 }

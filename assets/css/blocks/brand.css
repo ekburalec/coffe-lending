@@ -1,0 +1,14 @@
+.brand {
+    display: inline-flex;
+    flex-direction: column;
+    color: var(--brand-color);
+    text-decoration: none;
+    flex-shrink: 0;
+    max-width: 100%;
+}
+.brand__name {
+    font-family: var(--font-heading);
+    font-size: var(--brand-size);
+    font-weight: var(--weight-semibold);
+    line-height: var(--leading-heading);
+}

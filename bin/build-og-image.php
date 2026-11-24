@@ -73,17 +73,46 @@ function renderTemplateToPng(string $chrome, string $template, string $png): voi
         '2>&1',
     ]);
     exec($command, $output, $code);
-    exec('rm -rf ' . escapeshellarg($profile));
+    removeChromeProfile($profile);
 
     if ($code !== 0 || !is_file($png) || filesize($png) === 0) {
         throw new RuntimeException("не удалось сделать снимок шаблона:\n" . implode("\n", $output));
     }
 }
 
+/** Удаляет только собственный временный профиль, без команд оболочки. */
+function removeChromeProfile(string $profile): void
+{
+    $temporaryRoot = realpath(sys_get_temp_dir());
+    $resolvedProfile = realpath($profile);
+    if ($temporaryRoot === false || $resolvedProfile === false) {
+        return;
+    }
+    if (dirname($resolvedProfile) !== $temporaryRoot
+        || !str_starts_with(basename($resolvedProfile), 'og-chrome-')) {
+        throw new RuntimeException('неожиданный путь временного профиля Chrome');
+    }
+    $entries = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($resolvedProfile, FilesystemIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST,
+    );
+    foreach ($entries as $entry) {
+        if ($entry->isDir() && !$entry->isLink()) {
+            @rmdir($entry->getPathname());
+        } else {
+            @unlink($entry->getPathname());
+        }
+    }
+    @rmdir($resolvedProfile);
+}
+
 function findChrome(): string
 {
     $candidates = array_filter([
         getenv('CHROME_PATH') ?: null,
+        (getenv('PROGRAMFILES') ?: '') . '/Google/Chrome/Application/chrome.exe',
+        (getenv('PROGRAMFILES(X86)') ?: '') . '/Google/Chrome/Application/chrome.exe',
+        (getenv('LOCALAPPDATA') ?: '') . '/Google/Chrome/Application/chrome.exe',
         '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
         '/Applications/Chromium.app/Contents/MacOS/Chromium',
         '/usr/bin/google-chrome',

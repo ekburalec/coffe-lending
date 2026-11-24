@@ -1,0 +1,84 @@
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: var(--radius-lg);
+    background: var(--product-card-bg);
+    color: var(--product-card-color);
+    overflow: hidden;
+}
+.product-card__image {
+    width: 100%;
+    max-width: var(--product-photo-width);
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    margin-inline: auto;
+}
+.product-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-5);
+    gap: var(--space-3);
+}
+.product-card__title {
+    font-family: var(--font-body);
+    font-size: var(--text-h3);
+    font-weight: var(--weight-semibold);
+    letter-spacing: normal;
+    color: var(--product-card-title-color);
+    line-height: 1.25;
+}
+.product-card__description {
+    font-size: var(--text-small);
+}
+.product-card__portion {
+    color: var(--product-card-muted-color);
+    font-size: var(--text-small);
+}
+.product-card__ingredients {
+    font-size: var(--text-small);
+    color: var(--product-card-muted-color);
+}
+.product-card__ingredients summary {
+    cursor: pointer;
+    padding-block: var(--space-2);
+    min-height: var(--control-size);
+}
+.product-card__ingredients p {
+    padding-bottom: var(--space-3);
+}
+.product-card__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    margin-top: auto;
+    padding-top: var(--space-3);
+}
+.product-card__price {
+    font-size: var(--text-price);
+    font-weight: var(--weight-semibold);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+@media (min-width: 960px) {
+    .product-card--featured {
+        grid-row: span 2;
+    }
+    .product-card--compact {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .product-card--compact .product-card__image {
+        width: 34%;
+        margin: var(--space-4) 0 var(--space-4) var(--space-4);
+        border-radius: var(--radius-md);
+    }
+    .product-card--compact .product-card__body {
+        padding: var(--space-4);
+    }
+}

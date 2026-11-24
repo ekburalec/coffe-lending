@@ -1,0 +1,19 @@
+.text-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-size);
+    color: var(--text-link-color);
+    text-decoration-thickness: var(--line-width);
+    text-underline-offset: var(--space-1);
+    font-weight: var(--weight-medium);
+}
+.text-link:hover {
+    color: var(--text-link-hover-color);
+}
+.text-link--button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: start;
+    text-decoration: underline;
+}

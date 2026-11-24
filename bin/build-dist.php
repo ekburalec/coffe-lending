@@ -55,6 +55,7 @@ function buildDist(string $root): void
         $isIndexedPage = !isNoindexPage($html);
         if ($isIndexedPage) {
             $warnings = array_merge($warnings, checkPageSeo($root, $pageRel, $html));
+            $html = str_replace('</head>', '    <link rel="describedby" href="llms.txt" type="text/plain">' . "\n    </head>", $html);
         }
         if ($isNoindexBuild) {
             $html = injectNoindexMeta($html);
@@ -73,13 +74,18 @@ function buildDist(string $root): void
 
     copyAssets($root, $distDir, $assets);
     if ($isNoindexBuild) {
-        // Предварительная сборка: индексировать нечего, sitemap и llms не создаются
+        // Предварительная сборка: sitemap не создаётся, запрет обхода сохраняется
         writeDistFile($distDir, 'robots.txt', renderNoindexRobots());
     } else {
         writeDistFile($distDir, 'sitemap.xml', renderSitemap($siteUrl, $sitemapPages));
         writeDistFile($distDir, 'robots.txt', renderRobots($siteUrl));
-        writeDistFile($distDir, 'llms.txt', renderLlmsTxt($siteUrl, $indexedPages));
-        writeDistFile($distDir, 'llms-full.txt', renderLlmsFullTxt($siteUrl, $indexedPages));
+    }
+    if ($indexedPages) {
+        // Без домена ссылки относительные и работают в подпапке GitHub Pages.
+        $llmsBase = $siteUrl !== '' ? $siteUrl : '.';
+        $llmsNotice = $isNoindexBuild ? "Режим публикации: индексация отключена; см. robots.txt и meta robots.\n\n" : '';
+        writeDistFile($distDir, 'llms.txt', renderLlmsTxt($llmsBase, $indexedPages, !$isNoindexBuild, $llmsNotice));
+        writeDistFile($distDir, 'llms-full.txt', $llmsNotice . renderLlmsFullTxt($llmsBase, $indexedPages));
     }
     copyDeployFiles($root, $distDir);  // файлы из deploy/ перекрывают сгенерированные
 
@@ -87,7 +93,7 @@ function buildDist(string $root): void
     printWarnings($warnings);
     if ($isNoindexBuild) {
         echo PHP_EOL . 'ВНИМАНИЕ: предварительная сборка (noindex в ' . CONFIG_FILE . '): сайт закрыт от поисковиков'
-            . ($siteUrl === '' ? ', нет canonical, sitemap.xml и llms.txt' : ', нет sitemap.xml и llms.txt')
+            . ($siteUrl === '' ? ', нет canonical и sitemap.xml' : ', нет sitemap.xml')
             . '. Для боевого запуска укажи site_url и выключи noindex.' . PHP_EOL;
     }
 }
@@ -429,7 +435,7 @@ function printWarnings(array $warnings): void
 /**
  * llms.txt (llmstxt.org): название, описание, страницы и разделы со ссылками.
  */
-function renderLlmsTxt(string $siteUrl, array $pages): string
+function renderLlmsTxt(string $siteUrl, array $pages, bool $includeSitemap = true, string $notice = ''): string
 {
     ksort($pages);
     $main = getPageSummary($siteUrl, 'index.html', $pages['index.html'] ?? reset($pages));
@@ -438,7 +444,7 @@ function renderLlmsTxt(string $siteUrl, array $pages): string
     if ($main['description'] !== '') {
         $out .= "> {$main['description']}\n\n";
     }
-    $out .= "Сайт: {$siteUrl}/\n\n";
+    $out .= $notice . "Сайт: {$siteUrl}/\n\n";
 
     $out .= "## Страницы\n\n";
     foreach ($pages as $pageRel => $html) {
@@ -459,7 +465,9 @@ function renderLlmsTxt(string $siteUrl, array $pages): string
 
     $out .= "\n## Подробнее\n\n";
     $out .= "- [Полный текст сайта]({$siteUrl}/llms-full.txt): весь текст страниц в Markdown\n";
-    $out .= "- [Карта сайта]({$siteUrl}/sitemap.xml)\n";
+    if ($includeSitemap) {
+        $out .= "- [Карта сайта]({$siteUrl}/sitemap.xml)\n";
+    }
 
     return $out;
 }
@@ -606,7 +614,9 @@ function getAbsoluteUrlFromPage(string $pageUrl, string $href): string
     if (!isLocalUrl($href)) {
         return $href;
     }
-    $origin = preg_replace('~^(https?://[^/]+).*$~', '$1', $pageUrl);
+    $origin = preg_match('~^https?://~i', $pageUrl)
+        ? preg_replace('~^(https?://[^/]+).*$~', '$1', $pageUrl)
+        : '.';
     if (str_starts_with($href, '/')) {
         return $origin . $href;
     }
@@ -1148,7 +1158,7 @@ function removeDirectory(string $dir, string $root): void
     if (!is_dir($dir)) {
         return;
     }
-    if (realpath($dir) !== realpath($root) . '/' . DIST_DIR_NAME) {
+    if (realpath($dir) !== realpath($root) . DIRECTORY_SEPARATOR . DIST_DIR_NAME) {
         throw new RuntimeException("отказ удалять {$dir}: это не папка сборки");
     }
     $iterator = new RecursiveIteratorIterator(

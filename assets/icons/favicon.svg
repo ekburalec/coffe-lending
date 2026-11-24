@@ -1,5 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-    <!-- Заглушка шаблона: замените на знак проекта (docs/modules/web-app.md) -->
-    <rect width="512" height="512" rx="96" fill="#2F5BEA"/>
-    <rect x="136" y="136" width="240" height="240" rx="48" fill="none" stroke="#FFFFFF" stroke-width="40"/>
+  <title>Вкусный повод</title>
+  <rect width="512" height="512" fill="#211813"/>
+  <g fill="none" stroke="#EDC79E" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 142v228m0-228h44c76 0 76 108 0 108h-44m0 0h53c80 0 80 120 0 120h-53"/>
+    <path d="M300 370V142h102v228"/>
+  </g>
 </svg>

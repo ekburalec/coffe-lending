@@ -265,3 +265,5 @@ dist/                    ← результат сборки, не в git, ру�
 
 Спецификация: [docs/app/admin-spec.md](docs/app/admin-spec.md).
 План и прогресс: [ADMIN-PLAN.md](ADMIN-PLAN.md).
+
+| [docs/modules/php-app.md](docs/modules/php-app.md) | PHP-приложение: запуск, роутер и приватные данные |

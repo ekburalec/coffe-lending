@@ -35,4 +35,13 @@ return [
         'closed' => ['label' => 'Закрыто в этот день', 'type' => 'checkbox'],
         'note' => ['label' => 'Пояснение', 'max' => 300],
     ]],
+    'delivery' => ['title' => 'Самовывоз и доставка', 'singleton' => true, 'fields' => [
+        'pickup_enabled' => ['label' => 'Самовывоз доступен', 'type' => 'checkbox'],
+        'delivery_enabled' => ['label' => 'Доставка доступна', 'type' => 'checkbox'],
+        'fee' => ['label' => 'Стоимость доставки, ₽', 'type' => 'number', 'min' => 0, 'max' => 1000000, 'required' => true],
+        'threshold' => ['label' => 'Бесплатная доставка от, ₽ (0 — всегда бесплатно)', 'type' => 'number', 'min' => 0, 'max' => 1000000, 'required' => true],
+        'zone' => ['label' => 'Зона доставки', 'required' => true, 'max' => 300],
+        'pickup_time' => ['label' => 'Ориентир самовывоза', 'required' => true, 'max' => 120],
+        'delivery_time' => ['label' => 'Ориентир доставки', 'required' => true, 'max' => 120],
+    ]],
 ];

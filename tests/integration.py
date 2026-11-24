@@ -93,6 +93,12 @@ def run():
             special = {"csrf": csrf, "date": "2026-12-31", "closed": 1, "note": "Праздник", "visible": 1, "sort_order": 0}
             assert request("/admin/edit?section=exceptions&new=1", special)[0] == 200
             assert request("/admin/edit?section=exceptions&new=1", special)[0] == 422
+            delivery = {"csrf": csrf, "fee": 200, "threshold": 1200, "zone": "Рядом", "pickup_time": "20 минут", "delivery_time": "50 минут"}
+            assert request("/admin/edit?section=delivery", delivery)[0] == 422
+            delivery["delivery_enabled"] = 1
+            assert request("/admin/edit?section=delivery", delivery)[0] == 200
+            delivery["threshold"] = "12.5"
+            assert request("/admin/edit?section=delivery", delivery)[0] == 422
             db.close()
             print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation")
         finally:

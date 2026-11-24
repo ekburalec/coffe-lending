@@ -43,6 +43,7 @@ function validateAdminFields(array $fields, array $previous): array
 function validateAdminRecord(string $kind, array $data): array
 {
     $errors = [];
+    if ($kind === 'delivery' && empty($data['pickup_enabled']) && empty($data['delivery_enabled'])) $errors['pickup_enabled'] = 'Оставьте доступным хотя бы один способ получения.';
     if ($kind === 'products' && !findRecord('categories', $data['category'] ?? '')) $errors['category'] = 'Категория не существует.';
     if (in_array($kind, ['hours', 'exceptions'], true) && empty($data['closed'])) {
         foreach (['opens', 'closes'] as $name) if (!preg_match('/^(?:[01][0-9]|2[0-3]):[0-5][0-9]$/D', $data[$name] ?? '')) $errors[$name] = 'Укажите время ЧЧ:ММ.';

@@ -8,6 +8,8 @@ ini_set('display_errors', '0');
 error_reporting(E_ALL);
 require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/router.php';
+require_once __DIR__ . '/database.php';
+require_once APP_ROOT . '/app/models/content.php';
 
 set_exception_handler(function (Throwable $error): void {
     error_log((string) $error);

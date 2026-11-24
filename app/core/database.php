@@ -1,0 +1,18 @@
+<?php
+declare(strict_types=1);
+
+function database(): PDO
+{
+    static $pdo;
+    if ($pdo) return $pdo;
+    $directory = appConfig('data_dir');
+    if (!is_dir($directory) && !mkdir($directory, 0700, true) && !is_dir($directory)) {
+        throw new RuntimeException('Cannot create data directory');
+    }
+    $pdo = new PDO('sqlite:' . $directory . '/site.sqlite', null, null, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+    $pdo->exec('PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;');
+    return $pdo;
+}

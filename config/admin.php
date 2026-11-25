@@ -78,10 +78,12 @@ return [
         'source' => ['label' => 'Ссылка на источник рейтинга', 'type' => 'url', 'max' => 2000],
     ]],
     'seo' => ['title' => 'SEO и превью ссылки', 'singleton' => true, 'fields' => [
-        'title' => ['wide' => true, 'label' => 'Заголовок страницы (title)', 'required' => true, 'max' => 200],
-        'description' => ['wide' => true, 'label' => 'Описание страницы', 'type' => 'textarea', 'required' => true, 'max' => 500],
-        'og_title' => ['wide' => true, 'label' => 'Заголовок превью ссылки', 'required' => true, 'max' => 200],
-        'og_description' => ['wide' => true, 'label' => 'Описание превью ссылки', 'type' => 'textarea', 'required' => true, 'max' => 500],
+        'title' => ['wide' => true, 'label' => 'Заголовок страницы (title)', 'required' => true, 'max' => 200, 'hint' => 'Ориентир: до 60 символов.', 'count' => true],
+        'description' => ['wide' => true, 'label' => 'Описание для поисковиков (meta description)', 'type' => 'textarea', 'rows' => 3, 'required' => true, 'max' => 500, 'hint' => 'Ориентир: 50–160 символов.', 'count' => true],
+        'og_title' => ['wide' => true, 'label' => 'Заголовок превью ссылки', 'required' => true, 'max' => 200, 'hint' => 'Ориентир: до 60 символов.', 'count' => true],
+        'og_description' => ['wide' => true, 'label' => 'Описание превью ссылки', 'type' => 'textarea', 'rows' => 3, 'required' => true, 'max' => 500, 'hint' => 'Ориентир: до 160 символов.', 'count' => true],
+        'schema_description' => ['wide' => true, 'label' => 'Описание для разметки schema.org', 'type' => 'textarea', 'rows' => 3, 'max' => 500, 'hint' => 'Ориентир: до 200 символов. Пустое поле использует описание для поисковиков.', 'count' => true],
         'image' => ['wide' => true, 'label' => 'Изображение превью (после загрузки JPG 1200×630)', 'type' => 'image', 'required' => true],
+        'image_alt' => ['wide' => true, 'label' => 'Что на картинке', 'max' => 300, 'hint' => 'Для незрячих: опишите изображение словами. Пустое поле использует заголовок превью.'],
     ]],
 ];

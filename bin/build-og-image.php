@@ -16,6 +16,7 @@ const OG_HEIGHT = 630;
 const OG_JPEG_QUALITY = 86;
 
 $projectRoot = dirname(__DIR__);
+require_once $projectRoot . '/app/services/images.php';
 
 try {
     buildOgImage($projectRoot);
@@ -47,6 +48,7 @@ function buildOgImage(string $root): void
     imageinterlace($image, true);  // progressive JPEG
     imagejpeg($image, $output, OG_JPEG_QUALITY);
     imagedestroy($image);
+    generateOgPreviews($output);
 
     printf("Готово: %s (%d×%d, %s КБ)%s", OG_OUTPUT, OG_WIDTH, OG_HEIGHT, round(filesize($output) / 1024, 1), PHP_EOL);
 }

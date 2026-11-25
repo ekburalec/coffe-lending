@@ -30,6 +30,12 @@ function buildPhpDist(string $root): void
         $seed = json_decode(file_get_contents($root . '/config/seed.json'), true, 512, JSON_THROW_ON_ERROR);
         foreach (array_merge($seed['records']['products'], $seed['records']['images'], [$seed['settings']['seo']]) as $record) {
             $assets[$record['image']] = 'seed';
+            if (str_ends_with($record['image'], '.jpg')) {
+                foreach (['.webp', '@2x.webp'] as $suffix) {
+                    $previewAsset = substr($record['image'], 0, -4) . $suffix;
+                    if (is_file($root . '/' . $previewAsset)) $assets[$previewAsset] = 'SEO preview';
+                }
+            }
             if (str_ends_with($record['image'], '.webp')) $assets[str_replace('.webp', '@2x.webp', $record['image'])] = 'seed';
         }
         copyAssets($root, $dist, $assets);

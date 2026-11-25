@@ -20,6 +20,15 @@ function adminEditorController(): void
         render('error', ['title' => 'Запись не найдена', 'message' => 'Вернитесь к списку.']);
         return;
     }
+    if ($key === 'seo') {
+        $record['schema_description'] ??= $record['description'];
+        $record['image_alt'] ??= $record['og_title'];
+    }
+    $part = $key === 'seo' ? postText('section_part') : '';
+    $definitions = $section['fields'];
+    if (in_array($part, ['texts', 'preview'], true)) {
+        $definitions = array_filter($definitions, fn (string $name): bool => $part === 'preview' ? in_array($name, ['image', 'image_alt'], true) : !in_array($name, ['image', 'image_alt'], true), ARRAY_FILTER_USE_KEY);
+    }
     $editing = $singleton || $id !== '' || isset($_GET['new']);
     if (($section['fixed'] ?? false) && !$singleton && isset($_GET['new'])) redirect('/admin/edit?section=' . $key);
     $errors = [];
@@ -39,10 +48,10 @@ function adminEditorController(): void
             $errors = deleteAdminRecord($key, $id, $section);
             if (!$errors) redirect('/admin/edit?section=' . $key . '&saved=1');
         } else {
-            [$data, $errors] = validateAdminFields($section['fields'], $record ?? []);
+            [$data, $errors] = validateAdminFields($definitions, $record ?? []);
             $errors = array_merge($errors, validateAdminRecord($key, $data));
             if (!$errors) {
-                foreach ($section['fields'] as $name => $field) {
+                foreach ($definitions as $name => $field) {
                     if (($field['type'] ?? '') !== 'image') continue;
                     $file = $_FILES[$name . '_upload'] ?? ['error' => UPLOAD_ERR_NO_FILE];
                     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_NO_FILE) {
@@ -59,6 +68,7 @@ function adminEditorController(): void
                     $id = $id ?: 'item-' . bin2hex(random_bytes(8));
                     saveRecord($key, $id, $data);
                 }
+                if ($key === 'seo' && $part !== '') redirect('/admin/edit?section=seo&saved=1#seo-' . ($part === 'preview' ? 'preview' : 'texts'));
                 if ($key === 'rating' && postText('return_to') === 'reviews') redirect('/admin/edit?section=reviews&saved=1#rating');
                 if (in_array($key, ['reviews', 'faq'], true) && postText('return_to') === 'list') redirect('/admin/edit?section=' . $key . '&saved=1#record-' . $id);
                 redirect('/admin/edit?section=' . $key . ($singleton ? '' : '&id=' . $id) . '&saved=1');
@@ -73,6 +83,9 @@ function adminEditorController(): void
         $defaults['sort_order'] = $positions ? max($positions) + 1 : 0;
     }
     $fields = adminFields($section['fields'], $record ?? $defaults, $errors);
+    $seoTextFields = $key === 'seo' ? array_values(array_filter($fields, fn (array $field): bool => !in_array($field['name'], ['image', 'image_alt'], true))) : [];
+    $seoImageFields = $key === 'seo' ? array_values(array_filter($fields, fn (array $field): bool => $field['name'] === 'image_alt')) : [];
+    $seoPreview = $key === 'seo' ? seoPreviewData($record) : [];
     $ratingFields = $key === 'reviews' ? adminFields($sections['rating']['fields'], getSettings('rating'), [], 'rating') : [];
     $rows = [];
     if (!$singleton) foreach (listRecords($key) as $row) {
@@ -83,7 +96,7 @@ function adminEditorController(): void
     }
     $productGroups = $key === 'products' && !$editing ? productOrderGroups($rows) : [];
     $recordCaption = $record['name'] ?? $record['question'] ?? $record['label'] ?? $record['date'] ?? $id;
-    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields'));
+    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields', 'seoTextFields', 'seoImageFields', 'seoPreview'));
 }
 
 function deleteAdminRecord(string $kind, string $id, array $section): array

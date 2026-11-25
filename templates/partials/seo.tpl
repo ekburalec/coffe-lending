@@ -10,7 +10,7 @@
 <meta property="og:image" content="<?= e($seo['image_url']) ?>">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="<?= e($seo['og_title']) ?>">
+<meta property="og:image:alt" content="<?= e($seo['image_alt']) ?>">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json"><?= $seo['json_ld'] ?></script>
 

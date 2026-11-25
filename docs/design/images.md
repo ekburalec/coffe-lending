@@ -280,3 +280,9 @@ Hero экспортирован 560×700 и 1120×1400, интерьер 720×45
 | Чизкейк | assets/img/menu/photo_7@2x.webp | assets/img/order/photo_7.webp | assets/img/order/photo_7@2x.webp |
 | Шоколадный брауни | assets/img/menu/photo_8@2x.webp | assets/img/order/photo_8.webp | assets/img/order/photo_8@2x.webp |
 | Медовик | assets/img/menu/photo_9@2x.webp | assets/img/order/photo_9.webp | assets/img/order/photo_9@2x.webp |
+
+## Миниатюры текущего og:image для админки
+
+Производные существующего og-image.jpg без изменения содержания: assets/img/og-image.webp
+600×315 и assets/img/og-image@2x.webp 1200×630. Используются в SEO-панели с srcset 1x/2x.
+Обновляются вместе с JPG через bin/build-og-image.php. Новая иллюстрация не создавалась.

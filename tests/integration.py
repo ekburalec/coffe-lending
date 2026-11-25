@@ -199,6 +199,26 @@ def run():
             assert graph[0]["hasMenu"]["hasMenuSection"][-1]["hasMenuItem"][0]["offers"]["price"] == 125
             faq_schema = [x["acceptedAnswer"]["text"] for x in graph[1]["mainEntity"]]
             assert any("200" in text and "1 200" in text for text in faq_schema)
+            text_fields = {"csrf": csrf, "section_part": "texts", "title": "Новое название", "description": "Описание для поиска", "og_title": "Превью", "og_description": "Описание превью", "schema_description": "Отдельное описание schema.org"}
+            old_image = json.loads(db.execute("SELECT payload FROM settings WHERE name='seo'").fetchone()[0])["image"]
+            assert request("/admin/edit?section=seo", text_fields)[0] == 200
+            seo_settings = json.loads(db.execute("SELECT payload FROM settings WHERE name='seo'").fetchone()[0])
+            assert seo_settings["image"] == old_image
+            preview_fields = {"csrf": csrf, "section_part": "preview", "image": old_image, "image_alt": "Кофе и десерт на превью"}
+            assert request("/admin/edit?section=seo", preview_fields, {"image_upload": ("small.webp", "image/webp", file)})[0] == 422
+            og_bytes = (ROOT / "assets/img/og-image.jpg").read_bytes()
+            assert request("/admin/edit?section=seo", preview_fields, {"image_upload": ("preview.jpg", "image/jpeg", og_bytes)})[0] == 200
+            seo_settings = json.loads(db.execute("SELECT payload FROM settings WHERE name='seo'").fetchone()[0])
+            assert seo_settings["title"] == "Новое название" and seo_settings["schema_description"] == "Отдельное описание schema.org"
+            assert seo_settings["image"] != old_image and seo_settings["image_alt"] == "Кофе и десерт на превью"
+            for suffix in [".jpg", ".webp", "@2x.webp"]:
+                assert (Path(directory) / "uploads" / (Path(seo_settings["image"]).stem + suffix)).is_file()
+            seo_html = request("/admin/edit?section=seo")[1]
+            assert 'id="seo-texts"' in seo_html and 'id="seo-preview"' in seo_html and 'data-character-count' in seo_html
+            landing = request("/")[1]
+            assert 'property="og:image:alt" content="Кофе и десерт на превью"' in landing
+            graph = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', landing, re.S).group(1))["@graph"]
+            assert graph[0]["description"] == "Отдельное описание schema.org"
             assert request("/" + image, raw=True)[1].startswith(b"RIFF")
             assert "Новый адрес" in request("/llms-full.txt")[1]
             assert json.loads(request("/manifest.webmanifest")[1])["name"] == "Тест кофейня"
@@ -221,7 +241,7 @@ def run():
             assert status == 200 and headers["Content-Type"] == "application/zip"
             with zipfile.ZipFile(io.BytesIO(archive)) as z:
                 assert "site.sqlite" in z.namelist() and "manifest.json" in z.namelist()
-                assert len([n for n in z.namelist() if n.startswith("media/")]) == 2
+                assert len([n for n in z.namelist() if n.startswith("media/")]) == 5
             evil = io.BytesIO()
             with zipfile.ZipFile(evil, "w") as z: z.writestr("../escape.txt", "bad")
             assert request("/admin/backups", {"csrf": csrf, "action": "restore", "confirm_restore": 1}, {"backup": ("bad.zip", "application/zip", evil.getvalue())})[0] == 422
@@ -231,7 +251,7 @@ def run():
             status, html, _ = request("/admin/backups", {"csrf": csrf, "action": "restore", "confirm_restore": 1}, {"backup": ("full.zip", "application/zip", archive)})
             assert status == 200 and "Копия восстановлена" in html, re.findall(r'<p class="admin__message"[^>]*>(.*?)</p>', html)
             assert "Новый адрес" in request("/")[1] and "После копии" not in request("/")[1]
-            assert len(list((Path(directory) / "uploads").iterdir())) == 2
+            assert len(list((Path(directory) / "uploads").iterdir())) == 5
             assert len(list((Path(directory) / "backups").glob("*.zip"))) == 2
             login_html = request("/admin")[1]
             assert "Вход в админку" in login_html

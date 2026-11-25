@@ -87,3 +87,8 @@
 
 .admin__record-copy--hidden .admin__row-name { color: var(--admin-muted-color); }
 .admin__button--danger { color: var(--admin-error); }
+
+.admin__main--sections { display: grid; gap: var(--space-5); padding: 0; background: transparent; box-shadow: none; }
+.admin__seo-panel { min-width: 0; padding: var(--space-6); border-radius: var(--admin-panel-radius); background: var(--admin-surface); box-shadow: var(--admin-shadow); }
+.admin__seo-preview { display: block; width: 100%; max-width: var(--admin-seo-preview-width); height: auto; border: var(--line-width) solid var(--admin-line); border-radius: var(--radius-sm); }
+@media (max-width: 599px) { .admin__seo-panel { padding: var(--space-5) var(--space-4); border-radius: var(--radius-md); } }

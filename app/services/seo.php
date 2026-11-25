@@ -30,7 +30,7 @@ function landingSeo(array $data): array
         $special[] = ['@type' => 'OpeningHoursSpecification', 'validFrom' => $row['date'], 'validThrough' => $row['date'], 'opens' => !empty($row['closed']) ? '00:00' : $row['opens'], 'closes' => !empty($row['closed']) ? '00:00' : $row['closes']];
     }
     $cafe = [
-        '@type' => 'CafeOrCoffeeShop', 'name' => $contacts['name'], 'description' => $seo['description'],
+        '@type' => 'CafeOrCoffeeShop', 'name' => $contacts['name'], 'description' => !empty($seo['schema_description']) ? $seo['schema_description'] : $seo['description'],
         'url' => siteUrl() ? siteUrl() . '/' : './', 'image' => absoluteAsset($seo['image']),
         'address' => ['@type' => 'PostalAddress', 'addressLocality' => $contacts['city'], 'streetAddress' => $contacts['street'], 'addressCountry' => 'RU'],
         'openingHoursSpecification' => $opening, 'specialOpeningHoursSpecification' => $special,
@@ -55,6 +55,7 @@ function landingSeo(array $data): array
         '@type' => 'Question', 'name' => $row['question'], 'acceptedAnswer' => ['@type' => 'Answer', 'text' => $row['answer']],
     ], $data['faq'])];
     $deploy = require APP_ROOT . '/config/deploy.php';
+    $seo['image_alt'] = !empty($seo['image_alt']) ? $seo['image_alt'] : $seo['og_title'];
     $seo['noindex'] = $deploy['noindex'];
     $seo['canonical'] = siteUrl() ? siteUrl() . '/' : '';
     $seo['image_url'] = absoluteAsset($seo['image']);

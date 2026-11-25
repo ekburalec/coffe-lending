@@ -19,7 +19,7 @@
 <?php foreach ($sidebar as $group): ?><li><a class="admin__nav-link" href="<?= e($group['href']) ?>" <?= $group['active'] ? 'aria-current="page"' : '' ?>><?= e($group['title']) ?></a></li><?php endforeach; ?>
 </ul></nav></aside>
 <?php endif; ?>
-<main class="admin__main" id="admin-main" tabindex="-1"><h1 class="admin__title"><?= e($title) ?></h1>
+<main class="admin__main <?= $sectionPanels ? 'admin__main--sections' : '' ?>" id="admin-main" tabindex="-1"><?php if (!$sectionPanels): ?><h1 class="admin__title"><?= e($title) ?></h1><?php endif; ?>
 <?php if ($tabs): ?><nav class="admin__tabs" aria-label="Подразделы"><?php foreach ($tabs as $tab): ?><a class="admin__tab" href="<?= e($tab['href']) ?>" <?= $tab['active'] ? 'aria-current="page"' : '' ?>><?= e($tab['title']) ?></a><?php endforeach; ?></nav><?php endif; ?>
 <?php require __DIR__ . '/' . $view . '.tpl'; ?>
 </main>

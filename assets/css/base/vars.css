@@ -342,6 +342,8 @@
     --admin-seo-preview-width: 600px;
     --admin-record-min-width: 240px;
     --admin-delete-width: 300px;
+    --admin-compact-height: 34px;
+    --admin-compact-font-size: 0.8125rem;
     --admin-panel-radius: 24px;
     --admin-shadow: 0 5px 20px rgb(24 44 31 / 5%);
     --admin-title-size: clamp(1.875rem, 1.5rem + 1vw, 2.375rem);

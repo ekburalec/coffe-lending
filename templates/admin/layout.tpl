@@ -9,7 +9,7 @@
 <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml"></head>
 <body class="admin">
 <a class="skip-link" href="#admin-main">К содержимому</a>
-<header class="admin__header"><div class="admin__header-inner"><a class="admin__brand" href="/admin"><?= e($adminBrand) ?><span class="admin__caption">Панель управления</span></a><div class="admin__actions"><a class="admin__site-link" href="/">На сайт</a>
+<header class="admin__header"><div class="admin__header-inner"><a class="admin__brand" href="/admin"><?= e($adminBrand) ?><span class="admin__caption">Панель управления</span></a><div class="admin__actions"><a class="admin__site-link" href="/" target="_blank" rel="noopener noreferrer">На сайт<span class="sr-only"> (откроется в новой вкладке)</span></a>
 <?php if ($sidebar): ?><form method="post" action="/admin/logout"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><button class="admin__button admin__button--quiet" type="submit">Выйти</button></form><?php endif; ?>
 </div></div>
 </header>

@@ -38,10 +38,16 @@
 .admin__button--quiet { background: var(--admin-surface); border-color: var(--admin-line); color: var(--admin-link-color); }
 .admin__button--quiet:hover, .admin__button--quiet:active { background: var(--admin-subtle-bg); }
 .admin__button--submit { grid-column: 1 / -1; }
+.admin__button--compact { flex-shrink: 0; min-height: var(--admin-compact-height); padding: var(--space-1) var(--space-3); font-size: var(--admin-compact-font-size); white-space: nowrap; }
+.admin__file-input { padding: var(--space-2); border-style: dashed; font-size: var(--text-small); cursor: pointer; }
+.admin__file-input::file-selector-button { margin-inline-end: var(--space-3); padding: var(--space-2) var(--space-4); border: var(--line-width) solid var(--admin-line); border-radius: var(--radius-pill); background: var(--admin-subtle-bg); color: var(--admin-link-color); font: inherit; font-weight: var(--weight-semibold); cursor: pointer; }
+.admin__file-input:hover::file-selector-button { background: var(--admin-button-bg); color: var(--admin-button-color); }
+.admin__file-input:active::file-selector-button { background: var(--admin-button-active-bg); color: var(--admin-button-color); }
 .admin__message { color: var(--admin-error); overflow-wrap: anywhere; }
 .admin__success { color: var(--admin-link-color); background: var(--admin-subtle-bg); border-radius: var(--radius-sm); padding: var(--space-4); margin-block: var(--space-4); }
 .admin__hint { font-size: var(--text-small); font-weight: var(--weight-regular); }
 .admin__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+.admin__actions--row { justify-content: flex-end; gap: var(--space-2); margin-inline-start: auto; max-width: 100%; }
 .admin__list { display: grid; gap: var(--space-3); padding: 0; list-style: none; margin-block: var(--space-5); }
 .admin__row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; padding: var(--space-4); border: var(--line-width) solid var(--admin-line); border-radius: var(--radius-sm); background: var(--admin-subtle-bg); overflow-wrap: anywhere; }
 .admin__row-info { display: flex; flex: 1; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: baseline; min-width: 0; }
@@ -81,12 +87,17 @@
 .admin__subsection { margin-top: var(--space-6); padding-top: var(--space-5); border-top: var(--line-width) solid var(--admin-line); }
 .admin__record-copy { flex: 1; min-width: min(100%, var(--admin-record-min-width)); }
 .admin__record-copy--hidden { color: var(--admin-muted-color); }
-.admin__row--collection { align-items: start; }
+.admin__row--collection { align-items: center; }
 .admin__delete { max-width: 100%; }
 .admin__delete-form { display: grid; gap: var(--space-3); margin-top: var(--space-3); max-width: var(--admin-delete-width); }
 
 .admin__record-copy--hidden .admin__row-name { color: var(--admin-muted-color); }
 .admin__button--danger { color: var(--admin-error); }
+@media (max-width: 599px) {
+    .admin__button--compact { min-height: var(--control-size); }
+    .admin__actions--row { width: 100%; }
+    .admin__row > .admin__button--compact { margin-inline-start: auto; }
+}
 
 .admin__main--sections { display: grid; gap: var(--space-5); padding: 0; background: transparent; box-shadow: none; }
 .admin__seo-panel { min-width: 0; padding: var(--space-6); border-radius: var(--admin-panel-radius); background: var(--admin-surface); box-shadow: var(--admin-shadow); }

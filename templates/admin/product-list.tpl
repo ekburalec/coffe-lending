@@ -9,7 +9,7 @@
         <li class="admin__row admin__row--product" data-reorder-id="<?= e($row['id']) ?>" data-reorder-name="<?= e($row['name']) ?>">
             <button class="admin__drag-handle" type="button" data-reorder-handle aria-label="Переместить: <?= e($row['name']) ?>" aria-describedby="reorder-help" aria-pressed="false" hidden><svg width="20" height="24" viewBox="0 0 20 24" fill="currentColor" aria-hidden="true" focusable="false"><circle cx="7" cy="6" r="1.5"/><circle cx="13" cy="6" r="1.5"/><circle cx="7" cy="12" r="1.5"/><circle cx="13" cy="12" r="1.5"/><circle cx="7" cy="18" r="1.5"/><circle cx="13" cy="18" r="1.5"/></svg></button>
             <div class="admin__row-info"><a class="admin__row-name" href="/admin/edit?section=products&amp;id=<?= e($row['id']) ?>"><?= e($row['name']) ?></a><span class="admin__row-detail"><?= e($row['portion']) ?> · <?= e(rubles((int) $row['price'])) ?></span><span class="admin__badge"><?= !$row['visible'] ? 'Скрыто' : (!$row['available'] ? 'Нет в наличии' : '') ?></span></div>
-            <a class="admin__button admin__button--quiet" href="/admin/edit?section=products&amp;id=<?= e($row['id']) ?>">Изменить<span class="sr-only">: <?= e($row['name']) ?></span></a>
+            <a class="admin__button admin__button--quiet admin__button--compact" href="/admin/edit?section=products&amp;id=<?= e($row['id']) ?>">Изменить<span class="sr-only">: <?= e($row['name']) ?></span></a>
         </li>
     <?php endforeach; ?>
     </ul>

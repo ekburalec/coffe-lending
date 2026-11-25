@@ -12,3 +12,7 @@ exceptions, content, images, faq, announcements, reviews. Связь products.ca
 Доступ только через PDO prepared statements. JSON не является HTML.
 Миграция: `php bin/migrate.php`; seed.json — исходная демо-редакция, не рабочая БД.
 Конкурентные записи сериализует SQLite, busy_timeout 5 секунд. Файлы в APP_DATA_DIR.
+
+При повторной миграции отсутствующие фиксированные поля content/images/hours
+добавляются из seed без перезаписи имеющихся значений. Каталог и настройки не
+пересеиваются; это позволяет обновлять шаблон с новыми фиксированными полями.

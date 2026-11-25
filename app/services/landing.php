@@ -37,6 +37,7 @@ function landingFaq(array $delivery, array $hours): array
                 . 'В рабочие часы. Время ориентировочное. Состав на сайте не оформляет заказ.',
             default => $row['answer'],
         };
+        if (($row['mode'] ?? 'manual') !== 'manual' && !empty($row['prefix'])) $row['answer'] = $row['prefix'] . ' ' . $row['answer'];
     }
     unset($row);
     return $faq;

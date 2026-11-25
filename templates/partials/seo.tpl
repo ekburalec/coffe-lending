@@ -13,3 +13,5 @@
 <meta property="og:image:alt" content="<?= e($seo['og_title']) ?>">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json"><?= $seo['json_ld'] ?></script>
+
+<link rel="describedby" href="/llms.txt" type="text/plain">

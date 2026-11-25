@@ -5,6 +5,11 @@ export function initSiteNavigation() {
     const navigation = header.querySelector('[data-navigation]');
     const toggle = header.querySelector('[data-navigation-toggle]');
     if (!navigation || !toggle) return;
+    if (!navigation.querySelector('a')) {
+        navigation.hidden = true;
+        toggle.hidden = true;
+        return;
+    }
     const desktop = window.matchMedia('(min-width: 960px)');
 
     function setOpen(open) {

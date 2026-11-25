@@ -10,12 +10,12 @@
         <link rel="manifest" href="manifest.webmanifest?v=9e01f8e11c">
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-title" content="ВкусныйПовод">
+        <meta name="apple-mobile-web-app-title" content="<?= e($contacts['name']) ?>">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
         <link rel="preload" href="assets/fonts/cormorant-garamond-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="assets/fonts/manrope-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel="stylesheet" href="assets/css/main.css">
-        <script type="module" src="assets/js/main.js"></script>
+        <link rel="stylesheet" href="<?= e(assetUrl('assets/css/main.css')) ?>">
+        <script type="module" src="<?= e(assetUrl('assets/js/main.js')) ?>"></script>
     </head>
     <body id="top">
         <a class="skip-link" href="#main">Перейти к содержимому</a>
@@ -172,7 +172,7 @@
                     </div>
                     <div>
                         <h2 class="site-footer__title">Часы работы</h2>
-                        <p>Ежедневно<br>08:00&ndash;22:00</p>
+                        <p><?= e($hours['weekly']) ?><br><?= e($hours['today']) ?></p>
                     </div>
                     <div>
                         <h2 class="site-footer__title">Телефон</h2>

@@ -59,6 +59,7 @@ return [
     'faq' => ['title' => 'Вопросы и ответы', 'fields' => [
         'question' => ['label' => 'Вопрос', 'required' => true, 'max' => 300],
         'mode' => ['label' => 'Ответ', 'type' => 'select', 'options' => ['manual' => 'Текст ниже', 'hours' => 'Из расписания', 'delivery' => 'Из тарифов доставки', 'timing' => 'Из сроков получения']],
+        'prefix' => ['label' => 'Вступление перед автоматическим ответом (необязательно)', 'type' => 'textarea', 'max' => 1000],
         'answer' => ['label' => 'Свободный ответ (используется только в режиме «Текст ниже»)', 'type' => 'textarea', 'max' => 5000],
     ]],
     'announcements' => ['title' => 'Объявления', 'fields' => [

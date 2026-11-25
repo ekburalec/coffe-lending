@@ -34,3 +34,10 @@ function requestPath(): string
 {
     return rawurldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
 }
+
+function assetUrl(string $path): string
+{
+    static $assets;
+    $assets ??= is_file(APP_ROOT . '/config/assets.php') ? require APP_ROOT . '/config/assets.php' : [];
+    return '/' . ($assets[$path] ?? $path);
+}

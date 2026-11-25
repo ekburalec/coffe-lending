@@ -5,8 +5,15 @@
       "name": "landing",
       "runtimeExecutable": "php",
       "runtimeArgs": [
+        "-d",
+        "extension=gd",
+        "-d",
+        "extension=zip",
+        "-d",
+        "display_errors=0",
         "-S",
-        "localhost:8090"
+        "localhost:8090",
+        "router.php"
       ],
       "port": 8090
     },
@@ -14,8 +21,15 @@
       "name": "landing-alt",
       "runtimeExecutable": "php",
       "runtimeArgs": [
+        "-d",
+        "extension=gd",
+        "-d",
+        "extension=zip",
+        "-d",
+        "display_errors=0",
         "-S",
-        "localhost:8091"
+        "localhost:8091",
+        "router.php"
       ],
       "port": 8091
     },
@@ -23,10 +37,17 @@
       "name": "landing-dist",
       "runtimeExecutable": "php",
       "runtimeArgs": [
+        "-d",
+        "extension=gd",
+        "-d",
+        "extension=zip",
+        "-d",
+        "display_errors=0",
         "-S",
         "localhost:8092",
         "-t",
-        "dist"
+        "dist",
+        "dist/router.php"
       ],
       "port": 8092
     }

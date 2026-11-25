@@ -1,89 +1,102 @@
 # Вкусный повод
 
-Лендинг кофейни в Екатеринбурге: кофе, чай и десерты, самовывоз и доставка.
-HTML + чистый CSS (BEM, переменные) + нативный JS (ES modules).
-Выбор товаров и расчёт состава работают локально, без отправки и оплаты.
-Правила работы — [AGENTS.md](AGENTS.md), документация — [docs/](docs/).
+Лендинг кофейни с PHP-админкой: PHP 8.2+, SQLite/PDO, чистый CSS/BEM и нативный
+JavaScript. Каталог, навигация, контакты, расписание, доставка, тексты, фото, FAQ,
+объявления, реальные отзывы, рейтинг и SEO редактируются в `/admin`.
+Корзина только рассчитывает состав; отправки заказов и оплаты нет.
 
-Первая версия реализована. Результаты проверок и скриншоты —
-[docs/product/qa-report.md](docs/product/qa-report.md).
-Фотографии сгенерированы; шрифты подключаются локально из `assets/fonts/`.
-Публикация пока не настроена: `config/deploy.php` содержит `noindex: true` и пустой домен.
+## Локальный запуск
 
-## Что нужно
-
-- PHP 8+ в командной строке с расширениями GD и DOM — для сборки и локального сервера
-  (на хостинг PHP не нужен).
-- Google Chrome или Chromium — только для `bin/build-og-image.php`.
-
-## Как начать новый проект
-
-1. Скопировать папку шаблона под именем проекта (без `dist/`), при желании — `git init`.
-2. Заполнить вместе с агентом, в этом порядке:
-   1. [docs/product/product.md](docs/product/product.md) — бриф (последний вопрос — по какой структуре строим лендинг);
-   2. [docs/product/landing-content.md](docs/product/landing-content.md) — структура и тексты;
-   3. [docs/design/direction.md](docs/design/direction.md) + референсы в [docs/design/refs/](docs/design/refs/).
-3. Заменить заглушки каркаса:
-
-| Что | Где |
-|-----|-----|
-| `<title>`, description, Open Graph, JSON-LD, `apple-mobile-web-app-title`, `theme-color` | `index.html`, `<head>` |
-| Тексты и секции страницы | `index.html` (по `landing-content.md`) |
-| Палитра, шрифты, отступы, радиусы | `assets/css/base/vars.css` (по `direction.md`), шрифты — `assets/fonts/` + `@font-face` в `base.css` |
-| Знак и PNG-иконки | `assets/icons/` — [docs/modules/web-app.md](docs/modules/web-app.md) |
-| Имя, описание, цвета веб-приложения | `manifest.webmanifest` |
-| Картинка превью ссылки | `docs/design/og-image/og-image.html` → `php bin/build-og-image.php` |
-| Адрес сайта, режим noindex | `config/deploy.php` |
-
-После замены иконок или манифеста обновить `?v=` в ссылках (первые 10 символов md5 файла):
-
-```bash
-md5 -q assets/icons/favicon.svg | cut -c1-10
+```powershell
+php bin/migrate.php
+php -d extension=gd -d extension=zip -d display_errors=0 -S localhost:8090 router.php
 ```
 
-## Локальный просмотр
+Если GD/ZIP уже включены в php.ini, параметры `-d extension=...` не нужны.
+Открыть http://localhost:8090/ и http://localhost:8090/admin.
+Конфигурации запуска также есть в `.claude/launch.json`.
+`php -d extension=gd -d extension=zip bin/doctor.php` проверяет окружение.
 
-Конфигурации — в `.claude/launch.json`: `landing` — исходники на http://localhost:8090,
-`landing-dist` — собранный `dist/` на http://localhost:8092. Вручную:
+Первого администратора создают через CLI, известного пароля по умолчанию нет.
+Пароль длиной 12–72 байта передаётся через stdin, логин — аргументом:
 
-```bash
-php -S localhost:8090
+```text
+php bin/create-admin.php admin
 ```
 
-## Сборка для хостинга
+После запуска введите пароль в stdin и завершите ввод (Ctrl+Z, Enter в Windows;
+Ctrl+D в Linux). Терминал при таком способе может отображать ввод. Для скрытого
+ввода в PowerShell можно использовать:
 
-```bash
+```powershell
+$adminSecret = Read-Host 'Пароль администратора' -AsSecureString
+$adminCredential = [System.Net.NetworkCredential]::new('', $adminSecret)
+$adminCredential.Password | php bin/create-admin.php admin
+Remove-Variable adminSecret, adminCredential
+```
+
+Для явного сброса: `php bin/create-admin.php admin --reset`; старые сессии отзываются.
+В этом рабочем окружении создан локальный аккаунт, доступ сохранён в
+`var/admin-access.json` (не входит в git и сборку). После сохранения пароля файл
+можно удалить. Аккаунт на хостинге создаётся отдельно.
+
+## Работа с данными
+
+Сохранение сразу видно при следующей загрузке страницы. Общие сведения обновляются
+во всех связанных местах; упоминания внутри свободных текстов правятся вручную.
+Отзывы и ссылки карты добавляйте из реальных источников. Исходный адрес и телефон,
+товары и условия — демо, см. docs/product/product.md. Метки товаров исключены.
+
+На локальной машине данные находятся в `var/`, фотографии в `var/media/`.
+В PHP-дистрибутиве по умолчанию используется соседний с корнем сайта приватный
+каталог `coffee-data/`, фотографии в `coffee-data/media/`. Пути можно задать через
+APP_DATA_DIR и APP_UPLOAD_DIR. Пользователь PHP должен иметь право записи в них.
+Фотографии выдаются через PHP по публичным URL, прямого доступа к БД нет.
+
+В `/admin/backups` можно скачать БД или полный архив с загруженными фото и
+восстановить копию. Перед восстановлением автоматически сохраняется текущая
+версия. Сначала проверьте копию на тестовой установке. Подробности:
+[backups.md](docs/modules/backups.md).
+
+## Сборка и публикация
+
+```text
 php bin/build-dist.php
 ```
 
-Результат — папка `dist/`: её содержимое (вместе со скрытым `.htaccess`) выгружается в корень
-сайта. Подробности, SEO-проверки и чек-лист публикации — [docs/specs/deploy.md](docs/specs/deploy.md).
+`dist/` — PHP-приложение без рабочих данных и паролей. Сборка объединяет CSS/JS,
+ставит версии по содержимому и включает используемые исходные ресурсы. Рабочую БД
+она не читает и не изменяет. На хостинг выгружается содержимое `dist/`, включая
+`.htaccess` и `.user.ini`. Нужен Apache 2.4 с mod_rewrite, PHP 8.2+ и расширениями
+pdo_sqlite, DOM, mbstring, fileinfo, GD/WebP и ZIP. Для Nginx нужна отдельная
+настройка закрытых каталогов и маршрутизации; конфигурация проекта рассчитана на Apache.
 
-CSS и JS объединяются по точкам входа и подключаются с `?v=хэш`; графика копируется
-только по используемым ссылкам. `.htaccess` требует перепроверки статики на Apache.
+После первой загрузки выполните через SSH `php bin/migrate.php`, создайте
+администратора и запустите `php bin/doctor.php`. При обновлении заменяется только
+код; приватный `coffee-data/` сохраняется. Подробный порядок и проверки:
+[deploy.md](docs/specs/deploy.md).
 
-Для GitHub Pages: в Settings → Pages выбрать **GitHub Actions**, затем после коммита
-и push запустить **Actions → Deploy Pages → Run workflow**. Workflow публикует только
-`dist/`. На GitHub Pages `.htaccess` не действует; обновление CSS/JS обеспечивают версии.
-Текущая предварительная сборка остаётся закрытой от индексации.
+Сейчас `config/deploy.php`: пустой домен и `noindex: true`. Для боевого запуска
+нужны реальный домен, HTTPS, реальные контакты и выключенный noindex.
+GitHub Pages не используется. Ручной workflow **Build PHP release** проверяет
+приложение и сохраняет артефакт для скачивания, без публикации на хостинг.
 
-Сборка также создаёт `llms.txt` (оглавление для ИИ-агентов) и `llms-full.txt`
-(текст из HTML). В предварительном режиме используются относительные ссылки;
-наличие этих файлов не отменяет запрет индексации. SEO/ИИ-чек-лист — в правиле деплоя.
+## Проверки и документация
 
-## Что в шаблоне
-
+```powershell
+python tests/integration.py
+$env:COFFEE_TEST_ROOT = "$PWD/dist"
+python tests/integration.py
+Remove-Item Env:COFFEE_TEST_ROOT
 ```
-AGENTS.md, CLAUDE.md     ← правила для AI-агентов (CLAUDE.md подключает AGENTS.md)
-index.html               ← лендинг: шапка, первый экран, меню, получение, FAQ и подвал
-manifest.webmanifest     ← веб-приложение «На экран Домой»
-assets/css/              ← base (vars, reset, base), blocks (container, skip-link, btn, section, notify),
-                           sections (site-header, hero, site-footer), utils (sr-only)
-assets/js/               ← main.js + modules/notify.js
-assets/icons/            ← знак-заглушка и PNG-иконки
-assets/img/og-image.jpg  ← картинка превью-заглушка
-bin/                     ← build-dist.php, build-og-image.php
-config/deploy.php        ← site_url и noindex
-deploy/.htaccess         ← кеширование и сжатие на хостинге
-docs/                    ← продукт, дизайн, спеки по слоям, модули, правила агента
-```
+
+Тесты создают временную БД/медиа и отдельный сервер на localhost:8093; рабочие данные
+не затрагиваются. Для Playwright: `playwright-cli open http://localhost:8090/`,
+затем `playwright-cli run-code --filename=tests/browser.cjs`. Тест админки
+`tests/admin-browser.cjs` запускается после входа администратора в этой браузерной
+сессии. Формальная сторонняя сертификация WCAG не выполнялась.
+
+План и выполненные этапы: [ADMIN-PLAN.md](ADMIN-PLAN.md).
+Спецификация: [admin-spec.md](docs/app/admin-spec.md).
+Отчёт: [admin-qa.md](docs/product/admin-qa.md).
+Правила разработки: [AGENTS.md](AGENTS.md).

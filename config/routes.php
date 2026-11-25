@@ -2,6 +2,11 @@
 declare(strict_types=1);
 
 return [
+    'GET /manifest.webmanifest' => 'manifestController',
+    'GET /robots.txt' => 'discoveryController',
+    'GET /sitemap.xml' => 'discoveryController',
+    'GET /llms.txt' => 'discoveryController',
+    'GET /llms-full.txt' => 'discoveryController',
     'GET /admin/backups' => 'backupsController',
     'POST /admin/backups' => 'backupsController',
     'GET /admin/edit' => 'adminEditorController',

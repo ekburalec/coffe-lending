@@ -14,88 +14,13 @@ const HASH_LENGTH = 10;
 const CONFIG_FILE = 'config/deploy.php';
 
 $projectRoot = dirname(__DIR__);
+require __DIR__ . '/build-php.php';
 
 try {
-    buildDist($projectRoot);
+    buildPhpDist($projectRoot);
 } catch (RuntimeException $e) {
     fwrite(STDERR, "Ошибка сборки: " . $e->getMessage() . PHP_EOL);
     exit(1);
-}
-
-/**
- * Полный цикл сборки: очистка, страницы, CSS, JS, статика, файлы хостинга.
- */
-function buildDist(string $root): void
-{
-    $config = getDeployConfig($root);
-    $siteUrl = $config['site_url'];
-    $isNoindexBuild = $config['noindex'];
-    $distDir = $root . '/' . DIST_DIR_NAME;
-    removeDirectory($distDir, $root);
-    mkdir($distDir, 0755, true);
-
-    $pages = glob($root . '/*.html') ?: [];
-    if (!$pages) {
-        throw new RuntimeException('в корне проекта нет ни одного *.html');
-    }
-
-    $built = [];   // путь сборки => ['content' => ..., 'hash' => ...]
-    $assets = [];  // путь статики => откуда ссылка
-    $sitemapPages = [];
-    $indexedPages = [];  // страница => итоговый HTML, для llms.txt
-    $warnings = [];
-
-    foreach ($pages as $pagePath) {
-        $pageRel = basename($pagePath);
-        $html = (string) file_get_contents($pagePath);
-        $html = buildPage($root, $pageRel, $html, $built, $assets);
-        if ($siteUrl !== '') {
-            $html = injectSeoTags($html, $siteUrl, $pageRel);
-        }
-        $isIndexedPage = !isNoindexPage($html);
-        if ($isIndexedPage) {
-            $warnings = array_merge($warnings, checkPageSeo($root, $pageRel, $html));
-            $html = str_replace('</head>', '    <link rel="describedby" href="llms.txt" type="text/plain">' . "\n    </head>", $html);
-        }
-        if ($isNoindexBuild) {
-            $html = injectNoindexMeta($html);
-        }
-        writeDistFile($distDir, $pageRel, $html);
-        if ($isIndexedPage) {
-            $sitemapPages[$pageRel] = date('Y-m-d', (int) filemtime($pagePath));
-            $indexedPages[$pageRel] = $html;
-        }
-    }
-
-    foreach ($built as $rel => $item) {
-        writeDistFile($distDir, $rel, $item['content']);
-        collectAssetsFromText($root, $rel, $item['content'], $assets);
-    }
-
-    copyAssets($root, $distDir, $assets);
-    if ($isNoindexBuild) {
-        // Предварительная сборка: sitemap не создаётся, запрет обхода сохраняется
-        writeDistFile($distDir, 'robots.txt', renderNoindexRobots());
-    } else {
-        writeDistFile($distDir, 'sitemap.xml', renderSitemap($siteUrl, $sitemapPages));
-        writeDistFile($distDir, 'robots.txt', renderRobots($siteUrl));
-    }
-    if ($indexedPages) {
-        // Без домена ссылки относительные и работают в подпапке GitHub Pages.
-        $llmsBase = $siteUrl !== '' ? $siteUrl : '.';
-        $llmsNotice = $isNoindexBuild ? "Режим публикации: индексация отключена; см. robots.txt и meta robots.\n\n" : '';
-        writeDistFile($distDir, 'llms.txt', renderLlmsTxt($llmsBase, $indexedPages, !$isNoindexBuild, $llmsNotice));
-        writeDistFile($distDir, 'llms-full.txt', $llmsNotice . renderLlmsFullTxt($llmsBase, $indexedPages));
-    }
-    copyDeployFiles($root, $distDir);  // файлы из deploy/ перекрывают сгенерированные
-
-    printReport($distDir);
-    printWarnings($warnings);
-    if ($isNoindexBuild) {
-        echo PHP_EOL . 'ВНИМАНИЕ: предварительная сборка (noindex в ' . CONFIG_FILE . '): сайт закрыт от поисковиков'
-            . ($siteUrl === '' ? ', нет canonical и sitemap.xml' : ', нет sitemap.xml')
-            . '. Для боевого запуска укажи site_url и выключи noindex.' . PHP_EOL;
-    }
 }
 
 /**

@@ -2,7 +2,8 @@
 <?php if ($notice): ?><p class="admin__success" role="status"><?= e($notice) ?></p><?php endif; ?>
 <?php if ($errors): ?><div class="admin__message" role="alert" id="form-errors"><p>Изменения не сохранены:</p><ul><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
 <?php if ($editing): ?>
-<form class="admin__form" method="post" enctype="multipart/form-data">
+<?php if ($id): ?><h2><?= e($recordCaption) ?></h2><?php endif; ?>
+<form class="admin__form" method="post" enctype="multipart/form-data" autocomplete="off">
 <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
 <?php foreach ($fields as $field): ?>
 <div class="admin__field">
@@ -17,7 +18,7 @@
 <?php elseif ($field['type'] === 'checkbox'): ?>
 <input id="field-<?= e($field['name']) ?>" type="checkbox" name="<?= e($field['name']) ?>" value="1" <?= $field['value'] ? 'checked' : '' ?> aria-describedby="error-<?= e($field['name']) ?>">
 <?php else: ?>
-<input class="admin__input" id="field-<?= e($field['name']) ?>" name="<?= e($field['name']) ?>" type="<?= e($field['type']) ?>" value="<?= e($field['value']) ?>" <?= !empty($field['required']) ? 'required' : '' ?> <?= $field['type'] === 'number' ? 'min="' . e($field['min'] ?? 0) . '" max="' . e($field['max'] ?? 1000000) . '" step="1"' : 'maxlength="' . e($field['max'] ?? 5000) . '"' ?> aria-describedby="error-<?= e($field['name']) ?>" aria-invalid="<?= $field['error'] ? 'true' : 'false' ?>">
+<input class="admin__input" id="field-<?= e($field['name']) ?>" name="<?= e($field['name']) ?>" type="<?= e($field['type']) ?>" value="<?= e($field['value']) ?>" <?= !empty($field['required']) ? 'required' : '' ?> <?= $field['type'] === 'number' ? 'min="' . e($field['min'] ?? 0) . '" max="' . e($field['max'] ?? 1000000) . '" step="1"' : (in_array($field['type'], ['text', 'url', 'tel'], true) ? 'maxlength="' . e($field['max'] ?? 5000) . '"' : '') ?> aria-describedby="error-<?= e($field['name']) ?>" aria-invalid="<?= $field['error'] ? 'true' : 'false' ?>">
 <?php endif; ?>
 <span class="admin__hint admin__message" id="error-<?= e($field['name']) ?>"><?= e($field['error']) ?></span>
 </div>

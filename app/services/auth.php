@@ -34,5 +34,5 @@ function validCsrf(): bool
 
 function adminPage(string $title, string $view, array $data = []): void
 {
-    render('admin/layout', array_merge($data, ['title' => $title, 'view' => $view, 'csrf' => $_SESSION['csrf']]));
+    render('admin/layout', array_merge($data, ['title' => $title, 'view' => $view, 'csrf' => $_SESSION['csrf'], 'adminBrand' => getSettings('contacts')['name']]));
 }

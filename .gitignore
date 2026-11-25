@@ -9,3 +9,5 @@
 /assets/img/uploads/
 /.playwright-cli/
 /test-results/
+
+/coffee-data/

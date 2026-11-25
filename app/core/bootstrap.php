@@ -38,3 +38,5 @@ require_once APP_ROOT . '/app/services/seo.php';
 
 require_once APP_ROOT . '/app/services/backups.php';
 require_once APP_ROOT . '/app/controllers/backups.php';
+
+require_once APP_ROOT . '/app/controllers/discovery.php';

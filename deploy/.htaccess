@@ -3,6 +3,22 @@
 
 AddDefaultCharset UTF-8
 Options -Indexes
+DirectoryIndex index.php
+
+# PHP-приложение требует Apache 2.4 и mod_rewrite. Служебные каталоги закрыты.
+RewriteEngine On
+RewriteRule ^(?:app|templates|config|bin|var|docs|tests|\.git|\.github)(?:/|$) - [F,L]
+RewriteRule ^router\.php$ - [F,L]
+RewriteRule (^|/)\.(?!well-known(?:/|$)) - [F,L]
+RewriteRule ^manifest\.webmanifest$ index.php [QSA,L]
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+RewriteRule ^ index.php [QSA,L]
+
+<FilesMatch "\.(sqlite|db|sql|tpl|log|ini|lock|zip)$">
+    Require all denied
+</FilesMatch>
 
 # MIME-типы, которых может не быть в конфиге хостинга
 <IfModule mod_mime.c>

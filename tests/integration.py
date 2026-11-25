@@ -15,7 +15,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(os.environ.get("COFFEE_TEST_ROOT", str(Path(__file__).resolve().parents[1]))).resolve()
 
 
 def run():
@@ -24,7 +24,9 @@ def run():
         subprocess.run(["php", "bin/migrate.php"], cwd=ROOT, env=env, check=True, capture_output=True)
         password = secrets.token_urlsafe(24)
         subprocess.run(["php", "bin/create-admin.php", "testadmin"], input=password, text=True, cwd=ROOT, env=env, check=True, capture_output=True)
-        process = subprocess.Popen(["php", "-d", "extension=gd", "-d", "extension=zip", "-d", "display_errors=0", "-d", "upload_tmp_dir=" + directory, "-S", "localhost:8093", "router.php"], cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=open(Path(directory) / "server.log", "w"))
+        modules = subprocess.check_output(["php", "-m"], text=True).lower().splitlines()
+        extension_flags = [flag for name in ["gd", "zip"] if name not in modules for flag in ["-d", "extension=" + name]]
+        process = subprocess.Popen(["php"] + extension_flags + [ "-d", "display_errors=0", "-d", "upload_tmp_dir=" + directory, "-S", "localhost:8093", "router.php"], cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=open(Path(directory) / "server.log", "w"))
         jar = http.cookiejar.CookieJar()
         client = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
 
@@ -126,6 +128,19 @@ def run():
             assert request("/admin/edit?section=products&id=" + product_id, product)[0] == 200
             landing = request("/")[1]
             assert landing.count('data-product=') == 10 and landing.count('data-order-row=') == 9 and "Нет в наличии" in landing
+            assert request("/admin/edit?section=navigation&new=1", {"csrf": csrf, "name": "Помощь", "target": "#faq", "sort_order": 9, "visible": 1})[0] == 200
+            assert request("/admin/edit?section=content&id=copy-1", {"csrf": csrf, "text": "Тестовый заголовок <script>bad</script>"})[0] == 200
+            assert request("/admin/edit?section=faq&new=1", {"csrf": csrf, "question": "Тестовый вопрос", "mode": "manual", "prefix": "", "answer": "Тестовый ответ", "sort_order": 10, "visible": 1})[0] == 200
+            assert request("/admin/edit?section=reviews&new=1", {"csrf": csrf, "name": "Автор теста", "text": "Тестовый отзыв", "source": "https://example.com/review", "sort_order": 0, "visible": 1})[0] == 200
+            assert request("/admin/edit?section=rating", {"csrf": csrf, "value": "4.9", "count": 10, "source": "https://example.com/rating"})[0] == 200
+            assert request("/admin/edit?section=announcements&new=1", {"csrf": csrf, "text": "Объявление без дат", "starts": "", "ends": "", "sort_order": 0, "visible": 1})[0] == 200
+            landing = request("/")[1]
+            for value in ["Помощь", "Тестовый заголовок", "Тестовый вопрос", "Тестовый ответ", "Тестовый отзыв", "4.9", "Объявление без дат"]:
+                assert value in landing, value
+            assert '<script>bad</script>' not in landing
+            assert request("/admin/edit?section=categories&id=coffee", {"csrf": csrf, "name": "Кофе", "sort_order": 0})[0] == 200
+            assert 'data-product="americano"' not in request("/")[1]
+            assert request("/admin/edit?section=categories&id=coffee", {"csrf": csrf, "name": "Кофе", "sort_order": 0, "visible": 1})[0] == 200
             seo = {"csrf": csrf, "title": "Новое название", "description": "Описание <script>alert(1)</script>", "og_title": "Превью", "og_description": "Описание превью", "image": "assets/img/og-image.jpg"}
             assert request("/admin/edit?section=seo", seo)[0] == 200
             landing = request("/")[1]
@@ -136,6 +151,20 @@ def run():
             assert graph[0]["hasMenu"]["hasMenuSection"][-1]["hasMenuItem"][0]["offers"]["price"] == 125
             faq_schema = [x["acceptedAnswer"]["text"] for x in graph[1]["mainEntity"]]
             assert any("200" in text and "1 200" in text for text in faq_schema)
+            assert request("/" + image, raw=True)[1].startswith(b"RIFF")
+            assert "Новый адрес" in request("/llms-full.txt")[1]
+            assert json.loads(request("/manifest.webmanifest")[1])["name"] == "Тест кофейня"
+            db.execute("DELETE FROM records WHERE kind='content' AND id='faq-title'")
+            db.commit()
+            subprocess.run(["php", "bin/migrate.php"], cwd=ROOT, env=env, check=True, capture_output=True)
+            assert db.execute("SELECT count(*) FROM records WHERE kind='content' AND id='faq-title'").fetchone()[0] == 1
+            assert "Новое название" in request("/")[1]
+            assert "Disallow: /" in request("/robots.txt")[1]
+            assert request("/sitemap.xml")[0] == 404
+            assert request("/admin/edit?section=hours&id=1", {"csrf": csrf, "opens": "09:00", "closes": "21:00"})[0] == 200
+            landing = request("/")[1]
+            footer = landing[landing.index('<footer'):]
+            assert "09:00–21:00" in footer
             db.close()
             status, sqlite_bytes, headers = request("/admin/backups", {"csrf": csrf, "action": "export-db"}, raw=True)
             assert status == 200 and sqlite_bytes.startswith(b"SQLite format 3")
@@ -156,7 +185,12 @@ def run():
             assert "Новый адрес" in request("/")[1] and "После копии" not in request("/")[1]
             assert len(list((Path(directory) / "uploads").iterdir())) == 2
             assert len(list((Path(directory) / "backups").glob("*.zip"))) == 2
-            assert "Вход в админку" in request("/admin")[1]
+            login_html = request("/admin")[1]
+            assert "Вход в админку" in login_html
+            csrf_login = token(login_html)
+            for attempt in range(5):
+                assert request("/admin/login", {"csrf": csrf_login, "username": "testadmin", "password": "wrong"})[0] == 422
+            assert request("/admin/login", {"csrf": csrf_login, "username": "testadmin", "password": password})[0] == 429
             print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation, dates, SEO, backup/restore")
         finally:
             if "db" in locals(): db.close()

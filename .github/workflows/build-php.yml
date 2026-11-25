@@ -1,0 +1,28 @@
+name: Build PHP release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: dom, mbstring, pdo_sqlite, gd, zip
+          coverage: none
+      - name: Integration checks
+        run: python3 tests/integration.py
+      - name: Build release
+        run: php bin/build-dist.php
+      - uses: actions/upload-artifact@v7
+        with:
+          name: coffee-php-release
+          path: dist/
+          include-hidden-files: true
+          retention-days: 7

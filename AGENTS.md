@@ -1,8 +1,7 @@
-> Активная фаза (решение пользователя): внедрение PHP-админки. Для этой фазы
-> публичная страница формируется PHP из SQLite вместо статического index.html.
-> Применяются docs/specs/php.md и docs/app/admin-spec.md. Указания ниже про
-> отсутствие серверной части описывают исходный шаблон; после этой фазы публикация
-> выполняется как PHP-приложение. CSS, BEM и нативный JS сохраняются.
+> Активная архитектура: PHP-лендинг и админка, SQLite/PDO, шаблоны .tpl.
+> Применяются docs/specs/php.md и docs/app/admin-spec.md. Исходная статическая
+> редакция находится в истории Git; шаблонные инструкции о создании нового проекта
+> относятся к исходной заготовке. CSS, BEM и нативный JS сохранены.
 
 # AGENTS.md
 
@@ -15,15 +14,14 @@
 
 ## О проекте
 
-Это **шаблон** — заготовка для статических HTML-лендингов: страницы на чистом HTML, CSS и JS
-без серверной части, сборка дистрибутива для обычного хостинга одной командой.
+Это лендинг кофейни «Вкусный повод» на PHP, SQLite, чистом HTML/CSS и нативном JS.
+Проект создан из статического шаблона; PHP-фаза и админка согласованы пользователем.
 В шаблоне есть документация (`docs/`), инструменты сборки (`bin/`) и пустой рабочий каркас
 страницы. Документация — источник правды о стеке, архитектуре и стиле кода. Если задача
 противоречит документации — остановись и спроси пользователя, а не «улучшай» правила молча.
 
-Серверной части (PHP-страниц, форм с обработкой на сервере, БД) в шаблоне нет. Если проекту
-она понадобится — это отдельное решение пользователя, правила для неё уже описаны
-в [docs/specs/php.md](docs/specs/php.md).
+Серверная часть реализована по [docs/specs/php.md](docs/specs/php.md): один
+администратор, управление контентом, SQLite. Заказ и оплата в неё не входят.
 
 ### Если проект только что создан из шаблона
 
@@ -47,16 +45,16 @@
 
 | Слой      | Технологии                                                                        |
 |-----------|-----------------------------------------------------------------------------------|
-| Страницы  | Статические `*.html` в корне проекта (`index.html` и др.), без серверного рендеринга |
+| Страницы  | PHP-фронт-контроллер `index.php`, серверные шаблоны `templates/*.tpl` |
 | Разметка  | HTML5, семантика, доступность WCAG 2.1 AA                                          |
 | Стили     | Чистый CSS, BEM, `@import`, CSS-переменные. Без SCSS/Tailwind/CSS-in-JS/фреймворков |
 | JS        | Нативный ES2020+, ES modules. Без jQuery, фреймворков, TypeScript, сборщиков       |
 | Сборка    | Только собственные скрипты на PHP CLI: `bin/build-dist.php` (дистрибутив для хостинга в `dist/`), `bin/build-og-image.php` (картинка превью ссылки) |
 | Картинки  | webp с retina-версией `@2x`, `og:image` — JPG; иконки и логотипы — SVG              |
-| Сервер    | Нет. Если понадобится — PHP 8+ и SQLite по [docs/specs/php.md](docs/specs/php.md), только по решению пользователя |
+| Сервер    | PHP 8.2+, SQLite/PDO, GD/WebP и ZIP по [docs/specs/php.md](docs/specs/php.md) |
 
-PHP в шаблоне — только инструмент сборки в командной строке и локальный сервер
-для просмотра (`php -S`), на хостинг PHP-код не выгружается.
+PHP используется в приложении, сборке и локальном сервере (`php -S localhost:8090 router.php`).
+На хостинг выгружается PHP-дистрибутив без рабочих данных.
 
 ## Как работать (обязательно)
 
@@ -102,7 +100,7 @@ PHP в шаблоне — только инструмент сборки в ко
 | [docs/specs/theming.md](docs/specs/theming.md) | Тёмная тема, `.dark-mode`, тёмные секции |
 | [docs/specs/js.md](docs/specs/js.md) | Любой JS, модули, формы, fetch, уведомления |
 | [docs/specs/deploy.md](docs/specs/deploy.md) | Подготовка к публикации: сборка `dist/`, версии `?v=`, SEO, кеширование в `.htaccess` |
-| [docs/specs/php.md](docs/specs/php.md) | Только если у проекта появилась серверная часть (решение пользователя) |
+| [docs/specs/php.md](docs/specs/php.md) | Любой серверный PHP-код и админка |
 
 ## Смыслы, структура и тексты лендинга — [docs/product/specs.md](docs/product/specs.md)
 
@@ -140,7 +138,10 @@ PHP в шаблоне — только инструмент сборки в ко
 ### Структура проекта
 
 ```
-index.html               ← страница лендинга (другие страницы — тоже *.html в корне)
+index.php                ← фронт-контроллер, лендинг и админка
+app/                     ← контроллеры, модели, сервисы и валидаторы
+templates/               ← шаблоны .tpl
+var/                     ← локальные приватные данные, не в git
 manifest.webmanifest     ← веб-приложение «На экран Домой»
 assets/css/              ← main.css (точка входа) + base/ blocks/ sections/ utils/
 assets/js/               ← main.js (точка входа) + modules/
@@ -158,7 +159,7 @@ dist/                    ← результат сборки, не в git, ру�
 
 - `<!DOCTYPE html>`, `lang`, `UTF-8`, `viewport`, `description`, уникальный `<title>` на каждой странице.
 - В `<head>` публичной страницы: Open Graph, JSON-LD schema.org, фавиконка, манифест — адреса
-  относительные, домен подставляет сборка.
+  формируются PHP, домен берётся из config/deploy.php.
 - Семантика: один `<main>`, один `<h1>`, заголовки без пропуска уровней, у `<section>` есть
   заголовок и `id`.
 - Формы: `<label for>` у каждого поля, `autocomplete`, `aria-describedby` для ошибок, `type="submit"`.
@@ -204,18 +205,16 @@ dist/                    ← результат сборки, не в git, ру�
 ## Разработка и сборка
 
 - Локальный просмотр исходников — конфигурация `landing` в `.claude/launch.json`
-  (`php -S localhost:8090`). Страница грузит `main.css` с цепочкой `@import` и `main.js`
+  (`php -S localhost:8090 router.php`). Страница грузит `main.css` с цепочкой `@import` и `main.js`
   с модулями как есть — без сборки.
 - Публикация — [docs/specs/deploy.md](docs/specs/deploy.md): `php bin/build-dist.php`
-  собирает `dist/`: страницы, CSS одним файлом на точку входа, JS одним файлом на точку входа,
-  подключения с `?v=` (хэш содержимого), только используемая графика, файлы из `deploy/`
-  (в т. ч. `.htaccess`), сгенерированные `robots.txt`, `sitemap.xml`, `llms.txt` / `llms-full.txt`,
-  `canonical` и абсолютные адреса в OG и JSON-LD — домен из `config/deploy.php` (`site_url`).
-- Сборка проверяет SEO-минимум каждой страницы и печатает предупреждения.
-- `dist/` руками не правится и не хранится в git. Перед выгрузкой — проверка сайта из `dist/`
-  (конфигурация `landing-dist`) и DoD из deploy.md.
-- Картинка попадает в `dist/`, только если на неё есть ссылка (HTML, CSS, SVG, манифест или
-  строка `'assets/…'` в JS).
+  собирает PHP-дистрибутив `dist/`, CSS/JS объединяются с `?v=` по содержимому.
+  Рабочие БД, аккаунты, фотографии и копии не входят в сборку. На хостинге они
+  хранятся отдельно от кода. Исходные ресурсы копируются по ссылкам и seed.json.
+- SEO, robots, sitemap и llms-файлы формируются PHP из актуальных данных;
+  домен и noindex берутся из `config/deploy.php`.
+- `dist/` руками не правится и не хранится в git. Перед выгрузкой — тесты dist,
+  проверка Apache/HTTPS и DoD из deploy.md. Публикация на GitHub Pages исключена.
 
 ## Definition of Done
 
@@ -241,13 +240,19 @@ dist/                    ← результат сборки, не в git, ру�
 | Документ | Что описывает |
 |----------|---------------|
 | [docs/modules/web-app.md](docs/modules/web-app.md) | Веб-приложение: манифест и иконки для «На экран Домой» |
-| [docs/modules/build-dist.md](docs/modules/build-dist.md) | Сборка dist и генерация llms.txt / llms-full.txt в публичном и предварительном режимах |
+| [docs/modules/build-dist.md](docs/modules/build-dist.md) | PHP-дистрибутив, версии ресурсов и приватные данные |
 | [docs/modules/order-preview.md](docs/modules/order-preview.md) | Локальный состав заказа, пересчёт сумм, доступность и состояние без JS |
 | [docs/modules/order-drawer.md](docs/modules/order-drawer.md) | Боковая модальная корзина, открытие, закрытие, фокус и прокрутка |
 | [docs/modules/site-navigation.md](docs/modules/site-navigation.md) | Мобильная навигация, клавиатура, смена размера и состояние без JS |
 | [docs/modules/fixed-header.md](docs/modules/fixed-header.md) | Фиксированная шапка, компенсация высоты и отступы якорей |
 | [docs/modules/announcement-bar.md](docs/modules/announcement-bar.md) | Бегущая строка, пауза, доступность и уменьшение движения |
 | [docs/design/og-image/README.md](docs/design/og-image/README.md) | Картинка превью ссылки `og:image` 1200×630: шаблон и сборка `bin/build-og-image.php` |
+| [docs/modules/php-app.md](docs/modules/php-app.md) | PHP-приложение: запуск, роутер и приватные данные |
+| [docs/modules/admin-auth.md](docs/modules/admin-auth.md) | Авторизация, сессии и CSRF админки |
+| [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
+| [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |
+| [docs/modules/seo.md](docs/modules/seo.md) | SEO, Open Graph и актуальная JSON-LD-разметка |
+| [docs/modules/backups.md](docs/modules/backups.md) | Экспорт, проверка и восстановление БД и фотографий |
 
 ### Интеграции (`docs/integrations/`)
 
@@ -255,7 +260,7 @@ dist/                    ← результат сборки, не в git, ру�
 
 | Документ | Что описывает |
 |----------|---------------|
-| [docs/integrations/github-pages.md](docs/integrations/github-pages.md) | Ручная сборка и публикация только dist через GitHub Actions / Pages |
+| [docs/integrations/github-pages.md](docs/integrations/github-pages.md) | Ручная сборка PHP-артефакта GitHub Actions без публикации |
 
 ## Если документация противоречит сама себе
 
@@ -266,14 +271,3 @@ dist/                    ← результат сборки, не в git, ру�
 
 Спецификация: [docs/app/admin-spec.md](docs/app/admin-spec.md).
 План и прогресс: [ADMIN-PLAN.md](ADMIN-PLAN.md).
-
-| [docs/modules/php-app.md](docs/modules/php-app.md) | PHP-приложение: запуск, роутер и приватные данные |
-
-| [docs/modules/admin-auth.md](docs/modules/admin-auth.md) | Авторизация, сессии и CSRF админки |
-
-| [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
-| [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |
-
-| [docs/modules/seo.md](docs/modules/seo.md) | SEO, Open Graph и актуальная JSON-LD-разметка |
-
-| [docs/modules/backups.md](docs/modules/backups.md) | Экспорт, проверка и восстановление БД и фотографий |

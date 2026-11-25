@@ -67,6 +67,7 @@ function validateBackupDatabase(string $path, array $stagedMedia): void
     $collections = [];
     foreach ($pdo->query('SELECT * FROM records') as $row) {
         if (!preg_match('/^[a-z0-9-]{1,80}$/D', $row['id']) || !in_array((int) $row['visible'], [0, 1], true)) throw new InvalidArgumentException('Некорректная запись в копии.');
+        if (filter_var($row['sort_order'], FILTER_VALIDATE_INT) === false || $row['sort_order'] < 0 || $row['sort_order'] > 100000) throw new InvalidArgumentException('Некорректный порядок записи.');
         $data = json_decode($row['payload'], true, 512, JSON_THROW_ON_ERROR);
         if (!is_array($data)) throw new InvalidArgumentException('Некорректные данные записи.');
         $collections[$row['kind']][] = array_merge($data, ['id' => $row['id'], 'sort_order' => $row['sort_order'], 'visible' => $row['visible']]);
@@ -100,6 +101,8 @@ function validateBackupDatabase(string $path, array $stagedMedia): void
 function validateRestoredFields(string $kind, array $section, array $record, array $collections, array $stagedMedia): void
 {
     $fields = $section['fields'];
+    if ($kind === 'hours') $fields['name'] = ['label' => 'День недели', 'required' => true, 'max' => 100];
+    if ($kind === 'content') $fields['label'] = ['label' => 'Описание поля', 'required' => true, 'max' => 1000];
     foreach ($fields as &$field) if (($field['type'] ?? '') === 'image') $field['type'] = 'text';
     unset($field);
     [, $errors] = validateAdminFields($fields, $record, $record, false);

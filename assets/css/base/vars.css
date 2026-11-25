@@ -387,6 +387,7 @@
     --reviews-focus-color: var(--color-accent);
     --reviews-disabled-opacity: .4;
     --reviews-card-min-height: 288px;
+    --reviews-avatar-size: 64px;
 }
 .dark-mode {
     --reviews-card-bg: var(--color-dark-surface);

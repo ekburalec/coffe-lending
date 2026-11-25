@@ -286,3 +286,21 @@ Hero экспортирован 560×700 и 1120×1400, интерьер 720×45
 Производные существующего og-image.jpg без изменения содержания: assets/img/og-image.webp
 600×315 и assets/img/og-image@2x.webp 1200×630. Используются в SEO-панели с srcset 1x/2x.
 Обновляются вместе с JPG через bin/build-og-image.php. Новая иллюстрация не создавалась.
+
+
+## Портреты для демо-отзывов
+
+По поручению пользователя, встроенный image_gen, три отдельных генерации.
+Это вымышленные персонажи, а не фотографии посетителей; на карточках есть подпись.
+Финальные файлы: assets/img/reviews/demo-{anna,mikhail,elena}.webp (64×64)
+и соответствующие @2x.webp (128×128). Уменьшение через PHP GD, WebP 88;
+оригиналы PNG 1254×1254 остались в CODEX_HOME/generated_images.
+
+Общий промпт: “Use case: photorealistic-natural. Asset type: circular avatar for an
+explicitly fictional demo cafe review. ONE square natural head-and-shoulders photo.
+Face centered with breathing room for circular cropping. Warm blurred cafe background,
+soft daylight, natural skin texture. No text, logos, watermark or collage. Synthetic
+character, not a real customer.” Варианты персонажей: Anna — woman about 30,
+shoulder-length dark brown hair, oatmeal sweater; Mikhail — man about 34, short dark
+hair, subtle beard, charcoal shirt; Elena — woman about 45, chin-length auburn hair,
+thin round glasses, terracotta blouse. Полные промпты сохранены в docs/design/review-portraits-prompts.md.

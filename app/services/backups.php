@@ -108,7 +108,7 @@ function validateRestoredFields(string $kind, array $section, array $record, arr
     [, $errors] = validateAdminFields($fields, $record, $record, false);
     $errors = array_merge($errors, validateAdminRecord($kind, $record, $collections));
     if ($errors) throw new InvalidArgumentException('Некорректные поля в разделе «' . $section['title'] . '».');
-    if (isset($record['image'])) {
+    if (!empty($record['image'])) {
         $image = $record['image'];
         if (!preg_match('~^assets/img/[a-zA-Z0-9_@/-]+\.(webp|jpg)$~D', $image)) throw new InvalidArgumentException('Некорректный путь фотографии.');
         if (str_starts_with($image, 'assets/img/uploads/')) {

@@ -254,7 +254,7 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/modules/admin-reorder.md](docs/modules/admin-reorder.md) | Перетаскивание товаров, клавиатура и сохранение порядка |
 | [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
 | [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |
-| [docs/modules/reviews.md](docs/modules/reviews.md) | Слайдер отзывов, управление отзывами и FAQ |
+| [docs/modules/reviews.md](docs/modules/reviews.md) | Слайдер, фото и демо-отзывы, управление отзывами и FAQ |
 | [docs/modules/admin-character-count.md](docs/modules/admin-character-count.md) | Подсказки и счётчики символов SEO-форм |
 | [docs/modules/seo.md](docs/modules/seo.md) | SEO, Open Graph и актуальная JSON-LD-разметка |
 | [docs/modules/backups.md](docs/modules/backups.md) | Экспорт, проверка и восстановление БД и фотографий |

@@ -51,6 +51,11 @@ function validateAdminFields(array $fields, array $previous, ?array $input = nul
 function validateAdminRecord(string $kind, array $data, ?array $collections = null): array
 {
     $errors = [];
+    if ($kind === 'reviews') {
+        if (empty($data['is_demo']) && empty($data['source'])) $errors['source'] = 'Для реального отзыва укажите ссылку на источник.';
+        $hasUpload = $collections === null && ($_FILES['image_upload']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK;
+        if ((!empty($data['image']) || $hasUpload) && empty($data['alt'])) $errors['alt'] = 'Опишите фотографию словами.';
+    }
     if ($kind === 'delivery' && empty($data['pickup_enabled']) && empty($data['delivery_enabled'])) $errors['pickup_enabled'] = 'Оставьте доступным хотя бы один способ получения.';
     if ($kind === 'seo' && !($collections === null && ($_FILES['image_upload']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) && !str_ends_with($data['image'] ?? '', '.jpg')) $errors['image'] = 'Для превью требуется JPG; загрузите новую фотографию.';
     if ($kind === 'faq' && ($data['mode'] ?? '') === 'manual' && trim($data['answer'] ?? '') === '') $errors['answer'] = 'Напишите ответ.';

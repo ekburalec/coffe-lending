@@ -175,6 +175,27 @@ def run():
             status, inline_html, _ = request("/admin/edit?section=reviews", inline_review)
             assert status == 200 and 'id="add-record"' in inline_html and 'id="rating-title"' in inline_html
             assert 'id="rating-source"' in inline_html and 'id="field-source"' in inline_html
+            assert request('/admin/edit?section=reviews', dict(inline_review, source=''))[0] == 422
+            assert request('/admin/edit?section=reviews', dict(inline_review, image='assets/img/reviews/demo-anna.webp', alt=''))[0] == 422
+            # Демо-импорт запускается явно, повторный вызов сохраняет правки.
+            subprocess.run(['php', 'bin/seed-demo-reviews.php'], cwd=ROOT, env=env, check=True, capture_output=True)
+            demo_count = db.execute("SELECT count(*) FROM records WHERE kind='reviews'").fetchone()[0]
+            demo_url = '/admin/edit?section=reviews&id=demo-review-anna'
+            demo_record = json.loads(db.execute("SELECT payload FROM records WHERE id='demo-review-anna'").fetchone()[0])
+            demo_record.update(csrf=csrf, text='Изменённый демо-текст', sort_order=2, visible=1)
+            assert request(demo_url, demo_record)[0] == 200
+            subprocess.run(['php', 'bin/seed-demo-reviews.php'], cwd=ROOT, env=env, check=True, capture_output=True)
+            assert db.execute("SELECT count(*) FROM records WHERE kind='reviews'").fetchone()[0] == demo_count
+            demo_landing = request('/')[1]
+            assert 'Изменённый демо-текст' in demo_landing
+            assert demo_landing.count('Демо-отзыв. Текст и автор вымышлены, фото сгенерировано.') == 3
+            assert 'demo-anna@2x.webp 2x' in demo_landing
+            assert request('/assets/img/reviews/demo-anna@2x.webp', raw=True)[0] == 200
+            assert request(demo_url, dict(demo_record, is_demo=0, source=''))[0] == 422
+            # Загрузка из нижней формы работает без потери статуса демо.
+            status, html, _ = request('/admin/edit?section=reviews', dict(inline_review, source='', is_demo=1, alt='Тестовая фотография'), {'image_upload': ('avatar.webp', 'image/webp', file)})
+            assert status == 200 and 'id="add-record"' in html
+            assert db.execute("SELECT count(*) FROM records WHERE kind='reviews' AND json_extract(payload,'$.alt')='Тестовая фотография'").fetchone()[0] == 1
             new_faq_id = db.execute("SELECT id FROM records WHERE kind='faq' AND json_extract(payload,'$.question')='Тестовый вопрос'").fetchone()[0]
             assert request("/admin/edit?section=faq&id=" + new_faq_id, {"csrf": csrf, "action": "toggle_visibility"})[0] == 200
             assert "Тестовый вопрос" not in request("/")[1]
@@ -241,7 +262,7 @@ def run():
             assert status == 200 and headers["Content-Type"] == "application/zip"
             with zipfile.ZipFile(io.BytesIO(archive)) as z:
                 assert "site.sqlite" in z.namelist() and "manifest.json" in z.namelist()
-                assert len([n for n in z.namelist() if n.startswith("media/")]) == 5
+                assert len([n for n in z.namelist() if n.startswith("media/")]) == 7
             evil = io.BytesIO()
             with zipfile.ZipFile(evil, "w") as z: z.writestr("../escape.txt", "bad")
             assert request("/admin/backups", {"csrf": csrf, "action": "restore", "confirm_restore": 1}, {"backup": ("bad.zip", "application/zip", evil.getvalue())})[0] == 422
@@ -251,7 +272,8 @@ def run():
             status, html, _ = request("/admin/backups", {"csrf": csrf, "action": "restore", "confirm_restore": 1}, {"backup": ("full.zip", "application/zip", archive)})
             assert status == 200 and "Копия восстановлена" in html, re.findall(r'<p class="admin__message"[^>]*>(.*?)</p>', html)
             assert "Новый адрес" in request("/")[1] and "После копии" not in request("/")[1]
-            assert len(list((Path(directory) / "uploads").iterdir())) == 5
+            assert 'Тестовая фотография' in request('/')[1] and 'Изменённый демо-текст' in request('/')[1]
+            assert len(list((Path(directory) / "uploads").iterdir())) == 7
             assert len(list((Path(directory) / "backups").glob("*.zip"))) == 2
             login_html = request("/admin")[1]
             assert "Вход в админку" in login_html
@@ -260,7 +282,7 @@ def run():
             for attempt in range(5):
                 assert request("/admin/login", {"csrf": csrf_login, "username": "testadmin", "password": "wrong"})[0] == 422
             assert request("/admin/login", {"csrf": csrf_login, "username": "testadmin", "password": password})[0] == 429
-            print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation, dates, SEO, backup/restore")
+            print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, demo reviews/photos, WebP/retina, validation, dates, SEO, backup/restore")
         finally:
             if "db" in locals(): db.close()
             process.terminate()

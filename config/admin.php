@@ -67,10 +67,13 @@ return [
         'starts' => ['label' => 'Начало (местное время, необязательно)', 'type' => 'datetime-local'],
         'ends' => ['label' => 'Окончание включительно (местное время, необязательно)', 'type' => 'datetime-local'],
     ]],
-    'reviews' => ['title' => 'Реальные отзывы', 'fields' => [
+    'reviews' => ['title' => 'Отзывы гостей', 'fields' => [
         'name' => ['label' => 'Автор', 'required' => true, 'max' => 150],
         'text' => ['label' => 'Текст отзыва', 'type' => 'textarea', 'required' => true, 'max' => 3000],
-        'source' => ['label' => 'Ссылка на реальный источник', 'type' => 'url', 'required' => true, 'max' => 2000],
+        'source' => ['label' => 'Ссылка на реальный источник (обязательна для реального отзыва)', 'type' => 'url', 'max' => 2000],
+        'image' => ['label' => 'Фото автора (необязательно)', 'type' => 'image'],
+        'alt' => ['label' => 'Описание фотографии', 'max' => 300],
+        'is_demo' => ['label' => 'Демо-отзыв: вымышленный текст и автор, с явной подписью на сайте', 'type' => 'checkbox'],
     ]],
     'rating' => ['title' => 'Рейтинг из внешнего источника', 'singleton' => true, 'fields' => [
         'value' => ['label' => 'Рейтинг от 0 до 5 (например, 4.9; пусто — не показывать)', 'max' => 4],

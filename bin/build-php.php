@@ -28,7 +28,8 @@ function buildPhpDist(string $root): void
         collectAssetsFromHtml($root, 'index.php', $html, $assets);
         // При заданном домене OG может быть абсолютным; исходное изображение всё равно нужно.
         $seed = json_decode(file_get_contents($root . '/config/seed.json'), true, 512, JSON_THROW_ON_ERROR);
-        foreach (array_merge($seed['records']['products'], $seed['records']['images'], [$seed['settings']['seo']]) as $record) {
+        $demoReviews = json_decode(file_get_contents($root . '/config/demo-reviews.json'), true, 512, JSON_THROW_ON_ERROR);
+        foreach (array_merge($seed['records']['products'], $seed['records']['images'], [$seed['settings']['seo']], $demoReviews) as $record) {
             $assets[$record['image']] = 'seed';
             if (str_ends_with($record['image'], '.jpg')) {
                 foreach (['.webp', '@2x.webp'] as $suffix) {
@@ -46,7 +47,7 @@ function buildPhpDist(string $root): void
                 writeDistFile($dist, $relative, file_get_contents($file->getPathname()));
             }
         }
-        foreach (['index.php', 'router.php', 'manifest.webmanifest', 'bin/migrate.php', 'bin/create-admin.php', 'bin/doctor.php', 'config/app.php', 'config/admin.php', 'config/admin-navigation.php', 'config/routes.php', 'config/deploy.php', 'config/schema.sql', 'config/seed.json'] as $relative) {
+        foreach (['index.php', 'router.php', 'manifest.webmanifest', 'bin/migrate.php', 'bin/create-admin.php', 'bin/doctor.php', 'bin/seed-demo-reviews.php', 'config/app.php', 'config/admin.php', 'config/admin-navigation.php', 'config/routes.php', 'config/deploy.php', 'config/schema.sql', 'config/seed.json', 'config/demo-reviews.json'] as $relative) {
             writeDistFile($dist, $relative, file_get_contents($root . '/' . $relative));
         }
         writeDistFile($dist, 'config/assets.php', "<?php\nreturn " . var_export($versions, true) . ";\n");

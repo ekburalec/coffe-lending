@@ -7,7 +7,7 @@
 <select class="admin__input" id="<?= e($field['id']) ?>" name="<?= e($field['name']) ?>" aria-describedby="<?= e($field['described_by']) ?>" aria-invalid="<?= $field['error'] ? 'true' : 'false' ?>"><?php foreach ($field['options'] ?? [] as $value => $label): ?><option value="<?= e($value) ?>" <?= (string) $field['value'] === (string) $value ? 'selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?></select>
 <?php elseif ($field['type'] === 'image'): ?>
 <input class="admin__input" id="<?= e($field['id']) ?>" name="<?= e($field['name']) ?>" value="<?= e($field['value']) ?>" readonly aria-describedby="<?= e($field['described_by']) ?>">
-<label for="upload-<?= e($field['id']) ?>">Загрузить новую фотографию (JPG, PNG, WebP, до 10 МБ)</label><input class="admin__input" id="upload-<?= e($field['id']) ?>" type="file" name="<?= e($field['name']) ?>_upload" accept="image/jpeg,image/png,image/webp" aria-describedby="<?= e($field['described_by']) ?>">
+<label for="upload-<?= e($field['id']) ?>">Загрузить новую фотографию (JPG, PNG, WebP, до 10 МБ)</label><input class="admin__input admin__file-input" id="upload-<?= e($field['id']) ?>" type="file" name="<?= e($field['name']) ?>_upload" accept="image/jpeg,image/png,image/webp" aria-describedby="<?= e($field['described_by']) ?>">
 <?php elseif ($field['type'] === 'checkbox'): ?>
 <input id="<?= e($field['id']) ?>" type="checkbox" name="<?= e($field['name']) ?>" value="1" <?= $field['value'] ? 'checked' : '' ?> aria-describedby="<?= e($field['described_by']) ?>">
 <?php else: ?>

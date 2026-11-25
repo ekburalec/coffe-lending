@@ -9,7 +9,7 @@
 <ul class="admin__list">
 <?php foreach ($rows as $row): ?>
     <li class="admin__row admin__row--collection" id="record-<?= e($row['id']) ?>">
-        <div class="admin__record-copy <?= !$row['visible'] ? 'admin__record-copy--hidden' : '' ?>"><h3 class="admin__row-name"><?= e($row['caption']) ?> <?php if (!$row['visible']): ?><span class="admin__badge">Скрыто</span><?php endif; ?></h3><p class="admin__row-detail"><?= e($row['preview']) ?></p><span class="admin__hint">Порядок: <?= e($row['sort_order']) ?></span></div>
+        <div class="admin__record-copy <?= !$row['visible'] ? 'admin__record-copy--hidden' : '' ?>"><h3 class="admin__row-name"><?= e($row['caption']) ?> <?php if (!empty($row['is_demo'])): ?><span class="admin__badge">Демо</span><?php endif; ?> <?php if (!$row['visible']): ?><span class="admin__badge">Скрыто</span><?php endif; ?></h3><p class="admin__row-detail"><?= e($row['preview']) ?></p><span class="admin__hint">Порядок: <?= e($row['sort_order']) ?></span></div>
         <div class="admin__actions admin__actions--row">
             <a class="admin__button admin__button--quiet admin__button--compact" href="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>">Изменить<span class="sr-only">: <?= e($row['caption']) ?></span></a>
             <form method="post" action="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><button class="admin__button admin__button--quiet admin__button--compact" type="submit" name="action" value="toggle_visibility"><?= $row['visible'] ? 'Скрыть' : 'Показать' ?><span class="sr-only">: <?= e($row['caption']) ?></span></button></form>
@@ -18,9 +18,9 @@
     </li>
 <?php endforeach; ?>
 </ul>
-<?php if (!$rows): ?><p class="admin__lead"><?= $key === 'reviews' ? 'Пока нет отзывов. Добавьте реальный отзыв со ссылкой на источник.' : 'Пока нет вопросов.' ?></p><?php endif; ?>
+<?php if (!$rows): ?><p class="admin__lead"><?= $key === 'reviews' ? 'Пока нет отзывов. Добавьте реальный отзыв с источником или явно помеченный демо-пример.' : 'Пока нет вопросов.' ?></p><?php endif; ?>
 </section>
 <section class="admin__subsection" id="add-record" aria-labelledby="add-record-title"><h2 class="admin__category-title" id="add-record-title"><?= $key === 'reviews' ? 'Добавить отзыв' : 'Добавить вопрос' ?></h2>
-<form class="admin__form admin__form--fields" method="post" action="/admin/edit?section=<?= e($key) ?>" autocomplete="off"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><input type="hidden" name="return_to" value="list">
+<form class="admin__form admin__form--fields" method="post" enctype="multipart/form-data" action="/admin/edit?section=<?= e($key) ?>" autocomplete="off"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><input type="hidden" name="return_to" value="list">
 <?php render('admin/fields', ['fields' => $fields]); ?>
 <button class="admin__button admin__button--submit" type="submit"><?= $key === 'reviews' ? 'Добавить отзыв' : 'Добавить вопрос' ?></button></form></section>

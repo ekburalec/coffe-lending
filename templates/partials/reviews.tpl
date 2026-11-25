@@ -8,7 +8,14 @@
         <?php if ($reviews): ?>
         <ul class="reviews__track" id="reviews-track" data-reviews-track tabindex="0" aria-label="Отзывы гостей. Список с горизонтальной прокруткой">
         <?php foreach ($reviews as $review): ?>
-            <li class="reviews__item"><figure class="reviews__card"><blockquote class="reviews__quote"><p><?= e($review['text']) ?></p></blockquote><figcaption class="reviews__author"><strong><?= e($review['name']) ?></strong><a class="text-link reviews__source" href="<?= e($review['source']) ?>" target="_blank" rel="noopener noreferrer">Читать в источнике<span class="sr-only"> (откроется в новой вкладке)</span></a></figcaption></figure></li>
+            <li class="reviews__item"><figure class="reviews__card">
+                <?php if (!empty($review['is_demo'])): ?><p class="reviews__demo">Демо-отзыв. Текст и автор вымышлены<?= !empty($review['image']) ? ', фото сгенерировано' : '' ?>.</p><?php endif; ?>
+                <blockquote class="reviews__quote"><p><?= e($review['text']) ?></p></blockquote>
+                <figcaption class="reviews__author">
+                    <?php if (!empty($review['image'])): ?><img class="reviews__avatar" src="<?= e(assetUrl($review['image'])) ?>" srcset="<?= e(assetUrl($review['image'])) ?> 1x, <?= e(assetUrl(str_replace('.webp', '@2x.webp', $review['image']))) ?> 2x" width="64" height="64" alt="<?= e($review['alt'] ?? $review['name']) ?>" loading="lazy" decoding="async"><?php endif; ?>
+                    <div class="reviews__identity"><strong><?= e($review['name']) ?></strong><?php if (empty($review['is_demo']) && !empty($review['source'])): ?><a class="text-link reviews__source" href="<?= e($review['source']) ?>" target="_blank" rel="noopener noreferrer">Читать в источнике<span class="sr-only"> (откроется в новой вкладке)</span></a><?php endif; ?></div>
+                </figcaption>
+            </figure></li>
         <?php endforeach; ?>
         </ul>
         <p class="sr-only" data-reviews-status data-message="Отзывы {от}–{до} из {всего}" aria-live="polite" aria-atomic="true"></p>

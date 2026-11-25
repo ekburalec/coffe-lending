@@ -1,3 +1,4 @@
+<?php if (isset($_GET['restored'])): ?><p class="admin__success">Копия восстановлена. Войдите с учётной записью из копии.</p><?php endif; ?>
 <form class="admin__form" method="post" action="/admin/login">
     <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
     <p id="login-error" class="admin__message" role="alert"><?= e($error) ?></p>

@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-function adminSections(): array
+function adminSections(?array $collections = null): array
 {
     $sections = require APP_ROOT . '/config/admin.php';
     if (isset($sections['products'])) {
-        $sections['products']['fields']['category']['options'] = array_column(listRecords('categories'), 'name', 'id');
+        $sections['products']['fields']['category']['options'] = array_column($collections['categories'] ?? listRecords('categories'), 'name', 'id');
     }
     if (isset($sections['navigation'])) {
         $targets = ['#welcome' => 'Первый экран', '#menu' => 'Меню', '#occasions' => 'Поводы зайти', '#space' => 'О кофейне', '#delivery' => 'Самовывоз и доставка', '#faq' => 'FAQ', '#contacts' => 'Контакты'];
-        foreach (listRecords('categories', true) as $category) $targets['#' . $category['id']] = $category['name'];
+        foreach ($collections['categories'] ?? listRecords('categories', true) as $category) $targets['#' . $category['id']] = $category['name'];
         $sections['navigation']['fields']['target']['options'] = $targets;
     }
     foreach ($sections as &$section) {
@@ -22,15 +22,18 @@ function adminSections(): array
     return $sections;
 }
 
-function validateAdminFields(array $fields, array $previous): array
+function validateAdminFields(array $fields, array $previous, ?array $input = null, bool $allowUploads = true): array
 {
+    $input ??= $_POST;
     $data = $previous;
     $errors = [];
     foreach ($fields as $name => $field) {
-        $value = postText($name);
+        $raw = $input[$name] ?? '';
+        $value = is_scalar($raw) ? trim(str_replace(["\r\n", "\r"], "\n", (string) $raw)) : '';
+        if (!is_scalar($raw)) $errors[$name] = 'Некорректное значение.';
         $type = $field['type'] ?? 'text';
-        if ($type === 'checkbox') $value = isset($_POST[$name]) ? 1 : 0;
-        if ($type === 'image' && ($_FILES[$name . '_upload']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) continue;
+        if ($type === 'checkbox') $value = !empty($input[$name]) ? 1 : 0;
+        if ($allowUploads && $type === 'image' && ($_FILES[$name . '_upload']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) continue;
         if (($field['required'] ?? false) && $value === '') $errors[$name] = 'Заполните поле.';
         elseif ($type === 'number' && ($value !== '' || ($field['required'] ?? false))) {
             $number = filter_var($value, FILTER_VALIDATE_INT);
@@ -45,7 +48,7 @@ function validateAdminFields(array $fields, array $previous): array
     return [$data, $errors];
 }
 
-function validateAdminRecord(string $kind, array $data): array
+function validateAdminRecord(string $kind, array $data, ?array $collections = null): array
 {
     $errors = [];
     if ($kind === 'delivery' && empty($data['pickup_enabled']) && empty($data['delivery_enabled'])) $errors['pickup_enabled'] = 'Оставьте доступным хотя бы один способ получения.';
@@ -63,7 +66,7 @@ function validateAdminRecord(string $kind, array $data): array
         }
         if (!empty($data['starts']) && !empty($data['ends']) && $data['ends'] < $data['starts']) $errors['ends'] = 'Окончание должно быть не раньше начала.';
     }
-    if ($kind === 'products'  && !findRecord('categories', $data['category'] ?? '')) $errors['category'] = 'Категория не существует.';
+    if ($kind === 'products'  && !in_array($data['category'] ?? '', array_column($collections['categories'] ?? listRecords('categories'), 'id'), true)) $errors['category'] = 'Категория не существует.';
     if (in_array($kind, ['hours', 'exceptions'], true) && empty($data['closed'])) {
         foreach (['opens', 'closes'] as $name) if (!preg_match('/^(?:[01][0-9]|2[0-3]):[0-5][0-9]$/D', $data[$name] ?? '')) $errors[$name] = 'Укажите время ЧЧ:ММ.';
         if (!$errors && $data['closes'] <= $data['opens']) $errors['closes'] = 'Закрытие должно быть позже открытия в тот же день.';
@@ -71,7 +74,7 @@ function validateAdminRecord(string $kind, array $data): array
     if ($kind === 'exceptions') {
         $date = DateTimeImmutable::createFromFormat('!Y-m-d', $data['date'] ?? '');
         if (!$date || $date->format('Y-m-d') !== ($data['date'] ?? '')) $errors['date'] = 'Укажите действительную дату.';
-        foreach (listRecords('exceptions') as $row) if ($row['date'] === ($data['date'] ?? '') && $row['id'] !== ($data['id'] ?? '')) $errors['date'] = 'Для этой даты уже есть запись.';
+        foreach ($collections['exceptions'] ?? listRecords('exceptions') as $row) if ($row['date'] === ($data['date'] ?? '') && $row['id'] !== ($data['id'] ?? '')) $errors['date'] = 'Для этой даты уже есть запись.';
     }
     return $errors;
 }

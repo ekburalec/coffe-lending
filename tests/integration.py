@@ -6,6 +6,8 @@ import re
 import secrets
 import sqlite3
 import json
+import io
+import zipfile
 import subprocess
 import tempfile
 import time
@@ -22,11 +24,11 @@ def run():
         subprocess.run(["php", "bin/migrate.php"], cwd=ROOT, env=env, check=True, capture_output=True)
         password = secrets.token_urlsafe(24)
         subprocess.run(["php", "bin/create-admin.php", "testadmin"], input=password, text=True, cwd=ROOT, env=env, check=True, capture_output=True)
-        process = subprocess.Popen(["php", "-d", "extension=gd", "-d", "extension=zip", "-S", "localhost:8093", "router.php"], cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        process = subprocess.Popen(["php", "-d", "extension=gd", "-d", "extension=zip", "-d", "display_errors=0", "-d", "upload_tmp_dir=" + directory, "-S", "localhost:8093", "router.php"], cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=open(Path(directory) / "server.log", "w"))
         jar = http.cookiejar.CookieJar()
         client = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
 
-        def request(path, data=None, files=None):
+        def request(path, data=None, files=None, raw=False):
             body = urllib.parse.urlencode(data).encode() if data is not None else None
             headers = {}
             if files:
@@ -44,7 +46,8 @@ def run():
                 response = client.open(req, timeout=5)
             except urllib.error.HTTPError as error:
                 response = error
-            return response.status, response.read().decode(), response.headers
+            content = response.read()
+            return response.status, content if raw else content.decode(), response.headers
 
         def token(html):
             return re.search(r'name="csrf" value="([a-f0-9]+)"', html).group(1)
@@ -134,11 +137,32 @@ def run():
             faq_schema = [x["acceptedAnswer"]["text"] for x in graph[1]["mainEntity"]]
             assert any("200" in text and "1 200" in text for text in faq_schema)
             db.close()
-            print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation")
+            status, sqlite_bytes, headers = request("/admin/backups", {"csrf": csrf, "action": "export-db"}, raw=True)
+            assert status == 200 and sqlite_bytes.startswith(b"SQLite format 3")
+            assert request("/admin/backups", {"csrf": csrf, "action": "restore", "confirm_restore": 1}, {"backup": ("bad.sqlite", "application/octet-stream", b"invalid database")})[0] == 422
+            status, archive, headers = request("/admin/backups", {"csrf": csrf, "action": "export-full"}, raw=True)
+            assert status == 200 and headers["Content-Type"] == "application/zip"
+            with zipfile.ZipFile(io.BytesIO(archive)) as z:
+                assert "site.sqlite" in z.namelist() and "manifest.json" in z.namelist()
+                assert len([n for n in z.namelist() if n.startswith("media/")]) == 2
+            evil = io.BytesIO()
+            with zipfile.ZipFile(evil, "w") as z: z.writestr("../escape.txt", "bad")
+            assert request("/admin/backups", {"csrf": csrf, "action": "restore", "confirm_restore": 1}, {"backup": ("bad.zip", "application/zip", evil.getvalue())})[0] == 422
+            contacts["street"] = "После копии"
+            assert request("/admin/edit?section=contacts", contacts)[0] == 200
+            for photo in (Path(directory) / "uploads").iterdir(): photo.unlink()
+            status, html, _ = request("/admin/backups", {"csrf": csrf, "action": "restore", "confirm_restore": 1}, {"backup": ("full.zip", "application/zip", archive)})
+            assert status == 200 and "Копия восстановлена" in html, re.findall(r'<p class="admin__message"[^>]*>(.*?)</p>', html)
+            assert "Новый адрес" in request("/")[1] and "После копии" not in request("/")[1]
+            assert len(list((Path(directory) / "uploads").iterdir())) == 2
+            assert len(list((Path(directory) / "backups").glob("*.zip"))) == 2
+            assert "Вход в админку" in request("/admin")[1]
+            print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation, dates, SEO, backup/restore")
         finally:
             if "db" in locals(): db.close()
             process.terminate()
             process.wait(timeout=5)
+            if __import__("sys").exc_info()[0]: print((Path(directory) / "server.log").read_text(encoding="utf-8", errors="replace")[-3500:])
 
 
 if __name__ == "__main__":

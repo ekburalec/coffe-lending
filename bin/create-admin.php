@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 if (PHP_SAPI !== 'cli') exit;
 require dirname(__DIR__) . '/app/core/bootstrap.php';
+$applicationLock = applicationLock(true);
 $username = trim($argv[1] ?? '');
 $password = rtrim(stream_get_contents(STDIN), "\r\n");
 if (!preg_match('/^[a-zA-Z0-9_.-]{3,80}$/D', $username) || strlen($password) < 12 || strlen($password) > 72) {

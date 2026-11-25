@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 return [
+    'GET /admin/backups' => 'backupsController',
+    'POST /admin/backups' => 'backupsController',
     'GET /admin/edit' => 'adminEditorController',
     'POST /admin/edit' => 'adminEditorController',
     'GET /admin' => 'dashboardController',

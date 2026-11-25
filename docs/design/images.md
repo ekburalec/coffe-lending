@@ -304,3 +304,14 @@ character, not a real customer.” Варианты персонажей: Anna �
 shoulder-length dark brown hair, oatmeal sweater; Mikhail — man about 34, short dark
 hair, subtle beard, charcoal shirt; Elena — woman about 45, chin-length auburn hair,
 thin round glasses, terracotta blouse. Полные промпты сохранены в docs/design/review-portraits-prompts.md.
+
+
+## Картинки-заглушки по поручению пользователя
+
+assets/img/placeholders/product.webp 480×360 и product@2x.webp 960×720:
+условная чашка на бежевом фоне. avatar.webp 64×64 и avatar@2x.webp 128×128:
+силуэт автора. Детерминированные геометрические иллюстрации PHP GD, WebP 90,
+без генерации фотографий; цвета #efe4d5 и #8b442d из кофейной палитры.
+Заглушки назначены товару «Американо» и демо-отзыву Анны, alt поясняет отсутствие фото.
+Оригиналы фото Американо и портрета Анны сохранены по прежним адресам; build-dist
+включает их через preserved_images в seed.json для совместимости старых БД/копий.

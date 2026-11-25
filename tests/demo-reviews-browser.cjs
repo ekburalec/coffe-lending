@@ -17,7 +17,7 @@ async (page) => {
     }
     await page.goto(base + '/admin/edit?section=reviews&id=demo-review-anna');
     if (!await page.locator('#field-is_demo').isChecked()) throw new Error('Demo flag missing');
-    if (!(await page.locator('#field-image').inputValue()).includes('demo-anna.webp')) throw new Error('Photo editor missing');
+    if (!(await page.locator('#field-image').inputValue()).includes('placeholders/avatar.webp')) throw new Error('Photo editor missing');
     const upload = page.locator('input[type=file]');
     if (!await upload.evaluate(el => el.classList.contains('admin__file-input') && getComputedStyle(el, '::file-selector-button').borderRadius === '999px')) throw new Error('Review upload styling');
     for (const width of [1440, 768, 320]) {

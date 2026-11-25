@@ -29,7 +29,7 @@ function buildPhpDist(string $root): void
         // При заданном домене OG может быть абсолютным; исходное изображение всё равно нужно.
         $seed = json_decode(file_get_contents($root . '/config/seed.json'), true, 512, JSON_THROW_ON_ERROR);
         $demoReviews = json_decode(file_get_contents($root . '/config/demo-reviews.json'), true, 512, JSON_THROW_ON_ERROR);
-        foreach (array_merge($seed['records']['products'], $seed['records']['images'], [$seed['settings']['seo']], $demoReviews) as $record) {
+        foreach (array_merge($seed['records']['products'], $seed['records']['images'], [$seed['settings']['seo']], $demoReviews, $seed['preserved_images'] ?? []) as $record) {
             $assets[$record['image']] = 'seed';
             if (str_ends_with($record['image'], '.jpg')) {
                 foreach (['.webp', '@2x.webp'] as $suffix) {

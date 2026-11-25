@@ -9,7 +9,7 @@
         <ul class="reviews__track" id="reviews-track" data-reviews-track tabindex="0" aria-label="Отзывы гостей. Список с горизонтальной прокруткой">
         <?php foreach ($reviews as $review): ?>
             <li class="reviews__item"><figure class="reviews__card">
-                <?php if (!empty($review['is_demo'])): ?><p class="reviews__demo">Демо-отзыв. Текст и автор вымышлены<?= !empty($review['image']) ? ', фото сгенерировано' : '' ?>.</p><?php endif; ?>
+                <?php if (!empty($review['is_demo'])): ?><p class="reviews__demo">Демо-отзыв. Текст и автор вымышлены; изображения созданы для примера.</p><?php endif; ?>
                 <blockquote class="reviews__quote"><p><?= e($review['text']) ?></p></blockquote>
                 <figcaption class="reviews__author">
                     <?php if (!empty($review['image'])): ?><img class="reviews__avatar" src="<?= e(assetUrl($review['image'])) ?>" srcset="<?= e(assetUrl($review['image'])) ?> 1x, <?= e(assetUrl(str_replace('.webp', '@2x.webp', $review['image']))) ?> 2x" width="64" height="64" alt="<?= e($review['alt'] ?? $review['name']) ?>" loading="lazy" decoding="async"><?php endif; ?>

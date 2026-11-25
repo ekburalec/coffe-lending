@@ -117,7 +117,7 @@ def run():
             assert [r[0] for r in db.execute("SELECT id FROM records WHERE kind='products' AND json_extract(payload,'$.category')='coffee' ORDER BY sort_order,id")] == ordered
             category_id = db.execute("SELECT id FROM records WHERE kind='categories' AND json_extract(payload, '$.name')='Тест'").fetchone()[0]
             product = {"csrf": csrf, "name": "Новый напиток", "category": category_id, "description": "Вкус", "ingredients": "Вода", "portion": "200 мл", "price": 125, "available": 1, "visible": 1, "sort_order": 1, "alt": "Чашка", "image": ""}
-            file = (ROOT / "assets/img/menu/photo_1.webp").read_bytes()
+            file = (ROOT / "assets/img/menu/photo_2.webp").read_bytes()
             status, html, _ = request("/admin/edit?section=products&new=1", product, {"image_upload": ("drink.webp", "image/webp", file)})
             assert status == 200 and "Изменения сохранены" in html, html[:200]
             product_id, payload = db.execute("SELECT id,payload FROM records WHERE kind='products' AND json_extract(payload, '$.name')='Новый напиток'").fetchone()
@@ -197,7 +197,7 @@ def run():
             assert status == 200 and 'id="add-record"' in inline_html and 'id="rating-title"' in inline_html
             assert 'id="rating-source"' in inline_html and 'id="field-source"' in inline_html
             assert request('/admin/edit?section=reviews', dict(inline_review, source=''))[0] == 422
-            assert request('/admin/edit?section=reviews', dict(inline_review, image='assets/img/reviews/demo-anna.webp', alt=''))[0] == 422
+            assert request('/admin/edit?section=reviews', dict(inline_review, image='assets/img/placeholders/avatar.webp', alt=''))[0] == 422
             # Демо-импорт запускается явно, повторный вызов сохраняет правки.
             subprocess.run(['php', 'bin/seed-demo-reviews.php'], cwd=ROOT, env=env, check=True, capture_output=True)
             demo_count = db.execute("SELECT count(*) FROM records WHERE kind='reviews'").fetchone()[0]
@@ -209,9 +209,9 @@ def run():
             assert db.execute("SELECT count(*) FROM records WHERE kind='reviews'").fetchone()[0] == demo_count
             demo_landing = request('/')[1]
             assert 'Изменённый демо-текст' in demo_landing
-            assert demo_landing.count('Демо-отзыв. Текст и автор вымышлены, фото сгенерировано.') == 3
-            assert 'demo-anna@2x.webp 2x' in demo_landing
-            assert request('/assets/img/reviews/demo-anna@2x.webp', raw=True)[0] == 200
+            assert demo_landing.count('Демо-отзыв. Текст и автор вымышлены; изображения созданы для примера.') == 3
+            assert 'placeholders/avatar@2x.webp 2x' in demo_landing
+            assert request('/assets/img/placeholders/avatar@2x.webp', raw=True)[0] == 200
             assert request(demo_url, dict(demo_record, is_demo=0, source=''))[0] == 422
             # Загрузка из нижней формы работает без потери статуса демо.
             status, html, _ = request('/admin/edit?section=reviews', dict(inline_review, source='', is_demo=1, alt='Тестовая фотография'), {'image_upload': ('avatar.webp', 'image/webp', file)})

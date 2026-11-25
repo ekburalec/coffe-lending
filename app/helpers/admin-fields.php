@@ -14,6 +14,11 @@ function adminFields(array $definitions, array $values, array $errors = [], stri
         $field['described_by'] = $field['error_id'] . (!empty($field['hint']) ? ' ' . $field['hint_id'] : '');
         $field['length'] = mb_strlen((string) $field['value'], 'UTF-8');
         $field['error'] = $errors[$name] ?? '';
+        if ($field['type'] === 'image' && $field['value'] && validImagePath($field['value'])) {
+            $path = str_starts_with($field['value'], 'assets/img/uploads/') ? appConfig('upload_dir') . '/' . basename($field['value']) : APP_ROOT . '/' . $field['value'];
+            $size = getimagesize($path);
+            if ($size) $field['preview'] = ['src' => assetUrl($field['value']), 'retina' => assetUrl(str_replace('.webp', '@2x.webp', $field['value'])), 'width' => $size[0], 'height' => $size[1], 'alt' => $values['alt'] ?? $field['label']];
+        }
         $fields[] = $field;
     }
     return $fields;

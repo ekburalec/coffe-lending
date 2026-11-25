@@ -54,7 +54,7 @@
 .admin__row-name { font-family: var(--font-body); line-height: var(--leading-body); color: var(--admin-color); font-size: var(--text-small); font-weight: var(--weight-semibold); text-decoration: none; }
 .admin__row-detail { color: var(--admin-muted-color); font-size: var(--text-small); }
 .admin__badge { color: var(--admin-link-color); font-size: var(--text-eyebrow); font-weight: var(--weight-semibold); }
-.admin__preview { width: var(--admin-preview-width); max-width: 100%; height: auto; }
+.admin__preview { width: auto; max-width: min(100%, var(--admin-preview-width)); height: auto; }
 @media (max-width: 959px) {
     .admin__workspace { grid-template-columns: minmax(0, 1fr); gap: var(--space-4); padding-block: var(--space-4); }
     .admin__sidebar { position: static; overflow-x: auto; padding: var(--space-2); border-radius: var(--radius-md); }

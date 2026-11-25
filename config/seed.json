@@ -29,8 +29,8 @@
                 "portion": "250 мл",
                 "ingredients": "Эспрессо, вода.",
                 "price": 190,
-                "image": "assets/img/menu/photo_1.webp",
-                "alt": "Американо в керамической чашке",
+                "image": "assets/img/placeholders/product.webp",
+                "alt": "Изображение товара пока не добавлено: чашка кофе",
                 "sort_order": 0,
                 "visible": 1,
                 "available": 1
@@ -567,5 +567,13 @@
             "count": 0,
             "source": ""
         }
-    }
+    },
+    "preserved_images": [
+        {
+            "image": "assets/img/menu/photo_1.webp"
+        },
+        {
+            "image": "assets/img/reviews/demo-anna.webp"
+        }
+    ]
 }

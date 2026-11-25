@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 return [
+    'POST /admin/records/reorder' => 'reorderRecordsController',
     'POST /admin/products/reorder' => 'reorderProductsController',
     'GET /manifest.webmanifest' => 'manifestController',
     'GET /robots.txt' => 'discoveryController',

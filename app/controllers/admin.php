@@ -94,9 +94,10 @@ function adminEditorController(): void
         $row['preview'] = mb_strimwidth($row['preview'], 0, 340, '…', 'UTF-8');
         $rows[] = $row;
     }
+    $listOrderVersion = in_array($key, ['navigation', 'faq'], true) ? productOrderVersion(array_column($rows, 'id')) : '';
     $productGroups = $key === 'products' && !$editing ? productOrderGroups($rows) : [];
     $recordCaption = $record['name'] ?? $record['question'] ?? $record['label'] ?? $record['date'] ?? $id;
-    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields', 'seoTextFields', 'seoImageFields', 'seoPreview'));
+    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields', 'seoTextFields', 'seoImageFields', 'seoPreview', 'listOrderVersion'));
 }
 
 function deleteAdminRecord(string $kind, string $id, array $section): array

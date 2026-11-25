@@ -8,11 +8,16 @@ function productsInCategory(string $category): array
 
 function saveProductOrder(array $ids): void
 {
+    saveRecordOrder('products', $ids);
+}
+
+function saveRecordOrder(string $kind, array $ids): void
+{
     $pdo = database();
     $pdo->beginTransaction();
     try {
-        $query = $pdo->prepare("UPDATE records SET sort_order = ? WHERE kind = 'products' AND id = ?");
-        foreach ($ids as $position => $id) $query->execute([$position, $id]);
+        $query = $pdo->prepare('UPDATE records SET sort_order = ? WHERE kind = ? AND id = ?');
+        foreach ($ids as $position => $id) $query->execute([$position, $kind, $id]);
         $pdo->commit();
     } catch (Throwable $error) {
         $pdo->rollBack();

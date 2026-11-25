@@ -6,10 +6,12 @@
 <?php endif; ?>
 <section class="admin__subsection" id="records" aria-labelledby="records-title"><h2 class="admin__category-title" id="records-title"><?= $key === 'reviews' ? 'Отзывы' : 'Частые вопросы' ?></h2>
 <p class="admin__lead"><?= $key === 'reviews' ? 'Карточки на сайте идут в этом порядке, по три на широком экране. Скрытые отзывы не видны на сайте; пустой блок сохраняется с сообщением «Отзывов пока нет».' : 'Вопросы на сайте идут в этом порядке. Скрытый вопрос остаётся в админке; на сайте и в разметке для поиска его нет.' ?></p>
-<ul class="admin__list">
+<?php if ($key === 'faq'): render('admin/reorder-help'); endif; ?>
+<ul class="admin__list"<?php if ($key === 'faq'): render('admin/reorder-attributes', compact('key', 'listOrderVersion', 'csrf')); endif; ?>>
 <?php foreach ($rows as $row): ?>
-    <li class="admin__row admin__row--collection" id="record-<?= e($row['id']) ?>">
-        <div class="admin__record-copy <?= !$row['visible'] ? 'admin__record-copy--hidden' : '' ?>"><h3 class="admin__row-name"><?= e($row['caption']) ?> <?php if (!empty($row['is_demo'])): ?><span class="admin__badge">Демо</span><?php endif; ?> <?php if (!$row['visible']): ?><span class="admin__badge">Скрыто</span><?php endif; ?></h3><p class="admin__row-detail"><?= e($row['preview']) ?></p><span class="admin__hint">Порядок: <?= e($row['sort_order']) ?></span></div>
+    <li class="admin__row admin__row--collection <?= $key === 'faq' ? 'admin__row--sortable' : '' ?>" id="record-<?= e($row['id']) ?>" <?= $key === 'faq' ? 'data-reorder-id="' . e($row['id']) . '" data-reorder-name="' . e($row['caption']) . '"' : '' ?>>
+        <?php if ($key === 'faq'): render('admin/reorder-handle', compact('row')); endif; ?>
+        <div class="admin__record-copy <?= !$row['visible'] ? 'admin__record-copy--hidden' : '' ?>"><h3 class="admin__row-name"><?= e($row['caption']) ?> <?php if (!empty($row['is_demo'])): ?><span class="admin__badge">Демо</span><?php endif; ?> <?php if (!$row['visible']): ?><span class="admin__badge">Скрыто</span><?php endif; ?></h3><p class="admin__row-detail"><?= e($row['preview']) ?></p><?php if ($key !== 'faq'): ?><span class="admin__hint">Порядок: <?= e($row['sort_order']) ?></span><?php endif; ?></div>
         <div class="admin__actions admin__actions--row">
             <a class="admin__button admin__button--quiet admin__button--compact" href="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>">Изменить<span class="sr-only">: <?= e($row['caption']) ?></span></a>
             <form method="post" action="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><button class="admin__button admin__button--quiet admin__button--compact" type="submit" name="action" value="toggle_visibility"><?= $row['visible'] ? 'Скрыть' : 'Показать' ?><span class="sr-only">: <?= e($row['caption']) ?></span></button></form>

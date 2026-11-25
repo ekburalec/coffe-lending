@@ -62,6 +62,7 @@ def run():
                 except urllib.error.URLError:
                     time.sleep(.1)
             assert status == 200 and "Вход в админку" in html
+            assert request("/admin/records/reorder", {"csrf": "bad"})[0] == 401
             csrf = token(html)
             assert request("/admin/login", {"csrf": "wrong", "username": "testadmin", "password": password})[0] == 403
             status, html, _ = request("/admin/login", {"csrf": csrf, "username": "testadmin", "password": password})
@@ -70,12 +71,32 @@ def run():
             assert request("/config/seed.json")[0] == 404
             assert request("/var/site.sqlite")[0] == 404
             assert request("/app/core/bootstrap.php")[0] == 404
+            assert request('/admin/records/reorder', {'csrf': 'bad'})[0] == 403
             csrf = token(html)
             db = sqlite3.connect(str(Path(directory) / "site.sqlite"))
             assert db.execute("SELECT count(*) FROM records WHERE kind='products'").fetchone()[0] == 9
             assert db.execute('SELECT MAX(version) FROM schema_version').fetchone()[0] == 2
             assert 'href="#reviews"' in request('/')[1]
             assert 'Отзывов пока нет.' in request('/')[1]
+            for section, label_field in [('navigation', 'name'), ('faq', 'question')]:
+                editor = request('/admin/edit?section=' + section)[1]
+                assert 'data-reorder-section="' + section + '"' in editor and 'data-reorder-handle' in editor
+                before = db.execute('SELECT id,payload,visible FROM records WHERE kind=? ORDER BY sort_order,id', (section,)).fetchall()
+                ids = [r[0] for r in before]
+                version = re.search(r'data-reorder-version="([a-f0-9]+)"', editor)[1]
+                move = dict(csrf=csrf, section=section, ids=json.dumps(list(reversed(ids))), version=version)
+                assert request('/admin/records/reorder', dict(move, section='settings'))[0] == 422
+                assert request('/admin/records/reorder', dict(move, ids=json.dumps(ids[:-1])))[0] == 422
+                assert request('/admin/records/reorder', dict(move, ids=json.dumps([ids[0]] * len(ids))))[0] == 422
+                status, response, _ = request('/admin/records/reorder', move)
+                assert status == 200
+                assert db.execute('SELECT id FROM records WHERE kind=? ORDER BY sort_order,id', (section,)).fetchall() == [(id,) for id in reversed(ids)]
+                assert request('/admin/records/reorder', move)[0] == 409
+                assert sorted(db.execute('SELECT id,payload,visible FROM records WHERE kind=?', (section,)).fetchall()) == sorted(before)
+                public = request('/')[1]
+                labels = [json.loads(r[1])[label_field] for r in reversed(before)]
+                assert public.index(labels[0]) < public.index(labels[1])
+                assert request('/admin/records/reorder', dict(move, ids=json.dumps(ids), version=json.loads(response)['version']))[0] == 200
             status, html, _ = request("/admin/edit?section=categories&new=1", {"csrf": csrf, "name": "Тест", "sort_order": 4, "visible": 1})
             assert status == 200 and "Изменения сохранены" in html
             editor = request("/admin/edit?section=products")[1]

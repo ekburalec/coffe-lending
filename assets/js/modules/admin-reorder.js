@@ -1,6 +1,6 @@
 import { notify } from './notify.js';
 
-/** Порядок внутри категории: мышь, касание и клавиатура. */
+/** Порядок товаров, навигации и вопросов: мышь, касание и клавиатура. */
 export function initAdminReorder() {
     document.querySelectorAll('[data-reorder-list]').forEach(initList);
 }
@@ -101,6 +101,7 @@ function initList(list) {
                 body: new URLSearchParams({
                     csrf: list.dataset.reorderCsrf,
                     category: list.dataset.reorderCategory,
+                    section: list.dataset.reorderSection || '',
                     version: list.dataset.reorderVersion,
                     ids: JSON.stringify(order),
                 }),

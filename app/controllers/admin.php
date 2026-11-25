@@ -48,6 +48,7 @@ function adminEditorController(): void
             if (!$errors) {
                 if ($singleton) saveSettings($key, $data);
                 else {
+                    if ($key === 'products' && (!$record || $record['category'] !== $data['category'])) $data['sort_order'] = nextProductOrder($data['category']);
                     $id = $id ?: 'item-' . bin2hex(random_bytes(8));
                     saveRecord($key, $id, $data);
                 }
@@ -70,8 +71,9 @@ function adminEditorController(): void
         $row['caption'] = $row['name'] ?? $row['question'] ?? $row['label'] ?? $row['text'] ?? $row['date'] ?? $row['id'];
         $rows[] = $row;
     }
+    $productGroups = $key === 'products' && !$editing ? productOrderGroups($rows) : [];
     $recordCaption = $record['name'] ?? $record['question'] ?? $record['label'] ?? $record['date'] ?? $id;
-    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption'));
+    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups'));
 }
 
 function deleteAdminRecord(string $kind, string $id, array $section): array

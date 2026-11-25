@@ -17,7 +17,7 @@ function buildPhpDist(string $root): void
         mkdir($dist, 0755, true);
         $assets = [];
         $versions = [];
-        foreach (['assets/css/main.css' => 'css', 'assets/js/main.js' => 'js'] as $entry => $type) {
+        foreach (['assets/css/main.css' => 'css', 'assets/js/main.js' => 'js', 'assets/js/admin.js' => 'js'] as $entry => $type) {
             $content = $type === 'css' ? bundleCss($root, $entry) : bundleJs($root, $entry);
             writeDistFile($dist, $entry, $content);
             $versions[$entry] = $entry . '?v=' . substr(md5($content), 0, HASH_LENGTH);

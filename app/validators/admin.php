@@ -12,9 +12,9 @@ function adminSections(?array $collections = null): array
         foreach ($collections['categories'] ?? listRecords('categories', true) as $category) $targets['#' . $category['id']] = $category['name'];
         $sections['navigation']['fields']['target']['options'] = $targets;
     }
-    foreach ($sections as &$section) {
+    foreach ($sections as $key => &$section) {
         if (!($section['singleton'] ?? false) && !($section['fixed'] ?? false)) {
-            $section['fields']['sort_order'] = ['label' => 'Порядок', 'type' => 'number', 'min' => 0, 'max' => 100000, 'default' => 0];
+            if ($key !== 'products') $section['fields']['sort_order'] = ['label' => 'Порядок', 'type' => 'number', 'min' => 0, 'max' => 100000, 'default' => 0];
             $section['fields']['visible'] = ['label' => 'Показывать на сайте', 'type' => 'checkbox', 'default' => 1];
         }
     }

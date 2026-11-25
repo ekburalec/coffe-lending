@@ -75,6 +75,22 @@ def run():
             assert db.execute("SELECT count(*) FROM records WHERE kind='products'").fetchone()[0] == 9
             status, html, _ = request("/admin/edit?section=categories&new=1", {"csrf": csrf, "name": "Тест", "sort_order": 4, "visible": 1})
             assert status == 200 and "Изменения сохранены" in html
+            editor = request("/admin/edit?section=products")[1]
+            assert 'data-reorder-list' in editor and 'Выше</button>' not in editor and 'Ниже</button>' not in editor
+            version = re.search(r'data-reorder-category="coffee" data-reorder-version="([a-f0-9]+)"', editor).group(1)
+            coffee = [r[0] for r in db.execute("SELECT id FROM records WHERE kind='products' AND json_extract(payload,'$.category')='coffee' ORDER BY sort_order,id")]
+            ordered = list(reversed(coffee))
+            move = {"csrf": csrf, "category": "coffee", "version": version, "ids": json.dumps(ordered)}
+            assert request("/admin/products/reorder", dict(move, csrf="bad"))[0] == 403
+            assert request("/admin/products/reorder", dict(move, ids=json.dumps([coffee[0]] * len(coffee))))[0] == 422
+            assert request("/admin/products/reorder", dict(move, ids=json.dumps(["black-tea"] + ordered[1:])))[0] == 422
+            status, result, _ = request("/admin/products/reorder", move)
+            assert status == 200, result
+            assert [r[0] for r in db.execute("SELECT id FROM records WHERE kind='products' AND json_extract(payload,'$.category')='coffee' ORDER BY sort_order,id")] == ordered
+            landing_order = re.findall(r'data-product="([^"]+)"', request("/")[1])[:len(coffee)]
+            assert landing_order == ordered
+            assert request("/admin/products/reorder", move)[0] == 409
+            assert [r[0] for r in db.execute("SELECT id FROM records WHERE kind='products' AND json_extract(payload,'$.category')='coffee' ORDER BY sort_order,id")] == ordered
             category_id = db.execute("SELECT id FROM records WHERE kind='categories' AND json_extract(payload, '$.name')='Тест'").fetchone()[0]
             product = {"csrf": csrf, "name": "Новый напиток", "category": category_id, "description": "Вкус", "ingredients": "Вода", "portion": "200 мл", "price": 125, "available": 1, "visible": 1, "sort_order": 1, "alt": "Чашка", "image": ""}
             file = (ROOT / "assets/img/menu/photo_1.webp").read_bytes()
@@ -187,6 +203,7 @@ def run():
             assert len(list((Path(directory) / "backups").glob("*.zip"))) == 2
             login_html = request("/admin")[1]
             assert "Вход в админку" in login_html
+            assert request("/admin/products/reorder", {"csrf": "old", "category": "coffee", "version": version, "ids": json.dumps(ordered)})[0] == 401
             csrf_login = token(login_html)
             for attempt in range(5):
                 assert request("/admin/login", {"csrf": csrf_login, "username": "testadmin", "password": "wrong"})[0] == 422

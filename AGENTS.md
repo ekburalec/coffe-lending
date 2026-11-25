@@ -233,6 +233,7 @@ dist/                    ← результат сборки, не в git, ру�
 | Документ | Что описывает |
 |----------|---------------|
 | [docs/product/logic/admin-publishing.md](docs/product/logic/admin-publishing.md) | Сохранение данных и согласованное отображение на лендинге |
+| [docs/product/logic/product-order.md](docs/product/logic/product-order.md) | Порядок товаров внутри категорий и конфликты сохранения |
 | [docs/product/logic/order-preview.md](docs/product/logic/order-preview.md) | Выбор позиций, количество и расчёт самовывоза/доставки без отправки и оплаты |
 
 ### Модули (`docs/modules/`)
@@ -249,6 +250,7 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/design/og-image/README.md](docs/design/og-image/README.md) | Картинка превью ссылки `og:image` 1200×630: шаблон и сборка `bin/build-og-image.php` |
 | [docs/modules/php-app.md](docs/modules/php-app.md) | PHP-приложение: запуск, роутер и приватные данные |
 | [docs/modules/admin-auth.md](docs/modules/admin-auth.md) | Авторизация, сессии и CSRF админки |
+| [docs/modules/admin-reorder.md](docs/modules/admin-reorder.md) | Перетаскивание товаров, клавиатура и сохранение порядка |
 | [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
 | [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |
 | [docs/modules/seo.md](docs/modules/seo.md) | SEO, Open Graph и актуальная JSON-LD-разметка |

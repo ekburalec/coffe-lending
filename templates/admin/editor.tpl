@@ -28,6 +28,8 @@
 <?php if ($id && !($section['fixed'] ?? false) && !$singleton): ?>
 <form class="admin__form" method="post"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><label for="confirm-delete"><input id="confirm-delete" name="confirm_delete" type="checkbox" value="1" required> Подтверждаю удаление записи. Восстановить её можно из резервной копии.</label><button class="admin__button" name="action" value="delete" type="submit">Удалить запись</button></form>
 <?php endif; ?>
+<?php elseif ($key === 'products'): ?>
+<?php require __DIR__ . '/product-list.tpl'; ?>
 <?php else: ?>
 <ul class="admin__list"><?php foreach ($rows as $row): ?><li class="admin__row"><div class="admin__row-info"><a class="admin__row-name" href="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>"><?= e($row['caption']) ?></a><?php if (isset($row['price'])): ?><span class="admin__row-detail"><?= e($row['portion']) ?> · <?= e(rubles((int) $row['price'])) ?></span><?php endif; ?><span class="admin__badge"><?= !$row['visible'] ? 'Скрыто' : (isset($row['available']) && !$row['available'] ? 'Нет в наличии' : '') ?></span></div><a class="admin__button admin__button--quiet" href="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>">Изменить<span class="sr-only">: <?= e($row['caption']) ?></span></a></li><?php endforeach; ?></ul>
 <?php if (!$rows): ?><p>Пока нет записей.</p><?php endif; ?>

@@ -16,6 +16,6 @@
 .reviews__source { font-size: var(--text-small); }
 .reviews__control:focus-visible, .reviews__track:focus-visible { outline: var(--focus-width) solid var(--reviews-focus-color); outline-offset: var(--focus-offset); }
 @media (min-width: 640px) { .reviews__track { grid-auto-columns: calc((100% - var(--space-5)) / 2); } }
-@media (min-width: 960px) { .reviews__track { grid-auto-columns: calc((100% - var(--space-5) * 2) / 3); } }
+
 
 .reviews__empty { padding: var(--space-5); border: var(--line-width) solid var(--reviews-card-border); border-radius: var(--radius-md); background: var(--reviews-card-bg); color: var(--reviews-muted-color); }

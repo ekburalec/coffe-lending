@@ -12,7 +12,7 @@ async (page) => {
         if (await page.locator('.reviews__source').count()) throw new Error('Invented review sources');
         if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error('Page overflow at ' + width);
         const columns = await page.locator('.reviews__track').evaluate(el => Math.round(el.clientWidth / (el.firstElementChild.getBoundingClientRect().width + 24)));
-        if (columns !== (width >= 960 ? 3 : width >= 640 ? 2 : 1)) throw new Error('Review columns at ' + width);
+        if (columns !== (width >= 640 ? 2 : 1)) throw new Error('Review columns at ' + width);
         await page.locator('#reviews').screenshot({path: 'var/demo-reviews-' + width + '.png'});
     }
     await page.goto(base + '/admin/edit?section=reviews&id=demo-review-anna');
@@ -35,5 +35,5 @@ async (page) => {
     if (await plain.locator('.reviews__demo').count() !== 3 || !await plain.locator('.reviews__quote').first().isVisible()) throw new Error('No-JS reviews');
     await noJs.close();
     if (errors.length) throw new Error(errors.join('\n'));
-    return 'PASS: demo labels, three portraits, retina, 3/2/1 cards, no JS, photo editor and responsive layouts';
+    return 'PASS: demo labels, three portraits, retina, 2/2/1 cards, no JS, photo editor and responsive layouts';
 }

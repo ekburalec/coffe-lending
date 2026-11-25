@@ -67,9 +67,16 @@ function landingData(): array
     $navigation = array_values(array_filter(listRecords('navigation', true), fn (array $row): bool => in_array($row['target'], $targets, true)));
     $copy = array_column(listRecords('content'), 'text', 'id');
     $images = array_column(listRecords('images'), null, 'id');
+    $occasionPanels = [];
+    foreach ([['coffee', 21, '#coffee'], ['tea', 24, '#tea'], ['meeting', 27, '#space']] as [$kind, $textIndex, $target]) {
+        $choices = array_values(array_filter($products, fn (array $product): bool => $product['category'] === $kind && !empty($product['available'])));
+        $illustrated = array_values(array_filter($choices, fn (array $product): bool => !str_contains($product['image'], '/placeholders/')));
+        $product = $illustrated[0] ?? $choices[0] ?? null;
+        $occasionPanels[] = ['id' => $kind, 'title_key' => 'copy-' . $textIndex, 'body_key' => 'copy-' . ($textIndex + 1), 'link_key' => 'copy-' . ($textIndex + 2), 'target' => in_array($target, ['#coffee', '#tea'], true) && !in_array(substr($target, 1), array_column($categories, 'id'), true) ? '#menu' : $target, 'product' => $product, 'image' => $product ?? $images['image-1']];
+    }
     $announcements = array_column(activeAnnouncements(), 'text');
     array_unshift($announcements, $hours['special'] ? $hours['today'] : $hours['weekly']);
     $announcements[] = deliveryDescription($delivery);
     $rating = getSettings('rating');
-    return compact('contacts', 'delivery', 'hours', 'products', 'categories', 'navigation', 'copy', 'images', 'faq', 'announcements', 'reviews', 'rating');
+    return compact('contacts', 'delivery', 'hours', 'products', 'categories', 'navigation', 'copy', 'images', 'faq', 'announcements', 'reviews', 'rating', 'occasionPanels');
 }

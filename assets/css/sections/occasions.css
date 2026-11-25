@@ -1,27 +1,24 @@
-.occasions__list {
-    margin-top: var(--space-7);
+.occasions__choices { display: grid; gap: var(--space-3); margin-top: var(--space-6); }
+.occasions__choice { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-5); min-height: var(--control-size); border: var(--line-width) solid var(--occasions-border); border-radius: var(--radius-md); background: var(--occasions-card-bg); color: var(--occasions-color); font: inherit; font-weight: var(--weight-semibold); text-align: start; cursor: pointer; transition: background-color var(--transition-fast), color var(--transition-fast); }
+.occasions__choice:hover, .occasions__choice[aria-selected="true"] { background: var(--occasions-active-bg); color: var(--occasions-active-color); }
+.occasions__choice:active { transform: translateY(var(--line-width)); }
+.occasions__choice:focus-visible, .occasions__panel:focus-visible { outline: var(--focus-width) solid var(--occasions-marker-color); outline-offset: var(--focus-offset); }
+.occasions__number { font-size: var(--text-small); font-weight: var(--weight-semibold); letter-spacing: var(--tracking-eyebrow); }
+.occasions__arrow { margin-inline-start: auto; font-size: var(--text-h3); }
+.occasions__panels { display: grid; gap: var(--space-5); margin-top: var(--space-5); }
+.occasions__panel { display: grid; overflow: hidden; border: var(--line-width) solid var(--occasions-border); border-radius: var(--radius-lg); background: var(--occasions-card-bg); color: var(--occasions-color); }
+.occasions__body { display: grid; justify-items: start; align-content: center; gap: var(--space-5); padding: var(--space-6); }
+.occasions__title { font-family: var(--font-heading); font-size: var(--text-h2); line-height: var(--leading-tight); }
+.occasions__copy { max-width: var(--lead-measure); color: var(--occasions-muted-color); }
+.occasions__suggestion { display: grid; gap: var(--space-2); }
+.occasions__suggestion span { font-size: var(--text-small); color: var(--occasions-muted-color); }
+.occasions__visual { margin: 0; }
+.occasions__image { width: 100%; height: var(--occasions-image-height); object-fit: cover; }
+@media (min-width: 768px) {
+    .occasions__choices { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .occasions__choice { padding: var(--space-5) var(--space-4); gap: var(--space-3); }
+    .occasions__panel { grid-template-columns: 1fr 1fr; }
+    .occasions__image { height: 100%; min-height: var(--occasions-image-height); }
+    .occasions__body { padding: var(--space-7); }
 }
-.occasions__item {
-    display: grid;
-    gap: var(--space-4);
-    padding-block: var(--space-6);
-    border-top: var(--line-width) solid var(--occasions-border);
-}
-.occasions__title {
-    font-family: var(--font-body);
-    font-size: var(--text-h3);
-    font-weight: var(--weight-semibold);
-    letter-spacing: normal;
-}
-.occasions__copy {
-    max-width: var(--lead-measure);
-}
-.occasions__copy p {
-    margin-bottom: var(--space-3);
-}
-@media (min-width: 960px) {
-    .occasions__item {
-        grid-template-columns: 5fr 7fr;
-        gap: var(--space-7);
-    }
-}
+@media (prefers-reduced-motion: reduce) { .occasions__choice { transition: none; } }

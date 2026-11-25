@@ -87,34 +87,12 @@
                     </div>
                 </div>
             </section>
-            <section class="section section--surface occasions" id="occasions" aria-labelledby="occasions-title">
+            <section class="section section--surface occasions" id="occasions" aria-labelledby="occasions-title" data-occasions>
                 <div class="container">
                     <p class="section__eyebrow" data-content-key="copy-18"><?= e($copy['copy-18']) ?></p>
                     <h2 class="section__title" id="occasions-title" data-content-key="copy-19"><?= e($copy['copy-19']) ?></h2>
                     <p class="section__lead" data-content-key="copy-20"><?= e($copy['copy-20']) ?></p>
-                    <ul class="occasions__list">
-                        <li class="occasions__item">
-                            <h3 class="occasions__title" data-content-key="copy-21"><?= e($copy['copy-21']) ?></h3>
-                            <div class="occasions__copy">
-                                <p data-content-key="copy-22"><?= e($copy['copy-22']) ?></p>
-                                <a class="text-link" href="<?= e(in_array('coffee', array_column($categories, 'id'), true) ? '#coffee' : '#menu') ?>" data-content-key="copy-23"><?= e($copy['copy-23']) ?></a>
-                            </div>
-                        </li>
-                        <li class="occasions__item">
-                            <h3 class="occasions__title" data-content-key="copy-24"><?= e($copy['copy-24']) ?></h3>
-                            <div class="occasions__copy">
-                                <p data-content-key="copy-25"><?= e($copy['copy-25']) ?></p>
-                                <a class="text-link" href="<?= e(in_array('tea', array_column($categories, 'id'), true) ? '#tea' : '#menu') ?>" data-content-key="copy-26"><?= e($copy['copy-26']) ?></a>
-                            </div>
-                        </li>
-                        <li class="occasions__item">
-                            <h3 class="occasions__title" data-content-key="copy-27"><?= e($copy['copy-27']) ?></h3>
-                            <div class="occasions__copy">
-                                <p data-content-key="copy-28"><?= e($copy['copy-28']) ?></p>
-                                <a class="text-link" href="#space" data-content-key="copy-29"><?= e($copy['copy-29']) ?></a>
-                            </div>
-                        </li>
-                    </ul>
+                    <?php require __DIR__ . '/partials/occasions.tpl'; ?>
                 </div>
             </section>
             <section class="section space dark-mode" id="space" aria-labelledby="space-title">

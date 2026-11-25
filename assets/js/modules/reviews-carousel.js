@@ -24,10 +24,17 @@ export function initReviewsCarousel() {
     }
 
     function move(direction) {
-        track.scrollBy({left: direction * track.clientWidth, behavior: reducedMotion.matches ? 'auto' : 'smooth'});
+        const step = track.firstElementChild.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap) || 0);
+        track.scrollBy({left: direction * step, behavior: reducedMotion.matches ? 'auto' : 'smooth'});
     }
     previous.addEventListener('click', () => move(-1));
     next.addEventListener('click', () => move(1));
+    track.addEventListener('keydown', (event) => {
+        if (event.target !== track || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+        event.preventDefault();
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') move(event.key === 'ArrowRight' ? 1 : -1);
+        else track.scrollTo({left: event.key === 'Home' ? 0 : track.scrollWidth, behavior: reducedMotion.matches ? 'auto' : 'smooth'});
+    });
     track.addEventListener('scroll', sync, {passive: true});
     window.addEventListener('resize', sync);
     sync();

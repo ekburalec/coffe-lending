@@ -24,7 +24,7 @@ async (page) => {
         await page.goto(base + '/');
         const track = page.locator('[data-reviews-track]');
         const visibleColumns = () => track.evaluate(el => Math.round(el.clientWidth / el.firstElementChild.getBoundingClientRect().width));
-        if (await visibleColumns() !== 3) throw new Error('Desktop must show three cards');
+        if (await visibleColumns() !== 2) throw new Error('Desktop must show two cards');
         await page.locator('[data-reviews-next]').click();
         await page.waitForFunction(() => document.querySelector('[data-reviews-track]').scrollLeft > 0);
         await page.locator('[data-reviews-previous]').click();
@@ -53,7 +53,7 @@ async (page) => {
         if (!await page.getByRole('heading', {name: 'Добавить вопрос', exact: true}).count()) throw new Error('Inline FAQ form missing');
         if (await page.getByRole('button', {name: /^(Выше|Ниже)$/}).count()) throw new Error('Legacy move buttons present');
         if (errors.length) throw new Error(errors.join('\n'));
-        return 'PASS: original palette, review editor, 3/2/1 cards, carousel, no-JS, visibility and empty-state navigation';
+        return 'PASS: original palette, review editor, 2/2/1 cards, carousel, no-JS, visibility and empty-state navigation';
     } finally {
         await page.goto(base + '/admin/edit?section=reviews');
         for (const id of ids) {

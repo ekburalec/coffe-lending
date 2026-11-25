@@ -240,10 +240,21 @@
 :root {
     --occasions-border: var(--color-line);
     --occasions-marker-color: var(--color-accent);
+    --occasions-card-bg: var(--color-card);
+    --occasions-color: var(--color-text);
+    --occasions-muted-color: var(--color-text-muted);
+    --occasions-active-bg: var(--color-accent);
+    --occasions-active-color: var(--color-on-accent);
+    --occasions-image-height: 360px;
 }
 .dark-mode {
     --occasions-border: var(--color-dark-line);
     --occasions-marker-color: var(--color-dark-accent);
+    --occasions-card-bg: var(--color-dark-surface);
+    --occasions-color: var(--color-dark-text);
+    --occasions-muted-color: var(--color-dark-muted);
+    --occasions-active-bg: var(--color-dark-accent);
+    --occasions-active-color: var(--color-dark-bg);
 }
 
 /* delivery */

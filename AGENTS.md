@@ -234,6 +234,7 @@ dist/                    ← результат сборки, не в git, ру�
 |----------|---------------|
 | [docs/product/logic/admin-publishing.md](docs/product/logic/admin-publishing.md) | Сохранение данных и согласованное отображение на лендинге |
 | [docs/product/logic/product-order.md](docs/product/logic/product-order.md) | Порядок товаров, навигации и FAQ; конфликты сохранения |
+| [docs/product/logic/occasions.md](docs/product/logic/occasions.md) | Подбор напитка для сценария посещения |
 | [docs/product/logic/reviews.md](docs/product/logic/reviews.md) | Видимость отзывов/FAQ, рейтинг и публичные блоки |
 | [docs/product/logic/order-preview.md](docs/product/logic/order-preview.md) | Выбор позиций, количество и расчёт самовывоза/доставки без отправки и оплаты |
 
@@ -254,6 +255,7 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/modules/admin-reorder.md](docs/modules/admin-reorder.md) | Перетаскивание товаров, навигации и FAQ; сохранение порядка |
 | [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
 | [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |
+| [docs/modules/occasions.md](docs/modules/occasions.md) | Выбор повода, доступные вкладки и рекомендации из каталога |
 | [docs/modules/reviews.md](docs/modules/reviews.md) | Слайдер, фото и демо-отзывы, управление отзывами и FAQ |
 | [docs/modules/admin-character-count.md](docs/modules/admin-character-count.md) | Подсказки и счётчики символов SEO-форм |
 | [docs/modules/seo.md](docs/modules/seo.md) | SEO, Open Graph и актуальная JSON-LD-разметка |

@@ -18,7 +18,7 @@ function backupsController(): void
                 }
                 if ($action === 'download') {
                     $name = postText('filename');
-                    if (!preg_match('/^backup-[0-9]{8}-[0-9]{6}-[a-f0-9]{8}\.(?:sqlite|zip)$/D', $name) || !is_file(backupDirectory() . '/' . $name)) throw new InvalidArgumentException('Копия не найдена.');
+                    if (!preg_match('/^(?:backup|auto-backup)-[0-9]{8}-[0-9]{6}-[a-f0-9]{8}\.(?:sqlite|zip)$/D', $name) || !is_file(backupDirectory() . '/' . $name)) throw new InvalidArgumentException('Копия не найдена.');
                     downloadBackup(backupDirectory() . '/' . $name);
                     return;
                 }
@@ -34,7 +34,11 @@ function backupsController(): void
     }
     $copies = array_map('basename', glob(backupDirectory() . '/backup-*') ?: []);
     rsort($copies);
-    adminPage('Резервные копии', 'backups', compact('error', 'copies'));
+    $automaticCopies = [];
+    foreach (automaticBackups() as $path) {
+        $automaticCopies[] = ['name' => basename($path), 'date' => date('d.m.Y H:i', filemtime($path)), 'size' => number_format(filesize($path) / 1024 / 1024, 2, ',', ' ') . ' МБ'];
+    }
+    adminPage('Резервные копии', 'backups', compact('error', 'copies', 'automaticCopies'));
 }
 
 function downloadBackup(string $path): void

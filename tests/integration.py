@@ -78,6 +78,7 @@ def run():
             assert db.execute('SELECT MAX(version) FROM schema_version').fetchone()[0] == 2
             assert 'href="#reviews"' in request('/')[1]
             assert 'Отзывов пока нет.' in request('/')[1]
+            assert 'Автокопий пока нет' in request('/admin/backups')[1]
             for section, label_field in [('navigation', 'name'), ('faq', 'question')]:
                 editor = request('/admin/edit?section=' + section)[1]
                 assert 'data-reorder-section="' + section + '"' in editor and 'data-reorder-handle' in editor
@@ -299,6 +300,20 @@ def run():
             login_html = request("/admin")[1]
             assert "Вход в админку" in login_html
             assert request("/admin/products/reorder", {"csrf": "old", "category": "coffee", "version": version, "ids": json.dumps(ordered)})[0] == 401
+            assert len(list((Path(directory) / 'backups').glob('auto-backup-*.zip'))) == 1
+            # Чистка ограничена автоматическими архивами; ручная копия сохраняется.
+            command = 'require "app/core/bootstrap.php"; for ($i=0; $i<6; $i++) { $copy=createBackup(true,true); pruneAutomaticBackups($copy); }'
+            subprocess.run(['php'] + extension_flags + ['-r', command], cwd=ROOT, env=env, check=True, capture_output=True)
+            assert len(list((Path(directory) / 'backups').glob('auto-backup-*.zip'))) == 5
+            assert len(list((Path(directory) / 'backups').glob('backup-*.zip'))) == 1
+            logged_in = request('/admin/login', {'csrf': token(login_html), 'username': 'testadmin', 'password': password})[1]
+            copies_page = request('/admin/backups')[1]
+            assert 'Автокопии' in copies_page and 'Автокопий пока нет' not in copies_page
+            auto_name = next((Path(directory) / 'backups').glob('auto-backup-*.zip')).name
+            status, downloaded, _ = request('/admin/backups', {'csrf': token(copies_page), 'action': 'download', 'filename': auto_name}, raw=True)
+            assert status == 200 and downloaded.startswith(b'PK')
+            assert request('/admin/backups', {'csrf': token(copies_page), 'action': 'download', 'filename': '../site.sqlite'})[0] == 422
+            login_html = request('/admin/logout', {'csrf': token(logged_in)})[1]
             csrf_login = token(login_html)
             for attempt in range(5):
                 assert request("/admin/login", {"csrf": csrf_login, "username": "testadmin", "password": "wrong"})[0] == 422

@@ -35,7 +35,7 @@ function validCsrf(): bool
 function adminPage(string $title, string $view, array $data = []): void
 {
     $sidebar = isset($_SESSION['admin']) ? adminNavigation() : [];
-    $sectionPanels = $view === 'editor' && ($data['key'] ?? '') === 'seo';
+    $sectionPanels = $view === 'backups' || ($view === 'editor' && ($data['key'] ?? '') === 'seo');
     $tabs = [];
     foreach ($sidebar as $group) if ($group['active'] && count($group['tabs']) > 1) $tabs = $group['tabs'];
     render('admin/layout', array_merge($data, ['title' => $title, 'view' => $view, 'csrf' => $_SESSION['csrf'], 'adminBrand' => getSettings('contacts')['name'], 'sidebar' => $sidebar, 'tabs' => $tabs, 'sectionPanels' => $sectionPanels]));

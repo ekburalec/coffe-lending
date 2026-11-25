@@ -15,9 +15,9 @@ function databaseSnapshot(string $destination): void
     chmod($destination, 0600);
 }
 
-function createBackup(bool $full): string
+function createBackup(bool $full, bool $automatic = false): string
 {
-    $name = 'backup-' . date('Ymd-His') . '-' . bin2hex(random_bytes(4));
+    $name = ($automatic ? 'auto-backup-' : 'backup-') . date('Ymd-His') . '-' . bin2hex(random_bytes(4));
     $snapshot = backupDirectory() . '/' . $name . '.sqlite';
     databaseSnapshot($snapshot);
     if (!$full) return $snapshot;
@@ -44,6 +44,21 @@ function createBackup(bool $full): string
         if (is_file($snapshot)) unlink($snapshot);
     }
     return $path;
+}
+
+function automaticBackups(): array
+{
+    $paths = glob(backupDirectory() . '/auto-backup-*.zip') ?: [];
+    usort($paths, fn (string $a, string $b): int => (filemtime($b) <=> filemtime($a)) ?: strcmp($b, $a));
+    return $paths;
+}
+
+function pruneAutomaticBackups(string $latest): void
+{
+    $paths = array_values(array_filter(automaticBackups(), fn (string $path): bool => $path !== $latest));
+    foreach (array_slice($paths, 4) as $path) {
+        if (!unlink($path)) throw new RuntimeException('Не удалось удалить старую автокопию. Проверьте права каталога.');
+    }
 }
 
 function validateBackupDatabase(string $path, array $stagedMedia): void
@@ -174,7 +189,8 @@ function restoreBackup(array $file): string
         elseif (!copy($file['tmp_name'], $stage . '/site.sqlite')) throw new RuntimeException('Не удалось подготовить БД.');
         validateBackupDatabase($stage . '/site.sqlite', $media);
         // Все изменения защищены эксклюзивным application.lock в index.php.
-        $safety = createBackup(true);
+        $safety = createBackup(true, true);
+        pruneAutomaticBackups($safety);
         if (!is_dir(appConfig('upload_dir'))) mkdir(appConfig('upload_dir'), 0755, true);
         foreach ($media as $name => $source) {
             $destination = appConfig('upload_dir') . '/' . $name;

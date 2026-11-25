@@ -257,7 +257,7 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/modules/reviews.md](docs/modules/reviews.md) | Слайдер, фото и демо-отзывы, управление отзывами и FAQ |
 | [docs/modules/admin-character-count.md](docs/modules/admin-character-count.md) | Подсказки и счётчики символов SEO-форм |
 | [docs/modules/seo.md](docs/modules/seo.md) | SEO, Open Graph и актуальная JSON-LD-разметка |
-| [docs/modules/backups.md](docs/modules/backups.md) | Экспорт, проверка и восстановление БД и фотографий |
+| [docs/modules/backups.md](docs/modules/backups.md) | Экспорт, пять автокопий, восстановление БД и фотографий |
 
 ### Интеграции (`docs/integrations/`)
 

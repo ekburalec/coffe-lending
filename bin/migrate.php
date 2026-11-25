@@ -23,6 +23,16 @@ try {
             if (!findRecord($kind, $record['id'])) saveRecord($kind, $record['id'], $record);
         }
     }
+    if (!$pdo->query('SELECT COUNT(*) FROM schema_version WHERE version = 2')->fetchColumn()) {
+        $links = listRecords('navigation');
+        $reviewLink = null;
+        foreach ($links as $link) if ($link['target'] === '#reviews') { $reviewLink = $link; break; }
+        $reviewLink ??= ['id' => 'nav-reviews', 'target' => '#reviews', 'sort_order' => $links ? max(array_column($links, 'sort_order')) + 1 : 0];
+        $reviewLink['name'] = 'Отзывы';
+        $reviewLink['visible'] = 1;
+        saveRecord('navigation', $reviewLink['id'], $reviewLink);
+        $pdo->exec('INSERT INTO schema_version VALUES(2)');
+    }
     $pdo->commit();
     echo "Миграции выполнены. Существующие данные сохранены.\n";
 } catch (Throwable $error) {

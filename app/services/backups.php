@@ -61,7 +61,7 @@ function validateBackupDatabase(string $path, array $stagedMedia): void
     }
     foreach ($objects as $object) if ($normalizeSql($object['sql']) !== ($definitions[$object['name']] ?? '')) throw new InvalidArgumentException('Определения таблиц не соответствуют приложению.');
     if ($pdo->query('PRAGMA quick_check')->fetchColumn() !== 'ok') throw new InvalidArgumentException('Копия БД повреждена.');
-    if ($pdo->query('SELECT version FROM schema_version')->fetchAll(PDO::FETCH_COLUMN) !== [1]) throw new InvalidArgumentException('Несовместимая версия схемы.');
+    if (!in_array($pdo->query('SELECT version FROM schema_version ORDER BY version')->fetchAll(PDO::FETCH_COLUMN), [[1], [1, 2]], true)) throw new InvalidArgumentException('Несовместимая версия схемы.');
     $admins = $pdo->query('SELECT * FROM admins')->fetchAll();
     if (count($admins) > 1 || ($admins && ($admins[0]['id'] != 1 || !preg_match('/^[a-zA-Z0-9_.-]{3,80}$/D', $admins[0]['username']) || !password_get_info($admins[0]['password_hash'])['algo']))) throw new InvalidArgumentException('Некорректная учётная запись в копии.');
     $collections = [];

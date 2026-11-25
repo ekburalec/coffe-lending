@@ -73,6 +73,9 @@ def run():
             csrf = token(html)
             db = sqlite3.connect(str(Path(directory) / "site.sqlite"))
             assert db.execute("SELECT count(*) FROM records WHERE kind='products'").fetchone()[0] == 9
+            assert db.execute('SELECT MAX(version) FROM schema_version').fetchone()[0] == 2
+            assert 'href="#reviews"' in request('/')[1]
+            assert 'Отзывов пока нет.' in request('/')[1]
             status, html, _ = request("/admin/edit?section=categories&new=1", {"csrf": csrf, "name": "Тест", "sort_order": 4, "visible": 1})
             assert status == 200 and "Изменения сохранены" in html
             editor = request("/admin/edit?section=products")[1]
@@ -163,7 +166,7 @@ def run():
             status, review_editor, _ = request(review_url, {"csrf": csrf, "action": "toggle_visibility"})
             assert status == 200 and "Скрыто" in review_editor and "Показать" in review_editor
             empty_reviews = request("/")[1]
-            assert 'id="reviews"' not in empty_reviews and 'href="#reviews"' not in empty_reviews
+            assert 'id="reviews"' in empty_reviews and 'href="#reviews"' in empty_reviews and 'Отзывов пока нет.' in empty_reviews
             assert request(review_url, {"csrf": csrf, "action": "toggle_visibility"})[0] == 200
             assert 'id="reviews"' in request("/")[1]
             assert request(review_url, {"csrf": csrf, "action": "delete"})[0] == 422

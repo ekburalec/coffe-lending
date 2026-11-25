@@ -11,6 +11,6 @@ if (version_compare(PHP_VERSION, '8.2', '<') || $missing || !function_exists('im
 require dirname(__DIR__) . '/app/core/bootstrap.php';
 $applicationLock = applicationLock(false);
 echo 'PHP: ' . PHP_VERSION . "\nДанные: " . appConfig('data_dir') . "\nФото: " . appConfig('upload_dir') . "\n";
-echo 'Схема: ' . database()->query('SELECT version FROM schema_version')->fetchColumn() . "\n";
+echo 'Миграция: ' . database()->query('SELECT MAX(version) FROM schema_version')->fetchColumn() . "\n";
 echo 'Администратор: ' . (adminAccount() ? 'создан' : 'не создан; выполните bin/create-admin.php') . "\n";
 echo "Проверка окружения пройдена.\n";

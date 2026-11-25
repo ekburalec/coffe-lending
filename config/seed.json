@@ -176,6 +176,13 @@
                 "target": "#contacts",
                 "sort_order": 3,
                 "visible": 1
+            },
+            {
+                "id": "nav-reviews",
+                "name": "Отзывы",
+                "target": "#reviews",
+                "sort_order": 4,
+                "visible": 1
             }
         ],
         "faq": [

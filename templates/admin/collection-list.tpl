@@ -5,7 +5,7 @@
 <button class="admin__button admin__button--submit" type="submit">Сохранить рейтинг</button></form></section>
 <?php endif; ?>
 <section class="admin__subsection" id="records" aria-labelledby="records-title"><h2 class="admin__category-title" id="records-title"><?= $key === 'reviews' ? 'Отзывы' : 'Частые вопросы' ?></h2>
-<p class="admin__lead"><?= $key === 'reviews' ? 'Карточки на сайте идут в этом порядке, по три на широком экране. Если все отзывы скрыты, блок и ссылки на него не показываются.' : 'Вопросы на сайте идут в этом порядке. Скрытый вопрос остаётся в админке; на сайте и в разметке для поиска его нет.' ?></p>
+<p class="admin__lead"><?= $key === 'reviews' ? 'Карточки на сайте идут в этом порядке, по три на широком экране. Скрытые отзывы не видны на сайте; пустой блок сохраняется с сообщением «Отзывов пока нет».' : 'Вопросы на сайте идут в этом порядке. Скрытый вопрос остаётся в админке; на сайте и в разметке для поиска его нет.' ?></p>
 <ul class="admin__list">
 <?php foreach ($rows as $row): ?>
     <li class="admin__row admin__row--collection" id="record-<?= e($row['id']) ?>">

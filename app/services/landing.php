@@ -61,8 +61,7 @@ function landingData(): array
     }
     $reviews = listRecords('reviews', true);
     $faq = landingFaq($delivery, $hours);
-    $targets = ['#welcome', '#menu', '#occasions', '#space', '#delivery', '#contacts'];
-    if ($reviews) $targets[] = '#reviews';
+    $targets = ['#welcome', '#menu', '#occasions', '#space', '#delivery', '#reviews', '#contacts'];
     if ($faq) $targets[] = '#faq';
     foreach ($categories as $category) $targets[] = '#' . $category['id'];
     $navigation = array_values(array_filter(listRecords('navigation', true), fn (array $row): bool => in_array($row['target'], $targets, true)));

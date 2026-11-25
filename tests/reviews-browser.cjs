@@ -48,7 +48,7 @@ async (page) => {
         await toggle(ids[0]);
         for (const id of ids) await toggle(id);
         await page.goto(base + '/');
-        if (await page.locator('#reviews').count() || await page.locator('a[href="#reviews"]').count()) throw new Error('Empty reviews section/link not hidden');
+        if (!await page.locator('#reviews').count() || !await page.locator('a[href="#reviews"]').count() || !await page.getByText('Отзывов пока нет.', {exact: true}).count()) throw new Error('Visible empty reviews section/link missing');
         await page.goto(base + '/admin/edit?section=faq');
         if (!await page.getByRole('heading', {name: 'Добавить вопрос', exact: true}).count()) throw new Error('Inline FAQ form missing');
         if (await page.getByRole('button', {name: /^(Выше|Ниже)$/}).count()) throw new Error('Legacy move buttons present');

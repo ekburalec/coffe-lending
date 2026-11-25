@@ -6,7 +6,7 @@ if (PHP_SAPI !== 'cli') exit;
 require dirname(__DIR__) . '/app/core/bootstrap.php';
 $doc = new DOMDocument();
 libxml_use_internal_errors(true);
-$doc->loadHTML('<?xml encoding="UTF-8">' . file_get_contents(APP_ROOT . '/index.html'));
+$doc->loadHTML('<?xml encoding="UTF-8">' . file_get_contents(APP_ROOT . '/config/initial.html'));
 $xpath = new DOMXPath($doc);
 function initialText(DOMXPath $xpath, string $query, ?DOMNode $node = null): string
 {
@@ -30,7 +30,7 @@ foreach ($xpath->query('//*[@class="menu__category"]') as $index => $category) {
         ];
     }
 }
-foreach ($xpath->query('//nav//a') as $index => $link) {
+foreach ($xpath->query('//nav[@id="site-navigation"]//a') as $index => $link) {
     $seed['records']['navigation'][] = ['id' => 'nav-' . $index, 'name' => trim($link->textContent), 'target' => $link->getAttribute('href'), 'sort_order' => $index, 'visible' => 1];
 }
 foreach ($xpath->query('//*[@id="faq"]//details') as $index => $faq) {

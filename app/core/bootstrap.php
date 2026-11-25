@@ -30,3 +30,6 @@ require_once APP_ROOT . '/app/validators/admin.php';
 require_once APP_ROOT . '/app/controllers/admin.php';
 
 require_once APP_ROOT . '/app/services/opening-hours.php';
+
+require_once APP_ROOT . '/app/services/landing.php';
+require_once APP_ROOT . '/app/controllers/landing.php';

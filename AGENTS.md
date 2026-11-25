@@ -233,6 +233,7 @@ dist/                    ← результат сборки, не в git, ру�
 
 | Документ | Что описывает |
 |----------|---------------|
+| [docs/product/logic/admin-publishing.md](docs/product/logic/admin-publishing.md) | Сохранение данных и согласованное отображение на лендинге |
 | [docs/product/logic/order-preview.md](docs/product/logic/order-preview.md) | Выбор позиций, количество и расчёт самовывоза/доставки без отправки и оплаты |
 
 ### Модули (`docs/modules/`)

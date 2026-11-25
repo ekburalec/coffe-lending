@@ -107,9 +107,26 @@ def run():
             assert request("/admin/edit?section=announcements&new=1", announcement)[0] == 422
             assert request("/admin/edit?section=rating", {"csrf": csrf, "value": "4.9", "count": 100, "source": ""})[0] == 422
             assert request("/admin/edit?section=navigation&new=1", {"csrf": csrf, "name": "Плохой пункт", "target": "#missing"})[0] == 422
+            status, landing, _ = request("/")
+            assert status == 200
+            assert "Новый напиток" in landing and "Новый адрес" in landing and "Тест кофейня" in landing
+            assert 'data-delivery-fee="200"' in landing and 'data-free-delivery-from="1200"' in landing
+            assert 'value="pickup"' not in landing and 'value="delivery" checked' in landing
+            assert landing.count('data-product=') == 10 and landing.count('data-order-row=') == 10
+            code = "require 'app/core/bootstrap.php'; echo json_encode([openingHours(new DateTimeImmutable('2026-12-31T10:00:00+05:00')), count(activeAnnouncements(new DateTimeImmutable('2026-12-31T08:00:00+05:00'))), count(activeAnnouncements(new DateTimeImmutable('2026-12-31T20:00:00+05:00'))), count(activeAnnouncements(new DateTimeImmutable('2026-12-31T20:01:00+05:00')))]);"
+            result = subprocess.run(["php", "-r", code], cwd=ROOT, env=env, check=True, capture_output=True)
+            hours, begin, end, after = json.loads(result.stdout)
+            assert hours["special"] and "закрыто" in hours["today"]
+            assert [begin, end, after] == [1, 1, 0]
+            product["price"] = 125
+            product.pop("available")
+            assert request("/admin/edit?section=products&id=" + product_id, product)[0] == 200
+            landing = request("/")[1]
+            assert landing.count('data-product=') == 10 and landing.count('data-order-row=') == 9 and "Нет в наличии" in landing
             db.close()
             print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation")
         finally:
+            if "db" in locals(): db.close()
             process.terminate()
             process.wait(timeout=5)
 

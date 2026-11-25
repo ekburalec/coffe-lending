@@ -1,0 +1,5 @@
+<?php if ($reviews || ($rating['value'] !== '' && $rating['source'] && (int) $rating['count'] > 0)): ?>
+<section class="section faq" id="reviews" aria-labelledby="reviews-title"><div class="container faq__inner"><div><h2 class="section__title" id="reviews-title">Отзывы гостей</h2>
+<?php if ($rating['value'] !== '' && $rating['source'] && (int) $rating['count'] > 0): ?><p>Рейтинг <?= e($rating['value']) ?> из 5 · оценок: <?= e($rating['count']) ?>. <a class="text-link" href="<?= e($rating['source']) ?>" target="_blank" rel="noopener noreferrer">Источник рейтинга<span class="sr-only"> (откроется в новой вкладке)</span></a></p><?php endif; ?></div>
+<div class="faq__list"><?php foreach ($reviews as $review): ?><figure class="faq__item"><blockquote><p><?= e($review['text']) ?></p></blockquote><figcaption><?= e($review['name']) ?> · <a class="text-link" href="<?= e($review['source']) ?>" target="_blank" rel="noopener noreferrer">Источник отзыва<span class="sr-only"> (откроется в новой вкладке)</span></a></figcaption></figure><?php endforeach; ?></div></div></section>
+<?php endif; ?>

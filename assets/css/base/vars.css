@@ -315,20 +315,52 @@
     --notify-color: var(--color-dark-bg);
 }
 
-/* admin */
+/* admin: отдельная рабочая панель по согласованным референсам */
 :root {
- --admin-bg: var(--color-bg); --admin-color: var(--color-text);
- --admin-surface: var(--color-card); --admin-border: var(--color-text-muted);
- --admin-focus: var(--color-accent); --admin-error: #9c2929;
- --admin-button-bg: var(--color-accent); --admin-button-color: var(--color-on-accent);
- --admin-button-hover-bg: var(--color-accent-dark); --admin-button-active-bg: var(--color-heading);
- --admin-card-width: 240px; --admin-form-width: 760px; --admin-preview-width: 240px;
- --admin-disabled-opacity: .5;
+    --admin-bg: #f0f2f3;
+    --admin-color: #26302a;
+    --admin-heading-color: #202824;
+    --admin-muted-color: #616c65;
+    --admin-surface: #ffffff;
+    --admin-subtle-bg: #f1f4f2;
+    --admin-border: #7b8981;
+    --admin-line: #dce2de;
+    --admin-focus: #1c7540;
+    --admin-error: #9c2929;
+    --admin-button-bg: #1c7540;
+    --admin-button-color: #ffffff;
+    --admin-button-hover-bg: #155b32;
+    --admin-button-active-bg: #104728;
+    --admin-link-color: #1c7540;
+    --admin-active-bg: #1c7540;
+    --admin-active-color: #ffffff;
+    --admin-max-width: 1280px;
+    --admin-sidebar-width: 232px;
+    --admin-form-width: 880px;
+    --admin-login-width: 560px;
+    --admin-preview-width: 240px;
+    --admin-panel-radius: 24px;
+    --admin-shadow: 0 5px 20px rgb(24 44 31 / 5%);
+    --admin-title-size: clamp(1.875rem, 1.5rem + 1vw, 2.375rem);
+    --admin-brand-size: 1.5rem;
+    --admin-disabled-opacity: .5;
 }
 .dark-mode {
- --admin-bg: var(--color-dark-bg); --admin-color: var(--color-dark-text);
- --admin-surface: var(--color-dark-surface); --admin-border: var(--color-dark-muted);
- --admin-focus: var(--color-dark-accent); --admin-error: #ffb0a0;
- --admin-button-bg: var(--color-dark-accent); --admin-button-color: var(--color-dark-bg);
- --admin-button-hover-bg: var(--color-dark-text); --admin-button-active-bg: var(--color-dark-muted);
+    --admin-bg: var(--color-dark-bg);
+    --admin-color: var(--color-dark-text);
+    --admin-heading-color: var(--color-dark-text);
+    --admin-muted-color: var(--color-dark-muted);
+    --admin-surface: var(--color-dark-surface);
+    --admin-subtle-bg: #293b30;
+    --admin-border: #9eafa3;
+    --admin-line: #516557;
+    --admin-focus: #9cdbaf;
+    --admin-error: #ffb0a0;
+    --admin-button-bg: #9cdbaf;
+    --admin-button-color: #14291c;
+    --admin-button-hover-bg: #c2ebce;
+    --admin-button-active-bg: #d9f3e0;
+    --admin-link-color: #9cdbaf;
+    --admin-active-bg: #9cdbaf;
+    --admin-active-color: #14291c;
 }

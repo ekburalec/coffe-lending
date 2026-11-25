@@ -1,12 +1,12 @@
-<div class="admin__actions"><a href="/admin">Все разделы</a><?php if (!$singleton): ?><a href="/admin/edit?section=<?= e($key) ?>">Список</a><?php if (!($section['fixed'] ?? false)): ?><a class="admin__button" href="/admin/edit?section=<?= e($key) ?>&amp;new=1">Добавить</a><?php endif; ?><?php endif; ?></div>
+<div class="admin__actions"><?php if (!$singleton): ?><a href="/admin/edit?section=<?= e($key) ?>">Список</a><?php if (!($section['fixed'] ?? false)): ?><a class="admin__button" href="/admin/edit?section=<?= e($key) ?>&amp;new=1">Добавить</a><?php endif; ?><?php endif; ?></div>
 <?php if ($notice): ?><p class="admin__success" role="status"><?= e($notice) ?></p><?php endif; ?>
 <?php if ($errors): ?><div class="admin__message" role="alert" id="form-errors"><p>Изменения не сохранены:</p><ul><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
 <?php if ($editing): ?>
 <?php if ($id): ?><h2><?= e($recordCaption) ?></h2><?php endif; ?>
-<form class="admin__form" method="post" enctype="multipart/form-data" autocomplete="off">
+<form class="admin__form admin__form--fields" method="post" enctype="multipart/form-data" autocomplete="off">
 <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
 <?php foreach ($fields as $field): ?>
-<div class="admin__field">
+<div class="admin__field <?= in_array($field['type'], ['textarea', 'image', 'url'], true) ? 'admin__field--wide' : '' ?>">
 <label for="field-<?= e($field['name']) ?>"><?= e($field['label']) ?></label>
 <?php if ($field['type'] === 'textarea'): ?>
 <textarea class="admin__input" id="field-<?= e($field['name']) ?>" name="<?= e($field['name']) ?>" rows="5" maxlength="<?= e($field['max'] ?? 5000) ?>" <?= !empty($field['required']) ? 'required' : '' ?> aria-invalid="<?= $field['error'] ? 'true' : 'false' ?>" aria-describedby="error-<?= e($field['name']) ?>"><?= e($field['value']) ?></textarea>
@@ -23,12 +23,12 @@
 <span class="admin__hint admin__message" id="error-<?= e($field['name']) ?>"><?= e($field['error']) ?></span>
 </div>
 <?php endforeach; ?>
-<button class="admin__button" type="submit" name="action" value="save">Сохранить</button>
+<button class="admin__button admin__button--submit" type="submit" name="action" value="save">Сохранить</button>
 </form>
 <?php if ($id && !($section['fixed'] ?? false) && !$singleton): ?>
 <form class="admin__form" method="post"><input type="hidden" name="csrf" value="<?= e($csrf) ?>"><label for="confirm-delete"><input id="confirm-delete" name="confirm_delete" type="checkbox" value="1" required> Подтверждаю удаление записи. Восстановить её можно из резервной копии.</label><button class="admin__button" name="action" value="delete" type="submit">Удалить запись</button></form>
 <?php endif; ?>
 <?php else: ?>
-<ul class="admin__list"><?php foreach ($rows as $row): ?><li class="admin__row"><a href="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>"><?= e($row['caption']) ?></a><span><?= $row['visible'] ? 'Показывается' : 'Скрыто' ?> · порядок <?= e($row['sort_order']) ?></span></li><?php endforeach; ?></ul>
+<ul class="admin__list"><?php foreach ($rows as $row): ?><li class="admin__row"><div class="admin__row-info"><a class="admin__row-name" href="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>"><?= e($row['caption']) ?></a><?php if (isset($row['price'])): ?><span class="admin__row-detail"><?= e($row['portion']) ?> · <?= e(rubles((int) $row['price'])) ?></span><?php endif; ?><span class="admin__badge"><?= !$row['visible'] ? 'Скрыто' : (isset($row['available']) && !$row['available'] ? 'Нет в наличии' : '') ?></span></div><a class="admin__button admin__button--quiet" href="/admin/edit?section=<?= e($key) ?>&amp;id=<?= e($row['id']) ?>">Изменить<span class="sr-only">: <?= e($row['caption']) ?></span></a></li><?php endforeach; ?></ul>
 <?php if (!$rows): ?><p>Пока нет записей.</p><?php endif; ?>
 <?php endif; ?>

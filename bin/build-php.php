@@ -40,7 +40,7 @@ function buildPhpDist(string $root): void
                 writeDistFile($dist, $relative, file_get_contents($file->getPathname()));
             }
         }
-        foreach (['index.php', 'router.php', 'manifest.webmanifest', 'bin/migrate.php', 'bin/create-admin.php', 'bin/doctor.php', 'config/app.php', 'config/admin.php', 'config/routes.php', 'config/deploy.php', 'config/schema.sql', 'config/seed.json'] as $relative) {
+        foreach (['index.php', 'router.php', 'manifest.webmanifest', 'bin/migrate.php', 'bin/create-admin.php', 'bin/doctor.php', 'config/app.php', 'config/admin.php', 'config/admin-navigation.php', 'config/routes.php', 'config/deploy.php', 'config/schema.sql', 'config/seed.json'] as $relative) {
             writeDistFile($dist, $relative, file_get_contents($root . '/' . $relative));
         }
         writeDistFile($dist, 'config/assets.php', "<?php\nreturn " . var_export($versions, true) . ";\n");

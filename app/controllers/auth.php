@@ -49,6 +49,6 @@ function logoutController(): void
 function dashboardController(): void
 {
     requireAdmin();
-    $sections = adminSections();
+    $sections = array_values(array_filter(adminNavigation(), fn (array $group): bool => $group['key'] !== 'home'));
     adminPage('Управление кофейней', 'dashboard', ['sections' => $sections]);
 }

@@ -49,6 +49,7 @@ function validateAdminRecord(string $kind, array $data): array
 {
     $errors = [];
     if ($kind === 'delivery' && empty($data['pickup_enabled']) && empty($data['delivery_enabled'])) $errors['pickup_enabled'] = 'Оставьте доступным хотя бы один способ получения.';
+    if ($kind === 'seo' && (($_FILES['image_upload']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) && !str_ends_with($data['image'] ?? '', '.jpg')) $errors['image'] = 'Для превью требуется JPG; загрузите новую фотографию.';
     if ($kind === 'faq' && ($data['mode'] ?? '') === 'manual' && trim($data['answer'] ?? '') === '') $errors['answer'] = 'Напишите ответ.';
     if ($kind === 'rating' && ($data['value'] ?? '') !== '') {
         if (!preg_match('/^[0-5](?:[.,][0-9])?$/D', $data['value']) || (float) str_replace(',', '.', $data['value']) > 5) $errors['value'] = 'Рейтинг от 0 до 5, максимум один знак после точки.';

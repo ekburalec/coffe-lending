@@ -76,4 +76,11 @@ return [
         'count' => ['label' => 'Количество оценок', 'type' => 'number', 'min' => 0, 'max' => 10000000],
         'source' => ['label' => 'Ссылка на источник рейтинга', 'type' => 'url', 'max' => 2000],
     ]],
+    'seo' => ['title' => 'SEO и превью ссылки', 'singleton' => true, 'fields' => [
+        'title' => ['label' => 'Заголовок страницы (title)', 'required' => true, 'max' => 200],
+        'description' => ['label' => 'Описание страницы', 'type' => 'textarea', 'required' => true, 'max' => 500],
+        'og_title' => ['label' => 'Заголовок превью ссылки', 'required' => true, 'max' => 200],
+        'og_description' => ['label' => 'Описание превью ссылки', 'type' => 'textarea', 'required' => true, 'max' => 500],
+        'image' => ['label' => 'Изображение превью (после загрузки JPG 1200×630)', 'type' => 'image', 'required' => true],
+    ]],
 ];

@@ -123,6 +123,16 @@ def run():
             assert request("/admin/edit?section=products&id=" + product_id, product)[0] == 200
             landing = request("/")[1]
             assert landing.count('data-product=') == 10 and landing.count('data-order-row=') == 9 and "Нет в наличии" in landing
+            seo = {"csrf": csrf, "title": "Новое название", "description": "Описание <script>alert(1)</script>", "og_title": "Превью", "og_description": "Описание превью", "image": "assets/img/og-image.jpg"}
+            assert request("/admin/edit?section=seo", seo)[0] == 200
+            landing = request("/")[1]
+            assert "<title>Новое название</title>" in landing
+            assert '<script>alert(1)</script>' not in landing
+            graph = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', landing, re.S).group(1))["@graph"]
+            assert graph[0]["address"]["streetAddress"] == "Новый адрес"
+            assert graph[0]["hasMenu"]["hasMenuSection"][-1]["hasMenuItem"][0]["offers"]["price"] == 125
+            faq_schema = [x["acceptedAnswer"]["text"] for x in graph[1]["mainEntity"]]
+            assert any("200" in text and "1 200" in text for text in faq_schema)
             db.close()
             print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, WebP/retina, validation")
         finally:

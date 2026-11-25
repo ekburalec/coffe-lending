@@ -146,7 +146,8 @@
                     <a class="text-link" href="#menu" data-content-key="copy-39"><?= e($copy['copy-39']) ?></a>
                 </div>
             </section>
-            <section class="section faq" id="faq" aria-labelledby="faq-title">
+            <?php require __DIR__ . '/partials/reviews.tpl'; ?>
+            <?php if ($faq): ?><section class="section faq" id="faq" aria-labelledby="faq-title">
                 <div class="container faq__inner">
                     <div>
                         <p class="section__eyebrow"><?= e($copy['faq-eyebrow']) ?></p>
@@ -156,8 +157,8 @@
                     </div>
                     <?php require __DIR__ . '/partials/faq.tpl'; ?>
 </div>
-            </section>
-        <?php require __DIR__ . '/partials/reviews.tpl'; ?>
+            </section><?php endif; ?>
+
 </main>
         <footer class="site-footer dark-mode" id="contacts">
             <div class="container">

@@ -45,7 +45,7 @@
 .admin__list { display: grid; gap: var(--space-3); padding: 0; list-style: none; margin-block: var(--space-5); }
 .admin__row { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; justify-content: space-between; padding: var(--space-4); border: var(--line-width) solid var(--admin-line); border-radius: var(--radius-sm); background: var(--admin-subtle-bg); overflow-wrap: anywhere; }
 .admin__row-info { display: flex; flex: 1; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: baseline; min-width: 0; }
-.admin__row-name { color: var(--admin-color); font-size: var(--text-small); font-weight: var(--weight-semibold); text-decoration: none; }
+.admin__row-name { font-family: var(--font-body); line-height: var(--leading-body); color: var(--admin-color); font-size: var(--text-small); font-weight: var(--weight-semibold); text-decoration: none; }
 .admin__row-detail { color: var(--admin-muted-color); font-size: var(--text-small); }
 .admin__badge { color: var(--admin-link-color); font-size: var(--text-eyebrow); font-weight: var(--weight-semibold); }
 .admin__preview { width: var(--admin-preview-width); max-width: 100%; height: auto; }
@@ -77,3 +77,13 @@
     .admin__drag-handle { grid-column: 1; grid-row: 1 / 3; }
     .admin__row--product .admin__row-info, .admin__row--product .admin__button { grid-column: 2; }
 }
+
+.admin__subsection { margin-top: var(--space-6); padding-top: var(--space-5); border-top: var(--line-width) solid var(--admin-line); }
+.admin__record-copy { flex: 1; min-width: min(100%, var(--admin-record-min-width)); }
+.admin__record-copy--hidden { color: var(--admin-muted-color); }
+.admin__row--collection { align-items: start; }
+.admin__delete { max-width: 100%; }
+.admin__delete-form { display: grid; gap: var(--space-3); margin-top: var(--space-3); max-width: var(--admin-delete-width); }
+
+.admin__record-copy--hidden .admin__row-name { color: var(--admin-muted-color); }
+.admin__button--danger { color: var(--admin-error); }

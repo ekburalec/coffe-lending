@@ -339,6 +339,8 @@
     --admin-form-width: 880px;
     --admin-login-width: 560px;
     --admin-preview-width: 240px;
+    --admin-record-min-width: 240px;
+    --admin-delete-width: 300px;
     --admin-panel-radius: 24px;
     --admin-shadow: 0 5px 20px rgb(24 44 31 / 5%);
     --admin-title-size: clamp(1.875rem, 1.5rem + 1vw, 2.375rem);
@@ -365,4 +367,34 @@
     --admin-link-color: var(--color-dark-accent);
     --admin-active-bg: var(--color-dark-accent);
     --admin-active-color: var(--color-dark-bg);
+}
+
+/* reviews */
+:root {
+    --reviews-card-bg: var(--color-card);
+    --reviews-card-color: var(--color-text);
+    --reviews-card-border: var(--color-line);
+    --reviews-muted-color: var(--color-text-muted);
+    --reviews-control-bg: var(--color-card);
+    --reviews-control-color: var(--color-accent);
+    --reviews-control-border: var(--color-text-muted);
+    --reviews-control-hover-bg: var(--color-accent);
+    --reviews-control-hover-color: var(--color-on-accent);
+    --reviews-control-active-bg: var(--color-accent-dark);
+    --reviews-focus-color: var(--color-accent);
+    --reviews-disabled-opacity: .4;
+    --reviews-card-min-height: 288px;
+}
+.dark-mode {
+    --reviews-card-bg: var(--color-dark-surface);
+    --reviews-card-color: var(--color-dark-text);
+    --reviews-card-border: var(--color-dark-line);
+    --reviews-muted-color: var(--color-dark-muted);
+    --reviews-control-bg: var(--color-dark-surface);
+    --reviews-control-color: var(--color-dark-accent);
+    --reviews-control-border: var(--color-dark-muted);
+    --reviews-control-hover-bg: var(--color-dark-accent);
+    --reviews-control-hover-color: var(--color-dark-bg);
+    --reviews-control-active-bg: var(--color-dark-text);
+    --reviews-focus-color: var(--color-dark-accent);
 }

@@ -28,6 +28,13 @@ function adminEditorController(): void
         if (!validCsrf()) {
             http_response_code(403);
             $errors['_form'] = 'Форма устарела. Обновите страницу.';
+        } elseif (postText('action') === 'toggle_visibility') {
+            if (!$record || !in_array($key, ['reviews', 'faq'], true)) $errors['_form'] = 'Эту запись нельзя скрыть.';
+            else {
+                $record['visible'] = $record['visible'] ? 0 : 1;
+                saveRecord($key, $id, $record);
+                redirect('/admin/edit?section=' . $key . '&saved=1#record-' . $id);
+            }
         } elseif (postText('action') === 'delete') {
             $errors = deleteAdminRecord($key, $id, $section);
             if (!$errors) redirect('/admin/edit?section=' . $key . '&saved=1');
@@ -52,28 +59,31 @@ function adminEditorController(): void
                     $id = $id ?: 'item-' . bin2hex(random_bytes(8));
                     saveRecord($key, $id, $data);
                 }
+                if ($key === 'rating' && postText('return_to') === 'reviews') redirect('/admin/edit?section=reviews&saved=1#rating');
+                if (in_array($key, ['reviews', 'faq'], true) && postText('return_to') === 'list') redirect('/admin/edit?section=' . $key . '&saved=1#record-' . $id);
                 redirect('/admin/edit?section=' . $key . ($singleton ? '' : '&id=' . $id) . '&saved=1');
             }
             $record = $data;
         }
         if ($errors && http_response_code() !== 403) http_response_code(422);
     }
-    $fields = [];
-    foreach ($section['fields'] as $name => $field) {
-        $field['name'] = $name;
-        $field['type'] = $field['type'] ?? 'text';
-        $field['value'] = $record[$name] ?? $field['default'] ?? '';
-        $field['error'] = $errors[$name] ?? '';
-        $fields[] = $field;
+    $defaults = [];
+    if (!$record && in_array($key, ['reviews', 'faq'], true)) {
+        $positions = array_column(listRecords($key), 'sort_order');
+        $defaults['sort_order'] = $positions ? max($positions) + 1 : 0;
     }
+    $fields = adminFields($section['fields'], $record ?? $defaults, $errors);
+    $ratingFields = $key === 'reviews' ? adminFields($sections['rating']['fields'], getSettings('rating'), [], 'rating') : [];
     $rows = [];
     if (!$singleton) foreach (listRecords($key) as $row) {
         $row['caption'] = $row['name'] ?? $row['question'] ?? $row['label'] ?? $row['text'] ?? $row['date'] ?? $row['id'];
+        $row['preview'] = $key === 'faq' ? faqAnswer($row, getSettings('delivery'), openingHours()) : ($row['text'] ?? '');
+        $row['preview'] = mb_strimwidth($row['preview'], 0, 340, '…', 'UTF-8');
         $rows[] = $row;
     }
     $productGroups = $key === 'products' && !$editing ? productOrderGroups($rows) : [];
     $recordCaption = $record['name'] ?? $record['question'] ?? $record['label'] ?? $record['date'] ?? $id;
-    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups'));
+    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields'));
 }
 
 function deleteAdminRecord(string $kind, string $id, array $section): array

@@ -28,19 +28,23 @@ function activeAnnouncements(?DateTimeImmutable $now = null): array
 function landingFaq(array $delivery, array $hours): array
 {
     $faq = listRecords('faq', true);
-    foreach ($faq as &$row) {
-        $row['answer'] = match ($row['mode'] ?? 'manual') {
-            'hours' => $hours['weekly'] . '. ' . $hours['today'] . '.',
-            'delivery' => deliveryDescription($delivery),
-            'timing' => (!empty($delivery['pickup_enabled']) ? 'Самовывоз: ' . $delivery['pickup_time'] . '. ' : '')
-                . (!empty($delivery['delivery_enabled']) ? 'Доставка: ' . $delivery['delivery_time'] . '. ' : '')
-                . 'В рабочие часы. Время ориентировочное. Состав на сайте не оформляет заказ.',
-            default => $row['answer'],
-        };
-        if (($row['mode'] ?? 'manual') !== 'manual' && !empty($row['prefix'])) $row['answer'] = $row['prefix'] . ' ' . $row['answer'];
-    }
+    foreach ($faq as &$row) $row['answer'] = faqAnswer($row, $delivery, $hours);
     unset($row);
     return $faq;
+}
+
+function faqAnswer(array $row, array $delivery, array $hours): string
+{
+    $answer = match ($row['mode'] ?? 'manual') {
+        'hours' => $hours['weekly'] . '. ' . $hours['today'] . '.',
+        'delivery' => deliveryDescription($delivery),
+        'timing' => (!empty($delivery['pickup_enabled']) ? 'Самовывоз: ' . $delivery['pickup_time'] . '. ' : '')
+            . (!empty($delivery['delivery_enabled']) ? 'Доставка: ' . $delivery['delivery_time'] . '. ' : '')
+            . 'В рабочие часы. Время ориентировочное. Состав на сайте не оформляет заказ.',
+        default => $row['answer'],
+    };
+    if (($row['mode'] ?? 'manual') !== 'manual' && !empty($row['prefix'])) $answer = $row['prefix'] . ' ' . $answer;
+    return $answer;
 }
 
 function landingData(): array
@@ -55,16 +59,18 @@ function landingData(): array
         foreach ($category['products'] as $product) $products[] = $product;
         $categories[] = $category;
     }
-    $targets = ['#welcome', '#menu', '#occasions', '#space', '#delivery', '#faq', '#contacts'];
+    $reviews = listRecords('reviews', true);
+    $faq = landingFaq($delivery, $hours);
+    $targets = ['#welcome', '#menu', '#occasions', '#space', '#delivery', '#contacts'];
+    if ($reviews) $targets[] = '#reviews';
+    if ($faq) $targets[] = '#faq';
     foreach ($categories as $category) $targets[] = '#' . $category['id'];
     $navigation = array_values(array_filter(listRecords('navigation', true), fn (array $row): bool => in_array($row['target'], $targets, true)));
     $copy = array_column(listRecords('content'), 'text', 'id');
     $images = array_column(listRecords('images'), null, 'id');
-    $faq = landingFaq($delivery, $hours);
     $announcements = array_column(activeAnnouncements(), 'text');
     array_unshift($announcements, $hours['special'] ? $hours['today'] : $hours['weekly']);
     $announcements[] = deliveryDescription($delivery);
-    $reviews = listRecords('reviews', true);
     $rating = getSettings('rating');
     return compact('contacts', 'delivery', 'hours', 'products', 'categories', 'navigation', 'copy', 'images', 'faq', 'announcements', 'reviews', 'rating');
 }

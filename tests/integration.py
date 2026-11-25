@@ -154,6 +154,35 @@ def run():
             for value in ["Помощь", "Тестовый заголовок", "Тестовый вопрос", "Тестовый ответ", "Тестовый отзыв", "4.9", "Объявление без дат"]:
                 assert value in landing, value
             assert '<script>bad</script>' not in landing
+            assert 'data-reviews-track' in landing and landing.index('id="reviews"') < landing.index('id="faq"')
+            review_id = db.execute("SELECT id FROM records WHERE kind='reviews'").fetchone()[0]
+            review_url = "/admin/edit?section=reviews&id=" + review_id
+            assert request(review_url, {"csrf": "bad", "action": "toggle_visibility"})[0] == 403
+            assert request("/admin/edit?section=navigation&new=1", {"csrf": csrf, "name": "Отзывы", "target": "#reviews", "sort_order": 10, "visible": 1})[0] == 200
+            assert 'href="#reviews"' in request("/")[1]
+            status, review_editor, _ = request(review_url, {"csrf": csrf, "action": "toggle_visibility"})
+            assert status == 200 and "Скрыто" in review_editor and "Показать" in review_editor
+            empty_reviews = request("/")[1]
+            assert 'id="reviews"' not in empty_reviews and 'href="#reviews"' not in empty_reviews
+            assert request(review_url, {"csrf": csrf, "action": "toggle_visibility"})[0] == 200
+            assert 'id="reviews"' in request("/")[1]
+            assert request(review_url, {"csrf": csrf, "action": "delete"})[0] == 422
+            assert request(review_url, {"csrf": csrf, "action": "delete", "confirm_delete": 1})[0] == 200
+            inline_review = {"csrf": csrf, "return_to": "list", "name": "Автор теста", "text": "Тестовый отзыв", "source": "https://example.com/review", "sort_order": 0, "visible": 1}
+            status, inline_html, _ = request("/admin/edit?section=reviews", inline_review)
+            assert status == 200 and 'id="add-record"' in inline_html and 'id="rating-title"' in inline_html
+            assert 'id="rating-source"' in inline_html and 'id="field-source"' in inline_html
+            new_faq_id = db.execute("SELECT id FROM records WHERE kind='faq' AND json_extract(payload,'$.question')='Тестовый вопрос'").fetchone()[0]
+            assert request("/admin/edit?section=faq&id=" + new_faq_id, {"csrf": csrf, "action": "toggle_visibility"})[0] == 200
+            assert "Тестовый вопрос" not in request("/")[1]
+            assert 'id="add-record"' in request("/admin/edit?section=faq")[1]
+            visible_faq_ids = [r[0] for r in db.execute("SELECT id FROM records WHERE kind='faq' AND visible=1")]
+            for faq_id in visible_faq_ids:
+                assert request("/admin/edit?section=faq&id=" + faq_id, {"csrf": csrf, "action": "toggle_visibility"})[0] == 200
+            no_faq = request("/")[1]
+            assert 'id="faq"' not in no_faq and 'href="#faq"' not in no_faq
+            for faq_id in visible_faq_ids:
+                assert request("/admin/edit?section=faq&id=" + faq_id, {"csrf": csrf, "action": "toggle_visibility"})[0] == 200
             assert request("/admin/edit?section=categories&id=coffee", {"csrf": csrf, "name": "Кофе", "sort_order": 0})[0] == 200
             assert 'data-product="americano"' not in request("/")[1]
             assert request("/admin/edit?section=categories&id=coffee", {"csrf": csrf, "name": "Кофе", "sort_order": 0, "visible": 1})[0] == 200

@@ -8,7 +8,7 @@ function adminSections(?array $collections = null): array
         $sections['products']['fields']['category']['options'] = array_column($collections['categories'] ?? listRecords('categories'), 'name', 'id');
     }
     if (isset($sections['navigation'])) {
-        $targets = ['#welcome' => 'Первый экран', '#menu' => 'Меню', '#occasions' => 'Поводы зайти', '#space' => 'О кофейне', '#delivery' => 'Самовывоз и доставка', '#faq' => 'FAQ', '#contacts' => 'Контакты'];
+        $targets = ['#welcome' => 'Первый экран', '#menu' => 'Меню', '#occasions' => 'Поводы зайти', '#space' => 'О кофейне', '#delivery' => 'Самовывоз и доставка', '#reviews' => 'Отзывы гостей', '#faq' => 'FAQ', '#contacts' => 'Контакты'];
         foreach ($collections['categories'] ?? listRecords('categories', true) as $category) $targets['#' . $category['id']] = $category['name'];
         $sections['navigation']['fields']['target']['options'] = $targets;
     }

@@ -234,6 +234,7 @@ dist/                    ← результат сборки, не в git, ру�
 |----------|---------------|
 | [docs/product/logic/admin-publishing.md](docs/product/logic/admin-publishing.md) | Сохранение данных и согласованное отображение на лендинге |
 | [docs/product/logic/product-order.md](docs/product/logic/product-order.md) | Порядок товаров внутри категорий и конфликты сохранения |
+| [docs/product/logic/reviews.md](docs/product/logic/reviews.md) | Видимость отзывов/FAQ, рейтинг и публичные блоки |
 | [docs/product/logic/order-preview.md](docs/product/logic/order-preview.md) | Выбор позиций, количество и расчёт самовывоза/доставки без отправки и оплаты |
 
 ### Модули (`docs/modules/`)
@@ -253,6 +254,7 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/modules/admin-reorder.md](docs/modules/admin-reorder.md) | Перетаскивание товаров, клавиатура и сохранение порядка |
 | [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
 | [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |
+| [docs/modules/reviews.md](docs/modules/reviews.md) | Слайдер отзывов, управление отзывами и FAQ |
 | [docs/modules/seo.md](docs/modules/seo.md) | SEO, Open Graph и актуальная JSON-LD-разметка |
 | [docs/modules/backups.md](docs/modules/backups.md) | Экспорт, проверка и восстановление БД и фотографий |
 

@@ -5,6 +5,8 @@ import { initFixedHeader } from './modules/fixed-header.js';
 import { initAnnouncementBar } from './modules/announcement-bar.js';
 import { initOrderDrawer } from './modules/order-drawer.js';
 
+import { initReviewsCarousel } from './modules/reviews-carousel.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     initNotify();
     initOrderPreview();
@@ -12,4 +14,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initAnnouncementBar();
     initFixedHeader();
     initOrderDrawer();
+    initReviewsCarousel();
 });

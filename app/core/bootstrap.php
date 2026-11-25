@@ -46,3 +46,5 @@ require_once APP_ROOT . '/app/helpers/admin-navigation.php';
 require_once APP_ROOT . '/app/models/product-order.php';
 require_once APP_ROOT . '/app/services/product-order.php';
 require_once APP_ROOT . '/app/controllers/product-order.php';
+
+require_once APP_ROOT . '/app/helpers/admin-fields.php';

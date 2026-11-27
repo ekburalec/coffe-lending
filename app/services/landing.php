@@ -51,9 +51,9 @@ function landingData(): array
 {
     $contacts = getSettings('contacts');
     $socialLinks = [];
-    foreach (['vk' => 'ВКонтакте', 'ok' => 'Одноклассники', 'telegram' => 'Telegram', 'whatsapp' => 'WhatsApp', 'rutube' => 'RUTUBE'] as $key => $name) {
+    foreach (['vk' => ['ВКонтакте', 'VK'], 'ok' => ['Одноклассники', 'OK'], 'telegram' => ['Telegram', 'TG'], 'whatsapp' => ['WhatsApp', 'WA'], 'rutube' => ['RUTUBE', 'RT']] as $key => [$name, $label]) {
         $url = $contacts[$key . '_url'] ?? '';
-        $socialLinks[] = ['name' => $name, 'url' => $url ?: '#contacts', 'placeholder' => $url === ''];
+        $socialLinks[] = ['name' => $name, 'label' => $label, 'url' => $url ?: '#contacts', 'placeholder' => $url === ''];
     }
     $missingSocial = count(array_filter($socialLinks, fn (array $social): bool => $social['placeholder']));
     $socialNotice = $missingSocial === count($socialLinks) ? 'Ссылки на сообщества пока не добавлены.' : ($missingSocial ? 'Не все ссылки на сообщества добавлены.' : '');

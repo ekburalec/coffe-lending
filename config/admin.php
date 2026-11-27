@@ -22,6 +22,11 @@ return [
         'street' => ['label' => 'Адрес', 'required' => true, 'max' => 250],
         'phone' => ['label' => 'Телефон', 'type' => 'tel', 'required' => true, 'max' => 80],
         'map_url' => ['label' => 'Ссылка на карту (только для реального адреса)', 'type' => 'url', 'max' => 2000],
+        'vk_url' => ['label' => 'ВКонтакте (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
+        'ok_url' => ['label' => 'Одноклассники (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
+        'telegram_url' => ['label' => 'Telegram (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
+        'whatsapp_url' => ['label' => 'WhatsApp (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
+        'rutube_url' => ['label' => 'RUTUBE (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
     ]],
     'hours' => ['title' => 'Обычный график', 'fixed' => true, 'fields' => [
         'opens' => ['label' => 'Открытие', 'type' => 'time'],

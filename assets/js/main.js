@@ -7,6 +7,7 @@ import { initOrderDrawer } from './modules/order-drawer.js';
 
 import { initReviewsCarousel } from './modules/reviews-carousel.js';
 import { initOccasions } from './modules/occasions.js';
+import { initSocialLinks } from './modules/social-links.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initNotify();
@@ -17,4 +18,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initOrderDrawer();
     initReviewsCarousel();
     initOccasions();
+    initSocialLinks();
 });

@@ -50,6 +50,13 @@ function faqAnswer(array $row, array $delivery, array $hours): string
 function landingData(): array
 {
     $contacts = getSettings('contacts');
+    $socialLinks = [];
+    foreach (['vk' => 'ВКонтакте', 'ok' => 'Одноклассники', 'telegram' => 'Telegram', 'whatsapp' => 'WhatsApp', 'rutube' => 'RUTUBE'] as $key => $name) {
+        $url = $contacts[$key . '_url'] ?? '';
+        $socialLinks[] = ['name' => $name, 'url' => $url ?: '#contacts', 'placeholder' => $url === ''];
+    }
+    $missingSocial = count(array_filter($socialLinks, fn (array $social): bool => $social['placeholder']));
+    $socialNotice = $missingSocial === count($socialLinks) ? 'Ссылки на сообщества пока не добавлены.' : ($missingSocial ? 'Не все ссылки на сообщества добавлены.' : '');
     $delivery = getSettings('delivery');
     $hours = openingHours();
     $products = [];
@@ -78,5 +85,5 @@ function landingData(): array
     array_unshift($announcements, $hours['special'] ? $hours['today'] : $hours['weekly']);
     $announcements[] = deliveryDescription($delivery);
     $rating = getSettings('rating');
-    return compact('contacts', 'delivery', 'hours', 'products', 'categories', 'navigation', 'copy', 'images', 'faq', 'announcements', 'reviews', 'rating', 'occasionPanels');
+    return compact('contacts', 'delivery', 'hours', 'products', 'categories', 'navigation', 'copy', 'images', 'faq', 'announcements', 'reviews', 'rating', 'occasionPanels', 'socialLinks', 'socialNotice');
 }

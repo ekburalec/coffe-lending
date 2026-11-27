@@ -79,6 +79,17 @@ def run():
             assert 'href="#reviews"' in request('/')[1]
             assert 'Отзывов пока нет.' in request('/')[1]
             assert 'Автокопий пока нет' in request('/admin/backups')[1]
+            assert request('/')[1].count('data-social-placeholder') == 5
+            social_contacts = json.loads(db.execute("SELECT payload FROM settings WHERE name='contacts'").fetchone()[0])
+            social_contacts.update(csrf=csrf, vk_url='javascript:alert(1)')
+            assert request('/admin/edit?section=contacts', social_contacts)[0] == 422
+            social_contacts['vk_url'] = 'https://example.com/community'
+            assert request('/admin/edit?section=contacts', social_contacts)[0] == 200
+            social_html = request('/')[1]
+            assert re.search(r'href="https://example.com/community"\s+target="_blank" rel="noopener noreferrer"', social_html)
+            assert social_html.count('data-social-placeholder') == 4
+            social_contacts['vk_url'] = ''
+            assert request('/admin/edit?section=contacts', social_contacts)[0] == 200
             for section, label_field in [('navigation', 'name'), ('faq', 'question')]:
                 editor = request('/admin/edit?section=' + section)[1]
                 assert 'data-reorder-section="' + section + '"' in editor and 'data-reorder-handle' in editor

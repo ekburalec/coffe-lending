@@ -141,21 +141,17 @@
         <footer class="site-footer dark-mode" id="contacts">
             <div class="container">
                 <div class="site-footer__inner">
-                    <div>
+                    <div class="site-footer__about">
                         <a class="brand" href="#top"><span class="brand__name"><?= e($contacts['name']) ?></span></a>
                         <p class="site-footer__caption"><?= e($copy['footer-caption']) ?></p>
+                        <nav class="site-footer__social" aria-label="Социальные сети"><h2 class="site-footer__title">Мы в соцсетях</h2><ul class="site-footer__social-list">
+                        <?php foreach ($socialLinks as $social): ?><li><a class="site-footer__social-link" href="<?= e($social['url']) ?>" <?php if ($social['placeholder']): ?>data-social-placeholder data-message="<?= e('Ссылка «' . $social['name'] . '» пока не добавлена.') ?>"<?php else: ?>target="_blank" rel="noopener noreferrer"<?php endif; ?>><?= e($social['name']) ?><span class="sr-only"><?= $social['placeholder'] ? ' (ссылка пока не добавлена)' : ' (откроется в новой вкладке)' ?></span><span aria-hidden="true">↗</span></a></li><?php endforeach; ?>
+                        </ul><?php if ($socialNotice): ?><p class="site-footer__social-note"><?= e($socialNotice) ?></p><?php endif; ?></nav>
                     </div>
-                    <div>
-                        <h2 class="site-footer__title">Адрес</h2>
-                        <address><?= e($contacts['city']) ?>,<br><?= e($contacts['street']) ?></address><?php if ($contacts['map_url']): ?><a class="text-link" href="<?= e($contacts['map_url']) ?>" target="_blank" rel="noopener noreferrer">На карте<span class="sr-only"> (откроется в новой вкладке)</span></a><?php endif; ?>
-                    </div>
-                    <div>
-                        <h2 class="site-footer__title">Часы работы</h2>
-                        <p><?= e($hours['weekly']) ?><br><?= e($hours['today']) ?></p>
-                    </div>
-                    <div>
-                        <h2 class="site-footer__title">Телефон</h2>
-                        <p><?= e($contacts['phone']) ?></p>
+                    <div class="site-footer__contacts">
+                        <div><h2 class="site-footer__title">Загляните к нам</h2><address><?= e($contacts['city']) ?>,<br><?= e($contacts['street']) ?></address><?php if ($contacts['map_url']): ?><a class="text-link" href="<?= e($contacts['map_url']) ?>" target="_blank" rel="noopener noreferrer">На карте<span class="sr-only"> (откроется в новой вкладке)</span></a><?php endif; ?></div>
+                        <div><h2 class="site-footer__title">Часы работы</h2><p><?= e($hours['weekly']) ?><br><?= e($hours['today']) ?></p></div>
+                        <div><h2 class="site-footer__title">Телефон</h2><p><?= e($contacts['phone']) ?></p></div>
                     </div>
                 </div>
                 <div class="site-footer__bottom">

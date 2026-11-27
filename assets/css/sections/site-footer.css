@@ -2,7 +2,7 @@
     padding-block: var(--space-8) var(--space-6);
     background: var(--site-footer-bg);
     color: var(--site-footer-color);
-    text-align: center;
+    text-align: start;
 }
 .site-footer__inner {
     display: grid;
@@ -19,13 +19,13 @@
 .site-footer__caption {
     max-width: var(--lead-measure);
     margin-top: var(--space-4);
-    margin-inline: auto;
+    margin-inline: 0;
     font-size: var(--text-small);
 }
 .site-footer__bottom {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: var(--space-5);
     padding-top: var(--space-5);
@@ -33,8 +33,19 @@
     border-top: var(--line-width) solid var(--site-footer-border);
     font-size: var(--text-small);
 }
-@media (min-width: 960px) {
+@media (min-width: 768px) {
     .site-footer__inner {
-        grid-template-columns: 2fr 1.5fr 1fr 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--space-9);
     }
 }
+
+.site-footer__about, .site-footer__contacts { min-width: 0; }
+.site-footer__contacts { display: grid; align-content: start; gap: var(--space-5); }
+.site-footer__social { margin-top: var(--space-6); }
+.site-footer__social-list { display: flex; flex-wrap: wrap; gap: var(--space-3); list-style: none; padding: 0; margin: 0; }
+.site-footer__social-link { display: inline-flex; align-items: center; gap: var(--space-3); min-height: var(--control-size); padding: var(--space-2) var(--space-4); border: var(--line-width) solid var(--site-footer-border); border-radius: var(--radius-pill); color: var(--site-footer-link-color); font-size: var(--text-small); text-decoration: none; transition: background-color var(--transition-fast), color var(--transition-fast); }
+.site-footer__social-link:hover, .site-footer__social-link:active { background: var(--site-footer-link-hover-bg); color: var(--site-footer-link-hover-color); }
+.site-footer__social-link:focus-visible { outline: var(--focus-width) solid var(--site-footer-link-hover-bg); outline-offset: var(--focus-offset); }
+.site-footer__social-note { margin-top: var(--space-4); font-size: var(--text-small); max-width: var(--lead-measure); }
+@media (prefers-reduced-motion: reduce) { .site-footer__social-link { transition: none; } }

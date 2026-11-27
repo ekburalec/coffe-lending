@@ -304,6 +304,9 @@
     --site-footer-color: var(--color-dark-muted);
     --site-footer-title-color: var(--color-dark-text);
     --site-footer-border: var(--color-dark-line);
+    --site-footer-link-color: var(--color-dark-text);
+    --site-footer-link-hover-bg: var(--color-dark-accent);
+    --site-footer-link-hover-color: var(--color-dark-bg);
 }
 .dark-mode {
     --site-footer-bg: var(--color-dark-bg);

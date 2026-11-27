@@ -80,16 +80,37 @@ def run():
             assert 'Отзывов пока нет.' in request('/')[1]
             assert 'Автокопий пока нет' in request('/admin/backups')[1]
             assert request('/')[1].count('data-social-placeholder') == 5
-            social_contacts = json.loads(db.execute("SELECT payload FROM settings WHERE name='contacts'").fetchone()[0])
-            social_contacts.update(csrf=csrf, vk_url='javascript:alert(1)')
-            assert request('/admin/edit?section=contacts', social_contacts)[0] == 422
-            social_contacts['vk_url'] = 'https://example.com/community'
-            assert request('/admin/edit?section=contacts', social_contacts)[0] == 200
+            social_editor = request('/admin/edit?section=social')[1]
+            assert 'Соцсети' in social_editor and 'Сохранить соцсети' in social_editor
+            assert 'name="vk_url"' not in request('/admin/edit?section=contacts')[1]
+            legacy_contacts = json.loads(db.execute("SELECT payload FROM settings WHERE name='contacts'").fetchone()[0])
+            legacy_contacts['vk_url'] = 'https://example.com/legacy'
+            db.execute("UPDATE settings SET payload=? WHERE name='contacts'", (json.dumps(legacy_contacts),))
+            db.commit()
+            assert 'href="https://example.com/legacy"' in request('/')[1]
+            # Старая БД без settings.social остаётся допустимой резервной копией.
+            subprocess.run(['php', '-r', 'require "app/core/bootstrap.php"; $p=appConfig("data_dir")."/legacy.sqlite"; databaseSnapshot($p); validateBackupDatabase($p,[]);'], cwd=ROOT, env=env, check=True, capture_output=True)
+            social = dict(re.findall(r'<input[^>]*name="([^"]+)"[^>]*value="([^"]*)"', request('/admin/edit?section=social')[1]))
+            assert social['vk_url'] == 'https://example.com/legacy'
+            social['vk_name'] = 'Клуб <кофе>'
+            social['vk_label'] = 'CF'
+            social['vk_url'] = 'https://example.com/community'
+            assert request('/admin/edit?section=social', dict(social, csrf='bad'))[0] == 403
+            assert request('/admin/edit?section=social', dict(social, vk_url='javascript:alert(1)'))[0] == 422
+            assert request('/admin/edit?section=social', dict(social, vk_name=''))[0] == 422
+            assert request('/admin/edit?section=social', dict(social, vk_label='ВК'))[0] == 422
+            assert request('/admin/edit?section=social', dict(social, vk_label='ABC'))[0] == 422
+            assert request('/admin/edit?section=social', social)[0] == 200
             social_html = request('/')[1]
             assert re.search(r'href="https://example.com/community"\s+target="_blank" rel="noopener noreferrer"', social_html)
+            assert 'title="Клуб &lt;кофе&gt;"' in social_html and '>CF</span>' in social_html
             assert social_html.count('data-social-placeholder') == 4
-            social_contacts['vk_url'] = ''
-            assert request('/admin/edit?section=contacts', social_contacts)[0] == 200
+            legacy_contacts['csrf'] = csrf
+            assert request('/admin/edit?section=contacts', legacy_contacts)[0] == 200
+            assert 'href="https://example.com/community"' in request('/')[1]
+            social['vk_url'] = ''
+            assert request('/admin/edit?section=social', social)[0] == 200
+            assert request('/')[1].count('data-social-placeholder') == 5
             for section, label_field in [('navigation', 'name'), ('faq', 'question')]:
                 editor = request('/admin/edit?section=' + section)[1]
                 assert 'data-reorder-section="' + section + '"' in editor and 'data-reorder-handle' in editor
@@ -306,6 +327,7 @@ def run():
             assert status == 200 and "Копия восстановлена" in html, re.findall(r'<p class="admin__message"[^>]*>(.*?)</p>', html)
             assert "Новый адрес" in request("/")[1] and "После копии" not in request("/")[1]
             assert 'Тестовая фотография' in request('/')[1] and 'Изменённый демо-текст' in request('/')[1]
+            assert 'title="Клуб &lt;кофе&gt;"' in request('/')[1] and '>CF</span>' in request('/')[1]
             assert len(list((Path(directory) / "uploads").iterdir())) == 7
             assert len(list((Path(directory) / "backups").glob("*.zip"))) == 2
             login_html = request("/admin")[1]

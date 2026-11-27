@@ -15,6 +15,7 @@ function adminEditorController(): void
     $singleton = $section['singleton'] ?? false;
     $id = is_string($_GET['id'] ?? null) ? $_GET['id'] : '';
     $record = $singleton ? getSettings($key) : ($id ? findRecord($key, $id) : null);
+    if ($key === 'social') $record = socialSettings();
     if ($id && !$record) {
         http_response_code(404);
         render('error', ['title' => 'Запись не найдена', 'message' => 'Вернитесь к списку.']);
@@ -83,6 +84,8 @@ function adminEditorController(): void
         $defaults['sort_order'] = $positions ? max($positions) + 1 : 0;
     }
     $fields = adminFields($section['fields'], $record ?? $defaults, $errors);
+    $socialGroups = [];
+    if ($key === 'social') foreach (array_chunk($fields, 3) as $groupFields) $socialGroups[] = ['name' => $groupFields[0]['value'] ?: $groupFields[0]['default'], 'fields' => $groupFields];
     $seoTextFields = $key === 'seo' ? array_values(array_filter($fields, fn (array $field): bool => !in_array($field['name'], ['image', 'image_alt'], true))) : [];
     $seoImageFields = $key === 'seo' ? array_values(array_filter($fields, fn (array $field): bool => $field['name'] === 'image_alt')) : [];
     $seoPreview = $key === 'seo' ? seoPreviewData($record) : [];
@@ -97,7 +100,7 @@ function adminEditorController(): void
     $listOrderVersion = in_array($key, ['navigation', 'faq'], true) ? productOrderVersion(array_column($rows, 'id')) : '';
     $productGroups = $key === 'products' && !$editing ? productOrderGroups($rows) : [];
     $recordCaption = $record['name'] ?? $record['question'] ?? $record['label'] ?? $record['date'] ?? $id;
-    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields', 'seoTextFields', 'seoImageFields', 'seoPreview', 'listOrderVersion'));
+    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields', 'seoTextFields', 'seoImageFields', 'seoPreview', 'listOrderVersion', 'socialGroups'));
 }
 
 function deleteAdminRecord(string $kind, string $id, array $section): array

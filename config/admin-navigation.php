@@ -4,6 +4,7 @@ declare(strict_types=1);
 return [
     ['key' => 'home', 'title' => 'Главная', 'href' => '/admin', 'sections' => [], 'description' => 'Все разделы управления сайтом.'],
     ['key' => 'contacts', 'title' => 'Контакты и часы', 'sections' => ['contacts' => 'Контакты', 'hours' => 'Часы работы'], 'description' => 'Название, адрес, телефон, карта и расписание по дням недели.'],
+    ['key' => 'social', 'title' => 'Соцсети', 'sections' => ['social' => 'Социальные сети'], 'description' => 'Полные названия, двухбуквенные подписи и URL пяти социальных ссылок.'],
     ['key' => 'schedule', 'title' => 'Особый график', 'sections' => ['exceptions' => 'Особые дни', 'announcements' => 'Объявления'], 'description' => 'Праздничные часы, выходные и объявления на заданные даты.'],
     ['key' => 'menu', 'title' => 'Меню кофейни', 'sections' => ['products' => 'Товары', 'categories' => 'Категории'], 'description' => 'Напитки и десерты: фотографии, цены, состав, наличие и порядок.'],
     ['key' => 'delivery', 'title' => 'Самовывоз и доставка', 'sections' => ['delivery' => 'Условия получения'], 'description' => 'Способы получения, стоимость доставки, зона и ориентиры времени.'],

@@ -255,7 +255,7 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/modules/admin-reorder.md](docs/modules/admin-reorder.md) | Перетаскивание товаров, навигации и FAQ; сохранение порядка |
 | [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
 | [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |
-| [docs/modules/social-links.md](docs/modules/social-links.md) | Соцсети футера, заглушки и реальные адреса из контактов |
+| [docs/modules/social-links.md](docs/modules/social-links.md) | Отдельный редактор соцсетей: названия, подписи и URL; заглушки |
 | [docs/modules/occasions.md](docs/modules/occasions.md) | Выбор повода, доступные вкладки и рекомендации из каталога |
 | [docs/modules/reviews.md](docs/modules/reviews.md) | Слайдер, фото и демо-отзывы, управление отзывами и FAQ |
 | [docs/modules/admin-character-count.md](docs/modules/admin-character-count.md) | Подсказки и счётчики символов SEO-форм |

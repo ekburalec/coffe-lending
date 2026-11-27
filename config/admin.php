@@ -1,7 +1,15 @@
 <?php
 declare(strict_types=1);
 
+$socialFields = [];
+foreach (socialNetworkDefaults() as $key => $network) {
+    $socialFields[$key . '_name'] = ['label' => 'Полное название', 'required' => true, 'max' => 80, 'default' => $network['name']];
+    $socialFields[$key . '_label'] = ['label' => 'Подпись в круге (две латинские буквы)', 'required' => true, 'max' => 2, 'default' => $network['label']];
+    $socialFields[$key . '_url'] = ['label' => 'URL (пусто — заглушка)', 'type' => 'url', 'max' => 2000];
+}
+
 return [
+    'social' => ['title' => 'Социальные сети', 'singleton' => true, 'fields' => $socialFields],
     'categories' => ['title' => 'Категории меню', 'fields' => [
         'name' => ['label' => 'Название', 'required' => true, 'max' => 120],
     ]],
@@ -22,11 +30,6 @@ return [
         'street' => ['label' => 'Адрес', 'required' => true, 'max' => 250],
         'phone' => ['label' => 'Телефон', 'type' => 'tel', 'required' => true, 'max' => 80],
         'map_url' => ['label' => 'Ссылка на карту (только для реального адреса)', 'type' => 'url', 'max' => 2000],
-        'vk_url' => ['label' => 'ВКонтакте (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
-        'ok_url' => ['label' => 'Одноклассники (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
-        'telegram_url' => ['label' => 'Telegram (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
-        'whatsapp_url' => ['label' => 'WhatsApp (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
-        'rutube_url' => ['label' => 'RUTUBE (пусто — заглушка)', 'type' => 'url', 'max' => 2000],
     ]],
     'hours' => ['title' => 'Обычный график', 'fixed' => true, 'fields' => [
         'opens' => ['label' => 'Открытие', 'type' => 'time'],

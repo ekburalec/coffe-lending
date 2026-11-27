@@ -50,10 +50,11 @@ function faqAnswer(array $row, array $delivery, array $hours): string
 function landingData(): array
 {
     $contacts = getSettings('contacts');
+    $socialValues = socialSettings($contacts);
     $socialLinks = [];
-    foreach (['vk' => ['ВКонтакте', 'VK'], 'ok' => ['Одноклассники', 'OK'], 'telegram' => ['Telegram', 'TG'], 'whatsapp' => ['WhatsApp', 'WA'], 'rutube' => ['RUTUBE', 'RT']] as $key => [$name, $label]) {
-        $url = $contacts[$key . '_url'] ?? '';
-        $socialLinks[] = ['name' => $name, 'label' => $label, 'url' => $url ?: '#contacts', 'placeholder' => $url === ''];
+    foreach (socialNetworkDefaults() as $key => $network) {
+        $url = $socialValues[$key . '_url'];
+        $socialLinks[] = ['name' => $socialValues[$key . '_name'], 'label' => $socialValues[$key . '_label'], 'url' => $url ?: '#contacts', 'placeholder' => $url === ''];
     }
     $missingSocial = count(array_filter($socialLinks, fn (array $social): bool => $social['placeholder']));
     $socialNotice = $missingSocial === count($socialLinks) ? 'Ссылки на сообщества пока не добавлены.' : ($missingSocial ? 'Не все ссылки на сообщества добавлены.' : '');

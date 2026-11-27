@@ -99,7 +99,10 @@
 
 .admin__record-copy--hidden .admin__row-name { color: var(--admin-muted-color); }
 .admin__button--danger { color: var(--admin-error); }
+.admin__social-group { min-width: 0; padding: var(--space-5); border: var(--line-width) solid var(--admin-line); border-radius: var(--radius-md); }
+.admin__social-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
 @media (max-width: 599px) {
+    .admin__social-fields { grid-template-columns: minmax(0, 1fr); }
     .admin__button--compact { min-height: var(--control-size); }
     .admin__actions--row { width: 100%; }
     .admin__row > .admin__button--compact { margin-inline-start: auto; }

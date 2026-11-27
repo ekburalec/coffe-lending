@@ -51,6 +51,9 @@ function validateAdminFields(array $fields, array $previous, ?array $input = nul
 function validateAdminRecord(string $kind, array $data, ?array $collections = null): array
 {
     $errors = [];
+    if ($kind === 'social') foreach (socialNetworkDefaults() as $key => $network) {
+        if (!preg_match('/^[a-zA-Z]{2}$/D', $data[$key . '_label'] ?? '')) $errors[$key . '_label'] = 'Укажите ровно две латинские буквы.';
+    }
     if ($kind === 'reviews') {
         if (empty($data['is_demo']) && empty($data['source'])) $errors['source'] = 'Для реального отзыва укажите ссылку на источник.';
         $hasUpload = $collections === null && ($_FILES['image_upload']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK;

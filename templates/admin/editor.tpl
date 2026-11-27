@@ -3,6 +3,8 @@
 <?php if ($errors): ?><div class="admin__message" role="alert" id="form-errors"><p>Изменения не сохранены:</p><ul><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
 <?php if ($key === 'seo'): ?>
 <?php require __DIR__ . '/seo.tpl'; ?>
+<?php elseif ($key === 'social'): ?>
+<?php require __DIR__ . '/social.tpl'; ?>
 <?php elseif ($editing): ?>
 <?php if ($id): ?><h2><?= e($recordCaption) ?></h2><?php endif; ?>
 <form class="admin__form admin__form--fields" method="post" enctype="multipart/form-data" autocomplete="off">

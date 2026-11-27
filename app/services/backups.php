@@ -116,6 +116,8 @@ function validateBackupDatabase(string $path, array $stagedMedia): void
 function validateRestoredFields(string $kind, array $section, array $record, array $collections, array $stagedMedia): void
 {
     $fields = $section['fields'];
+    // Старые копии могут содержать URL в contacts; они также должны быть безопасными.
+    if ($kind === 'contacts') foreach (socialNetworkDefaults() as $key => $network) $fields[$key . '_url'] = ['type' => 'url', 'max' => 2000];
     if ($kind === 'hours') $fields['name'] = ['label' => 'День недели', 'required' => true, 'max' => 100];
     if ($kind === 'content') $fields['label'] = ['label' => 'Описание поля', 'required' => true, 'max' => 1000];
     foreach ($fields as &$field) if (($field['type'] ?? '') === 'image') $field['type'] = 'text';

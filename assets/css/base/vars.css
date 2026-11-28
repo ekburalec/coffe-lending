@@ -416,3 +416,17 @@
     --reviews-control-active-bg: var(--color-dark-text);
     --reviews-focus-color: var(--color-dark-accent);
 }
+
+/* password-control */
+:root {
+    --password-control-bg: var(--admin-surface);
+    --password-control-color: var(--admin-link-color);
+    --password-control-hover-bg: var(--admin-subtle-bg);
+    --password-control-focus-color: var(--admin-focus);
+}
+.dark-mode {
+    --password-control-bg: var(--admin-surface);
+    --password-control-color: var(--admin-link-color);
+    --password-control-hover-bg: var(--admin-subtle-bg);
+    --password-control-focus-color: var(--admin-focus);
+}

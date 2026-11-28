@@ -6,6 +6,13 @@ function adminAccount(): ?array
     return database()->query('SELECT * FROM admins WHERE id = 1')->fetch() ?: null;
 }
 
+function updateAdminPassword(string $previousHash, string $newHash): bool
+{
+    $query = database()->prepare('UPDATE admins SET password_hash = ? WHERE id = 1 AND password_hash = ?');
+    $query->execute([$newHash, $previousHash]);
+    return $query->rowCount() === 1;
+}
+
 function loginBlocked(string $key): bool
 {
     $query = database()->prepare('SELECT failures, first_attempt FROM login_attempts WHERE ip_hash = ?');

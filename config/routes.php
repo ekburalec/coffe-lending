@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 return [
+    'GET /admin/password' => 'passwordController',
+    'POST /admin/password' => 'passwordController',
     'POST /admin/records/reorder' => 'reorderRecordsController',
     'POST /admin/products/reorder' => 'reorderProductsController',
     'GET /manifest.webmanifest' => 'manifestController',

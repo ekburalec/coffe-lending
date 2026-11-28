@@ -233,6 +233,7 @@ dist/                    ← результат сборки, не в git, ру�
 | Документ | Что описывает |
 |----------|---------------|
 | [docs/product/logic/admin-publishing.md](docs/product/logic/admin-publishing.md) | Сохранение данных и согласованное отображение на лендинге |
+| [docs/product/logic/admin-password.md](docs/product/logic/admin-password.md) | Смена пароля администратора и локальное предложение нового |
 | [docs/product/logic/product-order.md](docs/product/logic/product-order.md) | Порядок товаров, навигации и FAQ; конфликты сохранения |
 | [docs/product/logic/occasions.md](docs/product/logic/occasions.md) | Подбор напитка для сценария посещения |
 | [docs/product/logic/reviews.md](docs/product/logic/reviews.md) | Видимость отзывов/FAQ, рейтинг и публичные блоки |
@@ -251,7 +252,8 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/modules/announcement-bar.md](docs/modules/announcement-bar.md) | Бегущая строка, пауза, доступность и уменьшение движения |
 | [docs/design/og-image/README.md](docs/design/og-image/README.md) | Картинка превью ссылки `og:image` 1200×630: шаблон и сборка `bin/build-og-image.php` |
 | [docs/modules/php-app.md](docs/modules/php-app.md) | PHP-приложение: запуск, роутер и приватные данные |
-| [docs/modules/admin-auth.md](docs/modules/admin-auth.md) | Авторизация, сессии и CSRF админки |
+| [docs/modules/admin-auth.md](docs/modules/admin-auth.md) | Авторизация, генератор/смена пароля, отзыв сессий и CSRF |
+| [docs/modules/admin-auth.md](docs/modules/admin-auth.md#генератор-и-показ-паролей) | admin-password-controls.js: генерация, копирование и показ пароля |
 | [docs/modules/admin-reorder.md](docs/modules/admin-reorder.md) | Перетаскивание товаров, навигации и FAQ; сохранение порядка |
 | [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
 | [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |

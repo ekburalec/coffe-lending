@@ -5,7 +5,7 @@
     <meta name="description" content="Управление данными кофейни"><meta name="robots" content="noindex, nofollow">
     <title><?= e($title) ?> — <?= e($adminBrand) ?></title>
     <link rel="stylesheet" href="<?= e(assetUrl('assets/css/main.css')) ?>">
-<?php if ($sidebar): ?><script type="module" src="<?= e(assetUrl('assets/js/admin.js')) ?>"></script><?php endif; ?>
+<script type="module" src="<?= e(assetUrl('assets/js/admin.js')) ?>"></script>
 <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml"></head>
 <body class="admin">
 <a class="skip-link" href="#admin-main">К содержимому</a>

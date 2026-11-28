@@ -1,0 +1,64 @@
+async (page) => {
+    const base = new URL(page.url()).origin;
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.addInitScript(() => {
+        Object.defineProperty(navigator, 'clipboard', {configurable: true, value: {writeText: async value => { window.qaCopiedPassword = value; }}});
+    });
+    await page.goto(base + '/admin/password');
+    const generated = page.locator('#new-password');
+    const confirmation = page.locator('#confirm-password');
+    const copy = page.locator('[data-password-copy]');
+    if (!await copy.isDisabled()) throw new Error('Copy should be disabled before typing');
+    let posts = 0;
+    page.on('request', request => { if (request.method() === 'POST' && request.url().includes('/admin/password')) posts++; });
+    await page.getByRole('button', {name: 'Сгенерировать пароль', exact: true}).click();
+    const password = await generated.inputValue();
+    if (!/^[A-Za-z0-9_-]{20}$/.test(password) || await confirmation.inputValue() !== password) throw new Error('Generated password/confirmation');
+    if (await generated.getAttribute('type') !== 'password') throw new Error('Generated password should start hidden');
+    await copy.click();
+    if (!await page.evaluate(value => window.qaCopiedPassword === value, password)) throw new Error('Copy mismatch');
+    if (!await page.locator('[data-password-feedback]').getByText('Пароль скопирован.', {exact: true}).count()) throw new Error('Copy feedback');
+    await page.evaluate(() => { navigator.clipboard.writeText = async () => { throw new DOMException('QA clipboard denied', 'NotAllowedError'); }; });
+    await copy.click();
+    if (!(await page.locator('[data-password-feedback]').innerText()).includes('вручную') || await generated.inputValue() !== password) throw new Error('Clipboard failure fallback');
+    const toggle = generated.locator('..').getByRole('button');
+    await toggle.click();
+    if (await generated.getAttribute('type') !== 'text' || await toggle.getAttribute('aria-pressed') !== 'true') throw new Error('Show password');
+    await toggle.focus();
+    await page.keyboard.press('Space');
+    if (await generated.getAttribute('type') !== 'password') throw new Error('Keyboard hide password');
+    await page.getByRole('button', {name: 'Сгенерировать пароль', exact: true}).click();
+    if (await generated.inputValue() === password) throw new Error('Regeneration reused the password');
+    await generated.fill('');
+    if (!await copy.isDisabled()) throw new Error('Copy stale password');
+    if (posts !== 0) throw new Error('Generate/show/copy submitted the form');
+    for (const width of [1440, 768, 320]) {
+        await page.setViewportSize({width, height: 1000});
+        if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error('Password form overflow at ' + width);
+    }
+    await page.setViewportSize({width: 1440, height: 1000});
+    await page.screenshot({path: 'var/password-generator.png'});
+    const anonymous = await page.context().browser().newContext();
+    const login = await anonymous.newPage();
+    await login.goto(base + '/admin/login');
+    const loginPassword = login.locator('#password');
+    await loginPassword.fill('Example-for-display-only');
+    await login.getByRole('button', {name: 'Показать пароль', exact: true}).click();
+    if (await loginPassword.getAttribute('type') !== 'text') throw new Error('Login show password');
+    await login.getByRole('button', {name: 'Скрыть пароль', exact: true}).click();
+    if (await loginPassword.getAttribute('type') !== 'password') throw new Error('Login hide password');
+    if (await login.locator('[data-password-generate]').count()) throw new Error('Generator should not suggest a new password for sign-in');
+    await loginPassword.fill('');
+    await login.setViewportSize({width: 320, height: 900});
+    if (await login.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error('Login overflow');
+    await anonymous.close();
+    const noJs = await page.context().browser().newContext({javaScriptEnabled: false, storageState: await page.context().storageState()});
+    const plain = await noJs.newPage();
+    await plain.goto(base + '/admin/password');
+    if (await plain.locator('input[type=password]').count() !== 3 || !await plain.locator('[data-password-generator]').isHidden()) throw new Error('No-JS fallback');
+    if (await plain.getByRole('button', {name: 'Показать пароль', exact: true}).count()) throw new Error('Inactive no-JS controls visible');
+    await noJs.close();
+    if (errors.length) throw new Error(errors.join('\n'));
+    return 'PASS: secure generation, matching confirmation, copy, eyes/login/keyboard, no submit, no-JS and responsive layouts';
+}

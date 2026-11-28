@@ -30,7 +30,7 @@ def run():
         jar = http.cookiejar.CookieJar()
         client = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
 
-        def request(path, data=None, files=None, raw=False):
+        def request(path, data=None, files=None, raw=False, opener=None):
             body = urllib.parse.urlencode(data).encode() if data is not None else None
             headers = {}
             if files:
@@ -45,7 +45,7 @@ def run():
                 headers["Content-Type"] = "multipart/form-data; boundary=" + boundary
             req = urllib.request.Request("http://localhost:8093" + path, body, headers)
             try:
-                response = client.open(req, timeout=5)
+                response = (opener or client).open(req, timeout=5)
             except urllib.error.HTTPError as error:
                 response = error
             content = response.read()
@@ -62,6 +62,8 @@ def run():
                 except urllib.error.URLError:
                     time.sleep(.1)
             assert status == 200 and "Вход в админку" in html
+            assert 'Вход в админку' in request('/admin/password')[1]
+            assert 'Вход в админку' in request('/admin/password', {'csrf': 'bad', 'new_password': 'invalid'})[1]
             assert request("/admin/records/reorder", {"csrf": "bad"})[0] == 401
             csrf = token(html)
             assert request("/admin/login", {"csrf": "wrong", "username": "testadmin", "password": password})[0] == 403
@@ -76,6 +78,47 @@ def run():
             db = sqlite3.connect(str(Path(directory) / "site.sqlite"))
             assert db.execute("SELECT count(*) FROM records WHERE kind='products'").fetchone()[0] == 9
             assert db.execute('SELECT MAX(version) FROM schema_version').fetchone()[0] == 2
+            password_page = request('/admin/password')[1]
+            assert 'Пароль администратора' in password_page and 'autocomplete="new-password"' in password_page
+            assert 'Cache-Control' in request('/admin/password')[2]
+            old_hash = db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0]
+            peer = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+            peer_csrf = token(request('/admin/login', opener=peer)[1])
+            assert 'Управление кофейней' in request('/admin/login', {'csrf': peer_csrf, 'username': 'testadmin', 'password': password}, opener=peer)[1]
+            new_password = ' ' + 'я' * 35 + ' '  # Ровно 72 байта, пробелы сохраняются.
+            change = dict(csrf=token(password_page), current_password=password, new_password=new_password, confirm_password=new_password)
+            assert request('/admin/password', dict(change, csrf='bad'))[0] == 403
+            assert request('/admin/password', dict(change, current_password='incorrect'))[0] == 422
+            assert request('/admin/password', dict(change, confirm_password='different'))[0] == 422
+            for invalid_password in ['short', 'a' * 73, 'я' * 37, 'a' * 12 + '\0', password]:
+                assert request('/admin/password', dict(change, new_password=invalid_password, confirm_password=invalid_password))[0] == 422
+            assert request('/admin/password', dict(change, new_password=['invalid']))[0] == 422
+            assert db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0] == old_hash
+            old_session = next(cookie.value for cookie in jar if cookie.name == 'coffee_admin')
+            changed_status, changed_page, _ = request('/admin/password', change)
+            assert changed_status == 200 and 'Пароль изменён.' in changed_page
+            assert new_password not in changed_page and 'value="' + password + '"' not in changed_page
+            assert token(changed_page) != change['csrf']
+            assert next(cookie.value for cookie in jar if cookie.name == 'coffee_admin') != old_session
+            assert db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0] != old_hash
+            assert 'Вход в админку' in request('/admin/password', opener=peer)[1], 'Other sessions must expire'
+            assert 'Управление кофейней' in request('/admin')[1], 'Current session must survive'
+            login_after_change = request('/admin/logout', {'csrf': token(changed_page)})[1]
+            login_csrf = token(login_after_change)
+            assert request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': password})[0] == 422
+            assert request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': new_password.strip()})[0] == 422
+            assert request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': new_password + 'x'})[0] == 422
+            assert 'Управление кофейней' in request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': new_password})[1]
+            csrf_changed = token(request('/admin/password')[1])
+            assert request('/admin/password', dict(csrf=csrf_changed, current_password=new_password, new_password=password, confirm_password=password))[0] == 200
+            csrf = token(request('/admin/password')[1])
+            # Пять неверных текущих паролей ограничивают только смену пароля.
+            for attempt in range(5):
+                assert request('/admin/password', dict(change, csrf=csrf, current_password='incorrect'))[0] == 422
+            assert request('/admin/password', dict(change, csrf=csrf))[0] == 429
+            assert 'Управление кофейней' in request('/admin')[1]
+            db.execute('DELETE FROM login_attempts')
+            db.commit()
             assert 'href="#reviews"' in request('/')[1]
             assert 'Отзывов пока нет.' in request('/')[1]
             assert 'Автокопий пока нет' in request('/admin/backups')[1]
@@ -351,7 +394,7 @@ def run():
             for attempt in range(5):
                 assert request("/admin/login", {"csrf": csrf_login, "username": "testadmin", "password": "wrong"})[0] == 422
             assert request("/admin/login", {"csrf": csrf_login, "username": "testadmin", "password": password})[0] == 429
-            print("PASS: isolated migration, login, CSRF, private paths, catalog CRUD, demo reviews/photos, WebP/retina, validation, dates, SEO, backup/restore")
+            print("PASS: isolated migration, login, password change/session revocation, CSRF, private paths, catalog CRUD, demo reviews/photos, WebP/retina, validation, dates, SEO, backup/restore")
         finally:
             if "db" in locals(): db.close()
             process.terminate()

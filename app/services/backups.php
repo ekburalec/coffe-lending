@@ -67,16 +67,20 @@ function validateBackupDatabase(string $path, array $stagedMedia): void
     $pdo->exec('PRAGMA query_only = ON;');
     $objects = $pdo->query("SELECT name, type, sql FROM sqlite_master WHERE name NOT LIKE 'sqlite_%'")->fetchAll();
     $tables = ['schema_version', 'records', 'settings', 'admins', 'login_attempts'];
+    $hasOrders = (bool) $pdo->query("SELECT name FROM sqlite_master WHERE name='orders'")->fetchColumn();
+    if ($hasOrders) $tables = array_merge($tables, ['orders', 'order_items', 'order_events', 'order_mail_queue', 'order_attempts']);
     if (count($objects) !== count($tables)) throw new InvalidArgumentException('Неподдерживаемая структура БД.');
     foreach ($objects as $object) if ($object['type'] !== 'table' || !in_array($object['name'], $tables, true)) throw new InvalidArgumentException('Неподдерживаемые объекты БД.');
     $normalizeSql = fn (string $sql): string => str_replace('ifnotexists', '', strtolower(preg_replace('/\\s+/', '', $sql)));
     $definitions = [];
-    foreach (explode(';', file_get_contents(APP_ROOT . '/config/schema.sql')) as $sql) {
+    foreach (explode(';', file_get_contents(APP_ROOT . '/config/schema.sql') . file_get_contents(APP_ROOT . '/config/orders-schema.sql')) as $sql) {
         if (preg_match('/CREATE TABLE IF NOT EXISTS ([a-z_]+)/', $sql, $match)) $definitions[$match[1]] = $normalizeSql($sql);
     }
     foreach ($objects as $object) if ($normalizeSql($object['sql']) !== ($definitions[$object['name']] ?? '')) throw new InvalidArgumentException('Определения таблиц не соответствуют приложению.');
     if ($pdo->query('PRAGMA quick_check')->fetchColumn() !== 'ok') throw new InvalidArgumentException('Копия БД повреждена.');
-    if (!in_array($pdo->query('SELECT version FROM schema_version ORDER BY version')->fetchAll(PDO::FETCH_COLUMN), [[1], [1, 2]], true)) throw new InvalidArgumentException('Несовместимая версия схемы.');
+    if (!in_array($pdo->query('SELECT version FROM schema_version ORDER BY version')->fetchAll(PDO::FETCH_COLUMN), [[1], [1, 2], [1, 2, 3]], true)) throw new InvalidArgumentException('Несовместимая версия схемы.');
+    if ($pdo->query('PRAGMA foreign_key_check')->fetch()) throw new InvalidArgumentException('Повреждены связи БД.');
+    if ($hasOrders) validateRestoredOrders($pdo);
     $admins = $pdo->query('SELECT * FROM admins')->fetchAll();
     if (count($admins) > 1 || ($admins && ($admins[0]['id'] != 1 || !preg_match('/^[a-zA-Z0-9_.-]{3,80}$/D', $admins[0]['username']) || !password_get_info($admins[0]['password_hash'])['algo']))) throw new InvalidArgumentException('Некорректная учётная запись в копии.');
     $collections = [];
@@ -108,6 +112,7 @@ function validateBackupDatabase(string $path, array $stagedMedia): void
     $initial = json_decode(file_get_contents(APP_ROOT . '/config/seed.json'), true, 512, JSON_THROW_ON_ERROR);
     foreach (['content', 'images'] as $kind) {
         foreach (array_column($initial['records'][$kind], 'id') as $id) {
+            if ($kind === 'content' && in_array($id, visualEditorConfig()['optional'], true)) continue;
             if (!in_array($id, array_column($collections[$kind] ?? [], 'id'), true)) throw new InvalidArgumentException('В копии отсутствуют обязательные поля страницы.');
         }
     }
@@ -116,6 +121,13 @@ function validateBackupDatabase(string $path, array $stagedMedia): void
 function validateRestoredFields(string $kind, array $section, array $record, array $collections, array $stagedMedia): void
 {
     $fields = $section['fields'];
+    if ($kind === 'content' && isset($record['format'])) {
+        if (!in_array($record['format'], ['text', 'inline'], true)) throw new InvalidArgumentException('Неизвестный формат текста.');
+        if ($record['format'] === 'inline') {
+            if (!is_string($record['text'] ?? null) || strlen($record['text']) > 40000 || cleanVisualHtml($record['text'], false) !== $record['text']) throw new InvalidArgumentException('Недопустимое оформление текста.');
+            $record['text'] = visualPlainText($record['text']);
+        }
+    }
     // Старые копии могут содержать URL в contacts; они также должны быть безопасными.
     if ($kind === 'contacts') foreach (socialNetworkDefaults() as $key => $network) $fields[$key . '_url'] = ['type' => 'url', 'max' => 2000];
     if ($kind === 'hours') $fields['name'] = ['label' => 'День недели', 'required' => true, 'max' => 100];
@@ -180,6 +192,7 @@ function stageBackupArchive(string $source, string $stage): array
 
 function restoreBackup(array $file): string
 {
+    if (ordersInstalled() && database()->query('SELECT COUNT(*) FROM orders')->fetchColumn() && postText('confirm_orders_rollback') !== '1') throw new InvalidArgumentException('Копия заменит и заказы. Отметьте отдельное подтверждение полного отката заказов.');
     if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($file['tmp_name']) || ($file['size'] ?? 0) > 200 * 1024 * 1024) throw new InvalidArgumentException('Загрузите копию до 200 МБ (лимит PHP может быть меньше).');
     $extension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if (!in_array($extension, ['sqlite', 'zip'], true)) throw new InvalidArgumentException('Нужен файл .sqlite или .zip.');
@@ -208,6 +221,9 @@ function restoreBackup(array $file): string
             throw new RuntimeException('БД не заменена; прежняя версия сохранена.');
         }
         chmod($live, 0600);
+        database()->exec(file_get_contents(APP_ROOT . '/config/orders-schema.sql'));
+        database()->exec('DELETE FROM order_mail_queue');
+        cleanupOrderData();
         $_SESSION = [];
         session_destroy();
         foreach (glob(appConfig('data_dir') . '/sessions/sess_*') ?: [] as $sessionFile) unlink($sessionFile);

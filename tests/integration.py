@@ -20,10 +20,21 @@ ROOT = Path(os.environ.get("COFFEE_TEST_ROOT", str(Path(__file__).resolve().pare
 
 def run():
     with tempfile.TemporaryDirectory(prefix="coffee-test-") as directory:
-        env = dict(os.environ, APP_DATA_DIR=directory, APP_UPLOAD_DIR=str(Path(directory) / "uploads"))
+        env = dict(os.environ, APP_DATA_DIR=directory, APP_UPLOAD_DIR=str(Path(directory) / "uploads"), APP_PASSWORD_HIBP='0')
         subprocess.run(["php", "bin/migrate.php"], cwd=ROOT, env=env, check=True, capture_output=True)
-        password = secrets.token_urlsafe(24)
+        password = secrets.token_urlsafe(54)  # 72 ASCII bytes, legacy bcrypt boundary.
+        algorithms = json.loads(subprocess.check_output(['php', '-r', 'echo json_encode(password_algos());'], text=True))
         subprocess.run(["php", "bin/create-admin.php", "testadmin"], input=password, text=True, cwd=ROOT, env=env, check=True, capture_output=True)
+        # Проверить вход с прежним bcrypt-хешем и явный переход на новый алгоритм при смене.
+        legacy_hash = subprocess.run(['php', '-r', 'echo password_hash(stream_get_contents(STDIN), PASSWORD_BCRYPT);'], input=password, text=True, check=True, capture_output=True).stdout
+        with sqlite3.connect(str(Path(directory) / 'site.sqlite')) as legacy_db:
+            initial_hash = legacy_db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0]
+            for invalid in ['short', 'я' * 7, 'passwordpassword', 'a' * 129, 'a' * 15 + '\0']:
+                rejected = subprocess.run(['php', 'bin/create-admin.php', 'testadmin', '--reset'], input=invalid, text=True, cwd=ROOT, env=env, capture_output=True)
+                assert rejected.returncode == 1, 'CLI must share the new password policy'
+                assert legacy_db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0] == initial_hash
+            legacy_db.execute('UPDATE admins SET password_hash=? WHERE id=1', (legacy_hash,))
+        legacy_db.close()
         modules = subprocess.check_output(["php", "-m"], text=True).lower().splitlines()
         extension_flags = [flag for name in ["gd", "zip"] if name not in modules for flag in ["-d", "extension=" + name]]
         process = subprocess.Popen(["php"] + extension_flags + [ "-d", "display_errors=0", "-d", "upload_tmp_dir=" + directory, "-S", "localhost:8093", "router.php"], cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=open(Path(directory) / "server.log", "w"))
@@ -68,7 +79,7 @@ def run():
             csrf = token(html)
             assert request("/admin/login", {"csrf": "wrong", "username": "testadmin", "password": password})[0] == 403
             status, html, _ = request("/admin/login", {"csrf": csrf, "username": "testadmin", "password": password})
-            assert status == 200 and "Управление кофейней" in html
+            assert status == 200 and 'data-visual-editor' in html
             assert token(html) != csrf, "CSRF rotates after login"
             assert request("/config/seed.json")[0] == 404
             assert request("/var/site.sqlite")[0] == 404
@@ -77,20 +88,22 @@ def run():
             csrf = token(html)
             db = sqlite3.connect(str(Path(directory) / "site.sqlite"))
             assert db.execute("SELECT count(*) FROM records WHERE kind='products'").fetchone()[0] == 9
-            assert db.execute('SELECT MAX(version) FROM schema_version').fetchone()[0] == 2
+            assert db.execute('SELECT MAX(version) FROM schema_version').fetchone()[0] == 3
             password_page = request('/admin/password')[1]
-            assert 'Пароль администратора' in password_page and 'autocomplete="new-password"' in password_page
+            assert '<h1 class="admin__title">Пароль</h1>' in password_page and 'autocomplete="new-password"' in password_page
+            assert '<strong>testadmin</strong>' in password_page and 'php bin/create-admin.php НОВЫЙ_ЛОГИН --reset' in password_page
             assert 'Cache-Control' in request('/admin/password')[2]
             old_hash = db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0]
             peer = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
             peer_csrf = token(request('/admin/login', opener=peer)[1])
-            assert 'Управление кофейней' in request('/admin/login', {'csrf': peer_csrf, 'username': 'testadmin', 'password': password}, opener=peer)[1]
-            new_password = ' ' + 'я' * 35 + ' '  # Ровно 72 байта, пробелы сохраняются.
+            assert 'data-visual-editor' in request('/admin/login', {'csrf': peer_csrf, 'username': 'testadmin', 'password': password}, opener=peer)[1]
+            # Новый Argon2id-пароль может иметь тот же 72-байтовый префикс, что и прежний bcrypt.
+            new_password = password + ' я ' if 'argon2id' in algorithms else ' ' + 'я' * 35 + ' '
             change = dict(csrf=token(password_page), current_password=password, new_password=new_password, confirm_password=new_password)
             assert request('/admin/password', dict(change, csrf='bad'))[0] == 403
             assert request('/admin/password', dict(change, current_password='incorrect'))[0] == 422
             assert request('/admin/password', dict(change, confirm_password='different'))[0] == 422
-            for invalid_password in ['short', 'a' * 73, 'я' * 37, 'a' * 12 + '\0', password]:
+            for invalid_password in ['short', 'я' * 7, 'a' * 129, 'я' * 129, 'a' * 15 + '\0', 'passwordpassword', password]:
                 assert request('/admin/password', dict(change, new_password=invalid_password, confirm_password=invalid_password))[0] == 422
             assert request('/admin/password', dict(change, new_password=['invalid']))[0] == 422
             assert db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0] == old_hash
@@ -102,15 +115,24 @@ def run():
             assert next(cookie.value for cookie in jar if cookie.name == 'coffee_admin') != old_session
             assert db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0] != old_hash
             assert 'Вход в админку' in request('/admin/password', opener=peer)[1], 'Other sessions must expire'
+            assert 'data-visual-editor' not in request('/', opener=peer)[1], 'Revoked sessions must lose the site editor'
             assert 'Управление кофейней' in request('/admin')[1], 'Current session must survive'
             login_after_change = request('/admin/logout', {'csrf': token(changed_page)})[1]
             login_csrf = token(login_after_change)
             assert request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': password})[0] == 422
             assert request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': new_password.strip()})[0] == 422
             assert request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': new_password + 'x'})[0] == 422
-            assert 'Управление кофейней' in request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': new_password})[1]
+            assert 'data-visual-editor' in request('/admin/login', {'csrf': login_csrf, 'username': 'testadmin', 'password': new_password})[1]
             csrf_changed = token(request('/admin/password')[1])
             assert request('/admin/password', dict(csrf=csrf_changed, current_password=new_password, new_password=password, confirm_password=password))[0] == 200
+            if 'argon2id' in algorithms:
+                full_length = '😀' * 128  # 128 code points, 512 bytes, 256 UTF-16 units.
+                long_form = dict(csrf=token(request('/admin/password')[1]), current_password=password, new_password=full_length, confirm_password=full_length)
+                assert request('/admin/password', long_form)[0] == 200
+                assert db.execute('SELECT password_hash FROM admins WHERE id=1').fetchone()[0].startswith('$argon2id$')
+                check_long = dict(csrf=token(request('/admin/password')[1]), current_password=full_length + 'x', new_password=password, confirm_password=password)
+                assert request('/admin/password', check_long)[0] == 422
+                assert request('/admin/password', dict(check_long, current_password=full_length))[0] == 200
             csrf = token(request('/admin/password')[1])
             # Пять неверных текущих паролей ограничивают только смену пароля.
             for attempt in range(5):
@@ -146,8 +168,31 @@ def run():
             assert request('/admin/edit?section=social', social)[0] == 200
             social_html = request('/')[1]
             assert re.search(r'href="https://example.com/community"\s+target="_blank" rel="noopener noreferrer"', social_html)
-            assert 'title="Клуб &lt;кофе&gt;"' in social_html and '>CF</span>' in social_html
+            assert 'title="Клуб &lt;кофе&gt;"' in social_html and '#social-vk' in social_html
             assert social_html.count('data-social-placeholder') == 4
+            hidden_social = dict(social)
+            hidden_social.pop('vk_visible')
+            assert request('/admin/edit?section=social', hidden_social)[0] == 200
+            hidden_html = request('/')[1]
+            assert 'https://example.com/community' not in hidden_html and '>CF</span>' not in hidden_html
+            saved_social = json.loads(db.execute("SELECT payload FROM settings WHERE name='social'").fetchone()[0])
+            assert saved_social['vk_visible'] == 0 and saved_social['vk_url'] == social['vk_url']
+            assert request('/admin/edit?section=social', social)[0] == 200
+            assert 'href="https://example.com/community"' in request('/')[1]
+            only_vk = {key: value for key, value in social.items() if not key.endswith('_visible') or key == 'vk_visible'}
+            assert request('/admin/edit?section=social', only_vk)[0] == 200
+            only_vk_html = request('/')[1]
+            assert 'data-social-placeholder' not in only_vk_html and 'site-footer__social-note' not in only_vk_html
+            only_vk.pop('vk_visible')
+            assert request('/admin/edit?section=social', only_vk)[0] == 200
+            assert 'Мы в соцсетях' not in request('/')[1]
+            # Старые настройки и копии без visible сохраняют показ всех сетей.
+            old_social = {key: value for key, value in social.items() if not key.endswith('_visible') and key != 'csrf'}
+            db.execute("UPDATE settings SET payload=? WHERE name='social'", (json.dumps(old_social),))
+            db.commit()
+            assert request('/')[1].count('site-footer__social-link') == 5
+            subprocess.run(['php', '-r', 'require "app/core/bootstrap.php"; $p=appConfig("data_dir")."/old-social.sqlite"; databaseSnapshot($p); validateBackupDatabase($p,[]);'], cwd=ROOT, env=env, check=True, capture_output=True)
+            assert request('/admin/edit?section=social', social)[0] == 200
             legacy_contacts['csrf'] = csrf
             assert request('/admin/edit?section=contacts', legacy_contacts)[0] == 200
             assert 'href="https://example.com/community"' in request('/')[1]
@@ -370,7 +415,7 @@ def run():
             assert status == 200 and "Копия восстановлена" in html, re.findall(r'<p class="admin__message"[^>]*>(.*?)</p>', html)
             assert "Новый адрес" in request("/")[1] and "После копии" not in request("/")[1]
             assert 'Тестовая фотография' in request('/')[1] and 'Изменённый демо-текст' in request('/')[1]
-            assert 'title="Клуб &lt;кофе&gt;"' in request('/')[1] and '>CF</span>' in request('/')[1]
+            assert 'title="Клуб &lt;кофе&gt;"' in request('/')[1] and '#social-vk' in request('/')[1]
             assert len(list((Path(directory) / "uploads").iterdir())) == 7
             assert len(list((Path(directory) / "backups").glob("*.zip"))) == 2
             login_html = request("/admin")[1]

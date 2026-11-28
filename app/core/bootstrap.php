@@ -22,6 +22,8 @@ set_exception_handler(function (Throwable $error): void {
 });
 
 require_once APP_ROOT . '/app/models/auth.php';
+require_once APP_ROOT . '/app/services/passwords.php';
+require_once APP_ROOT . '/app/services/pwned-passwords.php';
 require_once APP_ROOT . '/app/services/auth.php';
 require_once APP_ROOT . '/app/controllers/auth.php';
 
@@ -50,3 +52,21 @@ require_once APP_ROOT . '/app/controllers/product-order.php';
 require_once APP_ROOT . '/app/controllers/record-order.php';
 
 require_once APP_ROOT . '/app/helpers/admin-fields.php';
+
+require_once APP_ROOT . '/app/models/visual-editor.php';
+require_once APP_ROOT . '/app/services/visual-editor.php';
+require_once APP_ROOT . '/app/controllers/visual-editor.php';
+
+require_once APP_ROOT . '/app/models/orders.php';
+require_once APP_ROOT . '/app/models/order-backups.php';
+require_once APP_ROOT . '/app/models/order-mail.php';
+require_once APP_ROOT . '/app/models/order-retention.php';
+require_once APP_ROOT . '/app/services/orders.php';
+require_once APP_ROOT . '/app/validators/orders.php';
+
+require_once APP_ROOT . '/app/services/order-mail.php';
+require_once APP_ROOT . '/app/services/order-cleanup.php';
+require_once APP_ROOT . '/app/controllers/orders.php';
+require_once APP_ROOT . '/app/controllers/admin-orders.php';
+
+require_once APP_ROOT . '/app/controllers/order-mail.php';

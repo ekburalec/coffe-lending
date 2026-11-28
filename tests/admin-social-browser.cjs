@@ -8,6 +8,7 @@ async (page) => {
     if (await page.locator('fieldset').count() !== 5) throw new Error('Five social groups expected');
     if (await page.locator('[name$="_name"]').count() !== 5 || await page.locator('[name$="_label"]').count() !== 5 || await page.locator('[name$="_url"]').count() !== 5) throw new Error('Editable name/label/URL fields');
     const color = await page.locator('.admin__nav-link[aria-current]').evaluate(el => getComputedStyle(el).backgroundColor);
+    if (await page.getByRole('checkbox', {name: 'Показывать на сайте', exact: true}).count() !== 5) throw new Error('Five social visibility controls expected');
     if (color !== 'rgb(139, 68, 45)') throw new Error('Palette changed');
     for (const width of [1440, 768, 320]) {
         await page.setViewportSize({width, height: 1000});

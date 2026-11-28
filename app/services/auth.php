@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-function startAdminSession(): void
+function startAdminSession(bool $private = true): void
 {
     if (session_status() === PHP_SESSION_ACTIVE) return;
     $directory = appConfig('data_dir') . '/sessions';
@@ -9,10 +9,16 @@ function startAdminSession(): void
     session_save_path($directory);
     session_name('coffee_admin');
     ini_set('session.use_strict_mode', '1');
-    session_set_cookie_params(['httponly' => true, 'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off', 'samesite' => 'Strict', 'path' => '/admin']);
+    $cookieOptions = ['httponly' => true, 'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off', 'samesite' => 'Strict', 'path' => '/'];
+    session_set_cookie_params($cookieOptions);
     session_start();
+    // Перенос прежней cookie /admin: тот же сеанс должен быть доступен на сайте.
+    if (str_starts_with(requestPath(), '/admin') && isset($_COOKIE[session_name()])) {
+        setcookie(session_name(), session_id(), $cookieOptions);
+        setcookie(session_name(), '', array_merge($cookieOptions, ['path' => '/admin', 'expires' => time() - 3600]));
+    }
     header('Cache-Control: no-store');
-    header('X-Robots-Tag: noindex, nofollow');
+    if ($private || isset($_SESSION['admin'])) header('X-Robots-Tag: noindex, nofollow');
     $admin = isset($_SESSION['admin']) ? adminAccount() : null;
     $passwordVersion = $admin ? hash('sha256', $admin['password_hash']) : '';
     if (isset($_SESSION['admin']) && (!$admin || !hash_equals($passwordVersion, $_SESSION['password_version'] ?? '') || ($_SESSION['last_seen'] ?? 0) < time() - appConfig('session_timeout'))) {
@@ -30,23 +36,25 @@ function changeAdminPassword(#[SensitiveParameter] array $input): array
     if (loginBlocked($key)) return [['_form' => 'Слишком много попыток. Повторите через 15 минут.'], 429];
     $admin = adminAccount();
     $current = $input['current_password'] ?? null;
-    if (!is_string($current) || strlen($current) > 72 || str_contains($current, "\0") || !password_verify($current, $admin['password_hash'])) {
+    if (!verifyAdminPassword($current, $admin['password_hash'])) {
         recordLoginFailure($key);
         return [['current_password' => 'Текущий пароль указан неверно.'], 422];
     }
     $password = $input['new_password'] ?? null;
     $confirmation = $input['confirm_password'] ?? null;
     $errors = [];
-    if (!is_string($password) || strlen($password) < 12 || strlen($password) > 72 || str_contains($password, "\0")) {
-        $errors['new_password'] = 'Укажите пароль длиной от 12 до 72 байт без нулевого символа.';
-    } elseif (password_verify($password, $admin['password_hash'])) {
+    $passwordError = newPasswordError($password, $admin['username']);
+    if ($passwordError !== null) {
+        $errors['new_password'] = $passwordError;
+    } elseif (verifyAdminPassword($password, $admin['password_hash'])) {
         $errors['new_password'] = 'Новый пароль должен отличаться от текущего.';
     }
     if (!is_string($confirmation) || !is_string($password) || !hash_equals($password, $confirmation)) {
         $errors['confirm_password'] = 'Пароли не совпадают.';
     }
     if ($errors) return [$errors, 422];
-    $newHash = password_hash($password, PASSWORD_DEFAULT);
+    if (($breachError = newPasswordBreachError($password)) !== null) return [['new_password' => $breachError], 422];
+    $newHash = hashAdminPassword($password);
     if (!updateAdminPassword($admin['password_hash'], $newHash)) return [['_form' => 'Пароль уже изменён в другой вкладке. Войдите снова.'], 409];
     clearLoginFailures($key);
     session_regenerate_id(true);

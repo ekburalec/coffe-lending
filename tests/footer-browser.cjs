@@ -7,6 +7,7 @@ async (page) => {
     const footer = page.locator('.site-footer');
     const links = footer.locator('[data-social-placeholder]');
     if (await links.count() !== 5) throw new Error('Five social placeholders expected');
+    if (await links.locator('svg[aria-hidden="true"][focusable="false"] use').count() !== 5) throw new Error('Five decorative SVG icons expected');
     const destinations = await links.evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
     if (destinations.some(url => url !== '#contacts')) throw new Error('Invented social account');
     await links.first().click();

@@ -2,6 +2,9 @@
 declare(strict_types=1);
 
 return [
+    ['key' => 'orders', 'title' => 'Заказы', 'href' => '/admin/orders', 'sections' => [], 'description' => 'Список, карточки и доска заказов.'],
+    ['key' => 'order-settings', 'title' => 'Приём заказов', 'sections' => ['orders' => 'Настройки'], 'description' => 'Пауза, ограничения, реквизиты.'],
+    ['key' => 'smtp', 'title' => 'Почта заказов', 'href' => '/admin/smtp', 'sections' => [], 'description' => 'SMTP и тестовое письмо.'],
     ['key' => 'home', 'title' => 'Главная', 'href' => '/admin', 'sections' => [], 'description' => 'Все разделы управления сайтом.'],
     ['key' => 'contacts', 'title' => 'Контакты и часы', 'sections' => ['contacts' => 'Контакты', 'hours' => 'Часы работы'], 'description' => 'Название, адрес, телефон, карта и расписание по дням недели.'],
     ['key' => 'social', 'title' => 'Соцсети', 'sections' => ['social' => 'Социальные сети'], 'description' => 'Полные названия, двухбуквенные подписи и URL пяти социальных ссылок.'],
@@ -13,5 +16,6 @@ return [
     ['key' => 'faq', 'title' => 'Вопросы', 'sections' => ['faq' => 'Вопросы и ответы'], 'description' => 'Частые вопросы: ответы, порядок и видимость на сайте.'],
     ['key' => 'seo', 'title' => 'SEO', 'sections' => ['seo' => 'SEO и превью ссылки'], 'description' => 'Заголовок и описание для поиска, превью ссылки в мессенджерах.'],
     ['key' => 'backups', 'title' => 'Резервные копии', 'href' => '/admin/backups', 'sections' => [], 'description' => 'Скачать БД или архив с фотографиями и восстановить сохранённую версию.'],
-    ['key' => 'password', 'title' => 'Пароль администратора', 'href' => '/admin/password', 'sections' => [], 'description' => 'Сменить пароль для входа в панель управления.'],
+    ['key' => 'password', 'title' => 'Пароль', 'href' => '/admin/password', 'sections' => [], 'utility' => true, 'description' => 'Сменить пароль для входа в панель управления.'],
+    ['key' => 'visual-editor', 'title' => 'Визуальный редактор', 'href' => '/', 'sections' => [], 'utility' => true, 'description' => 'Открыть сайт с верхней панелью редактирования текстов и фотографий.'],
 ];

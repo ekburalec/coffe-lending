@@ -303,6 +303,7 @@
     --site-footer-bg: var(--color-dark-bg);
     --site-footer-color: var(--color-dark-muted);
     --site-footer-title-color: var(--color-dark-text);
+    --site-footer-social-icon-size: 22px;
     --site-footer-border: var(--color-dark-line);
     --site-footer-link-color: var(--color-dark-text);
     --site-footer-link-hover-bg: var(--color-dark-accent);
@@ -365,6 +366,9 @@
     --admin-disabled-opacity: .5;
     --admin-drag-opacity: .8;
     --admin-drag-shadow: var(--shadow-soft);
+    --admin-drag-duration: 240ms;
+    --admin-drag-placeholder-opacity: .25;
+    --admin-drag-z: 1000;
 }
 .dark-mode {
     --admin-bg: var(--color-dark-bg);
@@ -419,14 +423,86 @@
 
 /* password-control */
 :root {
+    --password-control-border: var(--admin-line);
     --password-control-bg: var(--admin-surface);
     --password-control-color: var(--admin-link-color);
     --password-control-hover-bg: var(--admin-subtle-bg);
     --password-control-focus-color: var(--admin-focus);
 }
 .dark-mode {
+    --password-control-border: var(--admin-line);
     --password-control-bg: var(--admin-surface);
     --password-control-color: var(--admin-link-color);
     --password-control-hover-bg: var(--admin-subtle-bg);
     --password-control-focus-color: var(--admin-focus);
+}
+
+/* password-strength: прежняя палитра админки */
+:root {
+    --password-strength-height: 6px;
+    --password-strength-font-size: var(--admin-compact-font-size);
+    --password-strength-track-bg: var(--admin-line);
+    --password-strength-fill-bg: var(--admin-link-color);
+    --password-strength-status-color: var(--admin-muted-color);
+}
+.dark-mode {
+    --password-strength-track-bg: var(--admin-line);
+    --password-strength-fill-bg: var(--admin-link-color);
+    --password-strength-status-color: var(--admin-muted-color);
+}
+
+/* visual-editor */
+:root {
+    --visual-editor-bg: var(--color-card);
+    --visual-editor-surface: var(--color-surface);
+    --visual-editor-color: var(--color-text);
+    --visual-editor-muted: var(--color-text-muted);
+    --visual-editor-border: var(--color-line);
+    --visual-editor-focus: var(--color-accent);
+    --visual-editor-active-bg: var(--color-accent);
+    --visual-editor-active-color: var(--color-on-accent);
+    --visual-editor-hover-bg: var(--color-surface);
+    --visual-editor-error: var(--admin-error);
+    --visual-editor-primary-hover-bg: var(--color-accent-dark);
+    --visual-editor-primary-hover-color: var(--color-on-accent);
+    --visual-editor-photo-height: 240px;
+    --visual-editor-dialog-width: 560px;
+    --visual-editor-outline-offset: 4px;
+    --visual-editor-backdrop: rgb(33 24 19 / 60%);
+    --visual-editor-disabled-opacity: .5;
+}
+.dark-mode {
+    --visual-editor-bg: var(--color-dark-surface);
+    --visual-editor-surface: var(--color-dark-bg);
+    --visual-editor-color: var(--color-dark-text);
+    --visual-editor-muted: var(--color-dark-muted);
+    --visual-editor-border: var(--color-dark-line);
+    --visual-editor-focus: var(--color-dark-accent);
+    --visual-editor-active-bg: var(--color-dark-accent);
+    --visual-editor-active-color: var(--color-dark-bg);
+    --visual-editor-hover-bg: var(--color-dark-bg);
+    --visual-editor-primary-hover-bg: var(--color-dark-text);
+    --visual-editor-primary-hover-color: var(--color-dark-bg);
+    --visual-editor-error: var(--admin-error);
+}
+
+/* checkout and orders */
+:root {
+    --checkout-width: 800px;
+    --checkout-border: var(--color-line);
+    --checkout-error-color: var(--color-accent-dark);
+    --checkout-notice-bg: var(--color-surface);
+    --orders-filter-width: 180px;
+    --orders-column-width: 260px;
+    --orders-border: var(--color-line);
+    --orders-card-bg: var(--color-card);
+    --orders-column-bg: var(--color-surface);
+}
+.dark-mode {
+    --checkout-border: var(--color-dark-line);
+    --checkout-error-color: var(--color-dark-accent);
+    --checkout-notice-bg: var(--color-dark-surface);
+    --orders-border: var(--color-dark-line);
+    --orders-card-bg: var(--color-dark-surface);
+    --orders-column-bg: var(--color-dark-bg);
 }

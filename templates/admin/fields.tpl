@@ -1,5 +1,5 @@
 <?php foreach ($fields as $field): ?>
-<div class="admin__field <?= (!empty($field['wide']) || in_array($field['type'], ['textarea', 'image', 'url'], true)) ? 'admin__field--wide' : '' ?>" <?= !empty($field['count']) ? 'data-character-field' : '' ?>>
+<div class="admin__field <?= (!empty($field['wide']) || in_array($field['type'], ['textarea', 'image', 'url'], true)) ? 'admin__field--wide' : '' ?> <?= $field['type'] === 'checkbox' ? 'admin__field--checkbox' : '' ?>" <?= !empty($field['count']) ? 'data-character-field' : '' ?>>
 <label for="<?= e($field['id']) ?>"><?= e($field['label']) ?></label>
 <?php if ($field['type'] === 'textarea'): ?>
 <textarea class="admin__input" id="<?= e($field['id']) ?>" name="<?= e($field['name']) ?>" rows="<?= e($field['rows'] ?? 5) ?>" maxlength="<?= e($field['max'] ?? 5000) ?>" <?= !empty($field['required']) ? 'required' : '' ?> aria-invalid="<?= $field['error'] ? 'true' : 'false' ?>" aria-describedby="<?= e($field['described_by']) ?>"><?= e($field['value']) ?></textarea>

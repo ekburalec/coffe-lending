@@ -1,4 +1,4 @@
-<div class="delivery__panels">
+<div class="delivery__panels" <?= visualManagedAttributes('delivery', $visualPreview) ?>>
 <?php if (!empty($delivery['pickup_enabled'])): ?><article class="delivery__panel"><h3 class="delivery__title">Самовывоз</h3><p>Без доплаты. Ориентир приготовления: <?= e($delivery['pickup_time']) ?> в рабочие часы.</p><p><?= e($contacts['city'] . ', ' . $contacts['street']) ?>. <?= e($hours['weekly']) ?>. <?= e($hours['today']) ?>.</p></article><?php endif; ?>
 <?php if (!empty($delivery['delivery_enabled'])): ?><article class="delivery__panel"><h3 class="delivery__title">Доставка</h3><p><?= e($delivery['zone']) ?>. Стоимость: <?= e(rubles((int) $delivery['fee'])) ?>, от <?= e(rubles((int) $delivery['threshold'])) ?> бесплатно.</p><p>Ориентир времени: <?= e($delivery['delivery_time']) ?> в рабочие часы.</p></article><?php endif; ?>
 </div>

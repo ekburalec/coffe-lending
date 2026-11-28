@@ -40,7 +40,7 @@ function faqAnswer(array $row, array $delivery, array $hours): string
         'delivery' => deliveryDescription($delivery),
         'timing' => (!empty($delivery['pickup_enabled']) ? 'Самовывоз: ' . $delivery['pickup_time'] . '. ' : '')
             . (!empty($delivery['delivery_enabled']) ? 'Доставка: ' . $delivery['delivery_time'] . '. ' : '')
-            . 'В рабочие часы. Время ориентировочное. Состав на сайте не оформляет заказ.',
+            . 'В рабочие часы. Время ориентировочное. Оформите заказ на сайте; состав и время подтвердит менеджер.',
         default => $row['answer'],
     };
     if (($row['mode'] ?? 'manual') !== 'manual' && !empty($row['prefix'])) $answer = $row['prefix'] . ' ' . $answer;
@@ -53,11 +53,10 @@ function landingData(): array
     $socialValues = socialSettings($contacts);
     $socialLinks = [];
     foreach (socialNetworkDefaults() as $key => $network) {
+        if (empty($socialValues[$key . '_visible'])) continue;
         $url = $socialValues[$key . '_url'];
-        $socialLinks[] = ['name' => $socialValues[$key . '_name'], 'label' => $socialValues[$key . '_label'], 'url' => $url ?: '#contacts', 'placeholder' => $url === ''];
+        $socialLinks[] = ['name' => $socialValues[$key . '_name'], 'icon' => assetUrl('assets/icons/social.svg') . '#social-' . $key, 'url' => $url ?: '#contacts', 'placeholder' => $url === ''];
     }
-    $missingSocial = count(array_filter($socialLinks, fn (array $social): bool => $social['placeholder']));
-    $socialNotice = $missingSocial === count($socialLinks) ? 'Ссылки на сообщества пока не добавлены.' : ($missingSocial ? 'Не все ссылки на сообщества добавлены.' : '');
     $delivery = getSettings('delivery');
     $hours = openingHours();
     $products = [];
@@ -73,7 +72,9 @@ function landingData(): array
     if ($faq) $targets[] = '#faq';
     foreach ($categories as $category) $targets[] = '#' . $category['id'];
     $navigation = array_values(array_filter(listRecords('navigation', true), fn (array $row): bool => in_array($row['target'], $targets, true)));
-    $copy = array_column(listRecords('content'), 'text', 'id');
+    $contentRecords = visualContentRecords();
+    $copyHtml = array_map('visualRecordHtml', $contentRecords);
+    $copy = array_map('visualPlainText', $copyHtml);
     $images = array_column(listRecords('images'), null, 'id');
     $occasionPanels = [];
     foreach ([['coffee', 21, '#coffee'], ['tea', 24, '#tea'], ['meeting', 27, '#space']] as [$kind, $textIndex, $target]) {
@@ -86,5 +87,6 @@ function landingData(): array
     array_unshift($announcements, $hours['special'] ? $hours['today'] : $hours['weekly']);
     $announcements[] = deliveryDescription($delivery);
     $rating = getSettings('rating');
-    return compact('contacts', 'delivery', 'hours', 'products', 'categories', 'navigation', 'copy', 'images', 'faq', 'announcements', 'reviews', 'rating', 'occasionPanels', 'socialLinks', 'socialNotice');
+    $visualPreview = false;
+    return compact('contacts', 'delivery', 'hours', 'products', 'categories', 'navigation', 'copy', 'copyHtml', 'images', 'faq', 'announcements', 'reviews', 'rating', 'occasionPanels', 'socialLinks', 'visualPreview');
 }

@@ -1,0 +1,7 @@
+VK, Odnoklassniki, Telegram and WhatsApp paths in assets/icons/social.svg
+are from Simple Icons (https://github.com/simple-icons/simple-icons),
+distributed under CC0 1.0 Universal: https://creativecommons.org/publicdomain/zero/1.0/
+Source files: icons/vk.svg, icons/odnoklassniki.svg, icons/telegram.svg,
+icons/whatsapp.svg (retrieved 2026-11-28).
+
+RUTUBE pictogram is a project-local vector drawing.

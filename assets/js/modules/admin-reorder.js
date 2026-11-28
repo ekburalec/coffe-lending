@@ -13,6 +13,70 @@ function initList(list) {
     let active = null;
     let saving = false;
     let scrollFrame = null;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const motion = getComputedStyle(list);
+    const duration = () => reducedMotion.matches ? 0 : parseFloat(motion.getPropertyValue('--admin-drag-duration'));
+    const easing = motion.getPropertyValue('--ease-out').trim();
+    const animations = new Map();
+
+    function rearrange(change, stationary = active?.preview ? active.row : null) {
+        const before = new Map(rows().map((row) => [row, row.getBoundingClientRect()]));
+        animations.forEach((animation) => animation.cancel());
+        animations.clear();
+        change();
+        rows().forEach((row) => {
+            if (row === stationary) return;
+            const previous = before.get(row);
+            const current = row.getBoundingClientRect();
+            const offset = previous.top - current.top;
+            if (!offset || !duration()) return;
+            const animation = row.animate([
+                { transform: `translateY(${offset}px)` }, { transform: 'translateY(0)' },
+            ], { duration: duration(), easing });
+            animations.set(row, animation);
+            animation.onfinish = () => animations.delete(row);
+        });
+    }
+
+    function lift() {
+        const rectangle = active.row.getBoundingClientRect();
+        const preview = active.row.cloneNode(true);
+        // Копия только визуальная: без повторных ID, JS-хуков и доступных контролов.
+        [preview, ...preview.querySelectorAll('*')].forEach((element) => {
+            element.removeAttribute('id');
+            [...element.attributes].filter((attribute) => attribute.name.startsWith('data-'))
+                .forEach((attribute) => element.removeAttribute(attribute.name));
+        });
+        preview.setAttribute('aria-hidden', 'true');
+        preview.inert = true;
+        preview.classList.add('is-drag-preview');
+        list.appendChild(preview);
+        active.preview = preview;
+        active.rectangle = rectangle;
+        active.row.classList.add('is-placeholder');
+        list.classList.add('is-dragging');
+        const frame = {
+            left: `${rectangle.left}px`, top: `${rectangle.top}px`,
+            width: `${rectangle.width}px`, height: `${rectangle.height}px`,
+            transform: 'translate(0, 0)',
+        };
+        active.flight = preview.animate([frame, frame], { duration: 1, fill: 'both' });
+    }
+
+    function followPointer() {
+        if (!active.preview) {
+            if (Math.hypot(active.clientX - active.startX, active.clientY - active.startY) < 5) return;
+            lift();
+        }
+        const rectangle = active.rectangle;
+        const frame = {
+            left: `${rectangle.left}px`, top: `${rectangle.top}px`,
+            width: `${rectangle.width}px`, height: `${rectangle.height}px`,
+            transform: `translate(${active.clientX - active.startX}px, ${active.clientY - active.startY}px)`,
+        };
+        active.flight.effect.setKeyframes([frame, frame]);
+        movePointer();
+    }
 
     if (rows().length < 2) return;
     list.classList.add('is-sortable');
@@ -50,13 +114,18 @@ function initList(list) {
     }
 
     function movePointer() {
-        if (!active) return;
-        const target = document.elementFromPoint(active.clientX, active.clientY)?.closest('[data-reorder-id]');
-        if (!target || target === active.row || target.parentElement !== list) return;
-        const rectangle = target.getBoundingClientRect();
-        const reference = active.clientY < rectangle.top + rectangle.height / 2 ? target : target.nextSibling;
-        if (reference !== active.row && active.row.nextSibling !== reference) {
-            list.insertBefore(active.row, reference);
+        if (!active?.preview) return;
+        const bounds = list.getBoundingClientRect();
+        if (active.clientX < bounds.left || active.clientX > bounds.right || active.clientY < bounds.top || active.clientY > bounds.bottom) return;
+        // offsetTop не зависит от текущей FLIP-анимации соседей: нет дрожания порога.
+        const others = rows().filter((row) => row !== active.row);
+        const reference = others.find((row) => {
+            const top = row.offsetTop + bounds.top;
+            return active.clientY < top + row.offsetHeight / 2;
+        }) || null;
+        const current = rows();
+        if (current[current.indexOf(active.row) + 1] !== reference && !(reference === null && current[current.length - 1] === active.row)) {
+            rearrange(() => list.insertBefore(active.row, reference));
             preserveFocus();
         }
     }
@@ -65,8 +134,9 @@ function initList(list) {
         if (!active || active.pointerId === null) return;
         const edge = 72;
         const step = 12;
-        const direction = active.clientY < edge ? -1 : active.clientY > window.innerHeight - edge ? 1 : 0;
-        if (direction) { window.scrollBy(0, direction * step); movePointer(); }
+        const direction = !active.preview ? 0 : active.clientY < edge ? -1 : active.clientY > window.innerHeight - edge ? 1 : 0;
+        const strength = direction < 0 ? (edge - active.clientY) / edge : (active.clientY - window.innerHeight + edge) / edge;
+        if (direction) { window.scrollBy(0, direction * step * Math.min(1, strength)); followPointer(); }
         scrollFrame = requestAnimationFrame(scrollWhileDragging);
     }
 
@@ -74,12 +144,27 @@ function initList(list) {
         if (!active) return;
         const drag = active;
         active = null;
+        saving = true;
         cancelAnimationFrame(scrollFrame);
         if (drag.pointerId !== null && drag.handle.hasPointerCapture(drag.pointerId)) drag.handle.releasePointerCapture(drag.pointerId);
-        drag.row.classList.remove('is-dragging');
         drag.handle.setAttribute('aria-pressed', 'false');
+        if (!commit) rearrange(() => drag.original.forEach((row) => list.appendChild(row)), drag.row);
+        if (drag.preview) {
+            const from = drag.preview.getBoundingClientRect();
+            const to = drag.row.getBoundingClientRect();
+            const landing = drag.preview.animate([
+                { transform: `translate(${from.left - drag.rectangle.left}px, ${from.top - drag.rectangle.top}px)` },
+                { transform: `translate(${to.left - drag.rectangle.left}px, ${to.top - drag.rectangle.top}px)` },
+            ], { duration: duration(), easing, fill: 'forwards' });
+            await landing.finished;
+            drag.preview.remove();
+            drag.flight.cancel();
+            landing.cancel();
+        }
+        drag.row.classList.remove('is-dragging', 'is-placeholder');
+        list.classList.remove('is-dragging');
+        saving = false;
         if (!commit) {
-            drag.original.forEach((row) => list.appendChild(row));
             drag.handle.focus({ preventScroll: true });
             status.textContent = list.dataset.messageCancelled;
             return;
@@ -113,7 +198,7 @@ function initList(list) {
             status.textContent = list.dataset.messageSaved;
             notify(list.dataset.messageSaved, 'success');
         } catch (error) {
-            drag.original.forEach((row) => list.appendChild(row));
+            rearrange(() => drag.original.forEach((row) => list.appendChild(row)));
             status.textContent = error.message || list.dataset.messageError;
             notify(status.textContent, 'error');
             console.error(error);
@@ -132,13 +217,15 @@ function initList(list) {
         event.preventDefault();
         active.clientX = event.clientX;
         active.clientY = event.clientY;
+        active.startX = event.clientX;
+        active.startY = event.clientY;
         scrollFrame = requestAnimationFrame(scrollWhileDragging);
     });
     document.addEventListener('pointermove', (event) => {
         if (!active || event.pointerId !== active.pointerId) return;
         active.clientX = event.clientX;
         active.clientY = event.clientY;
-        movePointer();
+        followPointer();
     });
     document.addEventListener('pointerup', (event) => {
         if (active && event.pointerId === active.pointerId) {
@@ -153,6 +240,7 @@ function initList(list) {
         const handle = event.target.closest('[data-reorder-handle]');
         if (!handle || saving) return;
         if (event.key === 'Escape' && active) { event.preventDefault(); finish(false); return; }
+        if (active && active.pointerId !== null) return;
         if (event.key === 'Enter' || event.key === ' ') {
             event.preventDefault();
             if (active) finish(true);
@@ -165,7 +253,7 @@ function initList(list) {
         const index = current.indexOf(active.row);
         const targetIndex = event.key === 'Home' ? 0 : event.key === 'End' ? current.length - 1 : Math.max(0, Math.min(current.length - 1, index + (event.key === 'ArrowUp' ? -1 : 1)));
         if (targetIndex === index) return;
-        list.insertBefore(active.row, targetIndex < index ? current[targetIndex] : current[targetIndex].nextSibling);
+        rearrange(() => list.insertBefore(active.row, targetIndex < index ? current[targetIndex] : current[targetIndex].nextSibling));
         preserveFocus();
     });
 }

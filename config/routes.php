@@ -2,6 +2,20 @@
 declare(strict_types=1);
 
 return [
+    'GET /checkout' => 'checkoutController',
+    'POST /checkout' => 'checkoutController',
+    'GET /order-success' => 'orderSuccessController',
+    'GET /privacy' => 'privacyController',
+    'GET /admin/orders' => 'adminOrdersController',
+    'POST /admin/orders' => 'adminOrdersController',
+    'GET /admin/orders/count' => 'adminOrderCountController',
+    'POST /admin/orders/move' => 'adminOrderMoveController',
+    'GET /admin/smtp' => 'adminSmtpController',
+    'POST /admin/smtp' => 'adminSmtpController',
+    'GET /admin/visual-editor' => 'visualEditorController',
+    'GET /admin/visual-editor/preview' => 'visualPreviewController',
+    'GET /admin/visual-editor/session' => 'visualSessionController',
+    'POST /admin/visual-editor/save' => 'saveVisualEditorController',
     'GET /admin/password' => 'passwordController',
     'POST /admin/password' => 'passwordController',
     'POST /admin/records/reorder' => 'reorderRecordsController',

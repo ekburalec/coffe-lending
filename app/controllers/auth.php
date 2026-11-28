@@ -4,7 +4,7 @@ declare(strict_types=1);
 function loginController(): void
 {
     startAdminSession();
-    if (isset($_SESSION['admin'])) redirect('/admin');
+    if (isset($_SESSION['admin'])) redirect('/');
     $error = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $key = hash('sha256', $_SERVER['REMOTE_ADDR'] ?? 'unknown');
@@ -17,14 +17,14 @@ function loginController(): void
         } else {
             $admin = adminAccount();
             $password = $_POST['password'] ?? '';
-            $valid = is_string($password) && strlen($password) <= 72 && !str_contains($password, "\0") && password_verify($password, $admin['password_hash'] ?? '$2y$10$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG');
+            $valid = verifyAdminPassword($password, $admin['password_hash'] ?? '$2y$10$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG');
             if ($valid && hash_equals($admin['username'], postText('username'))) {
                 clearLoginFailures($key);
                 session_regenerate_id(true);
                 $_SESSION['admin'] = $admin['id'];
                 $_SESSION['password_version'] = hash('sha256', $admin['password_hash']);
                 $_SESSION['csrf'] = bin2hex(random_bytes(32));
-                redirect('/admin');
+                redirect('/');
             }
             recordLoginFailure($key);
             $error = 'Не удалось войти. Проверьте логин и пароль.';
@@ -68,5 +68,5 @@ function passwordController(): void
             http_response_code($status);
         }
     }
-    adminPage('Пароль администратора', 'password', ['errors' => $errors, 'changed' => isset($_GET['changed'])]);
+    adminPage('Пароль', 'password', ['errors' => $errors, 'changed' => isset($_GET['changed']), 'username' => adminAccount()['username'], 'passwordHint' => newPasswordHint(), 'passwordMaximum' => passwordPolicy()['maximum_length'], 'passwordBytes' => newPasswordByteLimit(), 'passwordBreachHint' => passwordPolicy()['check_pwned'] ? 'Новые пароли проверяются по базе утечек HIBP. Сервис получает только часть хеша.' : 'Проверяется локальный список слабых паролей. Онлайн-проверка утечек отключена.']);
 }

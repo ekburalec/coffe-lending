@@ -4,7 +4,7 @@ async (page) => {
     page.on('pageerror', error => errors.push(error.message));
     page.on('response', response => { if (response.status() >= 400) errors.push(response.url()); });
     await page.goto(base + '/');
-    for (const [americano, cappuccino, expected] of [[1, 0, 340], [1, 3, 1000], [2, 3, 1190]]) {
+    for (const [americano, cappuccino, expected] of [[1, 0, 390], [1, 3, 1000], [2, 3, 1190]]) {
         await page.reload();
         for (let n = 0; n < americano; n++) await page.locator('[data-order-add="americano"]').click();
         for (let n = 0; n < cappuccino; n++) await page.locator('[data-order-add="cappuccino"]').click();

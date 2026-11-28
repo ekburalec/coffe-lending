@@ -14,6 +14,7 @@ function socialSettings(?array $contacts = null): array
     foreach (socialNetworkDefaults() as $key => $network) {
         $values[$key . '_name'] = $saved[$key . '_name'] ?? $network['name'];
         $values[$key . '_label'] = $saved[$key . '_label'] ?? $network['label'];
+        $values[$key . '_visible'] = $saved[$key . '_visible'] ?? 1;
         // Старые URL сохраняются до первого сохранения отдельного раздела.
         $values[$key . '_url'] = $saved[$key . '_url'] ?? $contacts[$key . '_url'] ?? '';
     }

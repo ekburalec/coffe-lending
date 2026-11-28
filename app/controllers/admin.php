@@ -15,6 +15,7 @@ function adminEditorController(): void
     $singleton = $section['singleton'] ?? false;
     $id = is_string($_GET['id'] ?? null) ? $_GET['id'] : '';
     $record = $singleton ? getSettings($key) : ($id ? findRecord($key, $id) : null);
+    if ($key === 'content' && $id !== '' && !$record) $record = visualContentRecords()[$id] ?? null;
     if ($key === 'social') $record = socialSettings();
     if ($id && !$record) {
         http_response_code(404);
@@ -34,10 +35,17 @@ function adminEditorController(): void
     if (($section['fixed'] ?? false) && !$singleton && isset($_GET['new'])) redirect('/admin/edit?section=' . $key);
     $errors = [];
     $notice = isset($_GET['saved']) ? 'Изменения сохранены.' : '';
+    $formattedContent = $key === 'content' && ($record['format'] ?? '') === 'inline';
+    $recordVersion = $record && in_array($key, ['content', 'images'], true) ? visualRecordVersion($record) : '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!validCsrf()) {
             http_response_code(403);
             $errors['_form'] = 'Форма устарела. Обновите страницу.';
+        } elseif ($recordVersion !== '' && isset($_POST['record_version']) && !hash_equals($recordVersion, postText('record_version'))) {
+            http_response_code(409);
+            $errors['_form'] = 'Текст или фото уже изменены в другой вкладке. Обновите страницу перед сохранением.';
+        } elseif ($formattedContent) {
+            $errors['_form'] = 'Этот текст содержит выделение. Откройте визуальный редактор, чтобы сохранить оформление.';
         } elseif (postText('action') === 'toggle_visibility') {
             if (!$record || !in_array($key, ['reviews', 'faq'], true)) $errors['_form'] = 'Эту запись нельзя скрыть.';
             else {
@@ -50,6 +58,7 @@ function adminEditorController(): void
             if (!$errors) redirect('/admin/edit?section=' . $key . '&saved=1');
         } else {
             [$data, $errors] = validateAdminFields($definitions, $record ?? []);
+            if ($key === 'content') $data['format'] = 'text';
             $errors = array_merge($errors, validateAdminRecord($key, $data));
             if (!$errors) {
                 foreach ($definitions as $name => $field) {
@@ -76,7 +85,7 @@ function adminEditorController(): void
             }
             $record = $data;
         }
-        if ($errors && http_response_code() !== 403) http_response_code(422);
+        if ($errors && !in_array(http_response_code(), [403, 409], true)) http_response_code(422);
     }
     $defaults = [];
     if (!$record && in_array($key, ['reviews', 'faq'], true)) {
@@ -85,13 +94,13 @@ function adminEditorController(): void
     }
     $fields = adminFields($section['fields'], $record ?? $defaults, $errors);
     $socialGroups = [];
-    if ($key === 'social') foreach (array_chunk($fields, 3) as $groupFields) $socialGroups[] = ['name' => $groupFields[0]['value'] ?: $groupFields[0]['default'], 'fields' => $groupFields];
+    if ($key === 'social') foreach (array_chunk($fields, 4) as $groupFields) $socialGroups[] = ['name' => $groupFields[0]['value'] ?: $groupFields[0]['default'], 'fields' => $groupFields];
     $seoTextFields = $key === 'seo' ? array_values(array_filter($fields, fn (array $field): bool => !in_array($field['name'], ['image', 'image_alt'], true))) : [];
     $seoImageFields = $key === 'seo' ? array_values(array_filter($fields, fn (array $field): bool => $field['name'] === 'image_alt')) : [];
     $seoPreview = $key === 'seo' ? seoPreviewData($record) : [];
     $ratingFields = $key === 'reviews' ? adminFields($sections['rating']['fields'], getSettings('rating'), [], 'rating') : [];
     $rows = [];
-    if (!$singleton) foreach (listRecords($key) as $row) {
+    if (!$singleton) foreach ($key === 'content' ? visualContentRecords() : listRecords($key) as $row) {
         $row['caption'] = $row['name'] ?? $row['question'] ?? $row['label'] ?? $row['text'] ?? $row['date'] ?? $row['id'];
         $row['preview'] = $key === 'faq' ? faqAnswer($row, getSettings('delivery'), openingHours()) : ($row['text'] ?? '');
         $row['preview'] = mb_strimwidth($row['preview'], 0, 340, '…', 'UTF-8');
@@ -100,7 +109,8 @@ function adminEditorController(): void
     $listOrderVersion = in_array($key, ['navigation', 'faq'], true) ? productOrderVersion(array_column($rows, 'id')) : '';
     $productGroups = $key === 'products' && !$editing ? productOrderGroups($rows) : [];
     $recordCaption = $record['name'] ?? $record['question'] ?? $record['label'] ?? $record['date'] ?? $id;
-    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields', 'seoTextFields', 'seoImageFields', 'seoPreview', 'listOrderVersion', 'socialGroups'));
+    $formattedHtml = $formattedContent ? visualRecordHtml($record) : '';
+    adminPage($section['title'], 'editor', compact('section', 'key', 'id', 'fields', 'rows', 'editing', 'errors', 'notice', 'singleton', 'recordCaption', 'productGroups', 'ratingFields', 'seoTextFields', 'seoImageFields', 'seoPreview', 'listOrderVersion', 'socialGroups', 'recordVersion', 'formattedContent', 'formattedHtml'));
 }
 
 function deleteAdminRecord(string $kind, string $id, array $section): array

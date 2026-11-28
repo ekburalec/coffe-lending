@@ -3,9 +3,9 @@ async page => {
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(base + '/admin');
-    await page.getByRole('navigation', {name: 'Разделы управления'}).getByRole('link', {name: 'Пароль администратора', exact: true}).click();
+    await page.getByRole('navigation', {name: 'Разделы управления'}).getByRole('link', {name: 'Пароль', exact: true}).click();
     if (new URL(page.url()).pathname !== '/admin/password') throw new Error('Password menu route');
-    if (await page.locator('.admin__nav-link[aria-current="page"]').innerText() !== 'Пароль администратора') throw new Error('Active password menu');
+    if (await page.locator('.admin__nav-link[aria-current="page"]').innerText() !== 'Пароль') throw new Error('Active password menu');
     const current = page.getByLabel('Текущий пароль', {exact: true});
     const next = page.getByLabel('Новый пароль', {exact: true});
     const confirmation = page.getByLabel('Повторите новый пароль', {exact: true});

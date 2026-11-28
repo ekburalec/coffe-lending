@@ -1,0 +1,13 @@
+EFF Long Wordlist (2016)
+Author: Joseph Bonneau / Electronic Frontier Foundation (EFF)
+Source: https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt
+Project: https://www.eff.org/dice
+
+Distributed under Creative Commons Attribution 4.0 International (CC BY 4.0),
+as stated by EFF's copyright policy: https://www.eff.org/copyright
+License: https://creativecommons.org/licenses/by/4.0/
+
+Adaptation in assets/js/modules/password-words.js:
+Dice codes removed and data wrapped in a JavaScript string array.
+All 7776 words and their original order preserved, including four hyphenated words.
+Retrieved 28 November 2026. No endorsement by EFF is implied.

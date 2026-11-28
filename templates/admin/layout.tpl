@@ -16,10 +16,13 @@
 <div class="admin__workspace <?= !$sidebar ? 'admin__workspace--login' : '' ?>">
 <?php if ($sidebar): ?>
 <aside class="admin__sidebar"><nav aria-label="Разделы управления"><ul class="admin__nav-list">
-<?php foreach ($sidebar as $group): ?><li><a class="admin__nav-link" href="<?= e($group['href']) ?>" <?= $group['active'] ? 'aria-current="page"' : '' ?>><?= e($group['title']) ?></a></li><?php endforeach; ?>
+<?php foreach ($sidebar as $group): if (!empty($group['utility'])) continue; ?><li><a class="admin__nav-link" href="<?= e($group['href']) ?>" <?= $group['active'] ? 'aria-current="page"' : '' ?>><?= e($group['title']) ?></a></li><?php endforeach; ?>
+</ul><ul class="admin__nav-list admin__nav-list--utility" aria-label="Управление сайтом">
+<?php foreach ($sidebar as $group): if (empty($group['utility'])) continue; ?><li class="admin__nav-item"><a class="admin__nav-link" href="<?= e($group['href']) ?>" <?= $group['active'] ? 'aria-current="page"' : '' ?>><?= e($group['title']) ?></a></li><?php endforeach; ?>
 </ul></nav></aside>
 <?php endif; ?>
 <main class="admin__main <?= $sectionPanels ? 'admin__main--sections' : '' ?>" id="admin-main" tabindex="-1"><?php if (!$sectionPanels): ?><h1 class="admin__title"><?= e($title) ?></h1><?php endif; ?>
+<?php if ($sidebar): ?><p class="orders__counter" data-orders-count data-count="<?= e(orderNewCount()) ?>" role="status">Новых заказов: <?= e(orderNewCount()) ?></p><?php endif; ?>
 <?php if ($tabs): ?><nav class="admin__tabs" aria-label="Подразделы"><?php foreach ($tabs as $tab): ?><a class="admin__tab" href="<?= e($tab['href']) ?>" <?= $tab['active'] ? 'aria-current="page"' : '' ?>><?= e($tab['title']) ?></a><?php endforeach; ?></nav><?php endif; ?>
 <?php require __DIR__ . '/' . $view . '.tpl'; ?>
 </main>

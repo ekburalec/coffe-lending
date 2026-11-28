@@ -115,5 +115,20 @@ export function initOrderPreview() {
     controls.hidden = false;
     document.addEventListener('click', handleOrderClick);
     receivingOptions.forEach((option) => option.addEventListener('change', render));
+    const checkout = root.querySelector('[data-order-checkout]');
+    if (checkout) checkout.addEventListener('submit', () => {
+        const inputs = checkout.querySelector('[data-checkout-inputs]');
+        inputs.replaceChildren();
+        products.forEach((product, id) => {
+            if (!product.quantity) return;
+            const input = document.createElement('input');
+            input.type = 'hidden'; input.name = `quantities[${id}]`; input.value = product.quantity;
+            inputs.append(input);
+        });
+        const receiving = document.createElement('input');
+        receiving.type = 'hidden'; receiving.name = 'receiving';
+        receiving.value = receivingOptions.find((option) => option.checked)?.value || 'pickup';
+        inputs.append(receiving);
+    });
     render();
 }

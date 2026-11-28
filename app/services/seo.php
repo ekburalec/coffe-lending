@@ -42,6 +42,7 @@ function landingSeo(array $data): array
     }
     $menu = ['@type' => 'Menu', 'name' => 'Меню', 'hasMenuSection' => []];
     foreach ($data['categories'] as $category) {
+        if (!$category['products']) continue;
         $section = ['@type' => 'MenuSection', 'name' => $category['name'], 'hasMenuItem' => []];
         foreach ($category['products'] as $product) $section['hasMenuItem'][] = [
             '@type' => 'MenuItem', 'name' => $product['name'], 'description' => $product['description'],

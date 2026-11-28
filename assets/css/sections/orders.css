@@ -1,0 +1,12 @@
+.orders__filters { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-4); margin-block: var(--space-5); }
+.orders__filters label { min-width: 0; flex: 1 1 var(--orders-filter-width); }
+.orders__list { list-style: none; padding: 0; display: grid; gap: var(--space-4); }
+.orders__card { display: grid; gap: var(--space-2); padding: var(--space-4); border: 1px solid var(--orders-border); border-radius: var(--radius-sm); background: var(--orders-card-bg); overflow-wrap: anywhere; }
+.orders__card[draggable="true"] { cursor: grab; }
+.orders__board { display: flex; gap: var(--space-4); overflow-x: auto; padding-bottom: var(--space-4); }
+.orders__column { flex: 0 0 var(--orders-column-width); display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-3); background: var(--orders-column-bg); }
+.orders__column h2 { font-size: var(--text-lead); }
+.orders__panel { margin-block: var(--space-5); padding: var(--space-4); border: 1px solid var(--orders-border); }
+.orders__counter { font-variant-numeric: tabular-nums; }
+@media (max-width: 639px) { .orders__board { flex-direction: column; } .orders__column { flex-basis: auto; } }
+@media print { .orders__screen, .admin__header, .admin__sidebar { display: none; } .admin__workspace { display: block; } }

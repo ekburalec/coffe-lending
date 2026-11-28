@@ -1,3 +1,5 @@
+> Обновление 28.11.2026: корзина передаёт состав в /checkout; дальнейший сценарий описан в docs/product/logic/orders.md. Описания отсутствия отправки ниже относятся к предыдущей версии.
+
 # Боковая корзина
 
 Файл: assets/js/modules/order-drawer.js, initOrderDrawer() через main.js.

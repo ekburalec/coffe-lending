@@ -13,6 +13,8 @@
 @import url('./blocks/notify.css');
 @import url('./blocks/announcement-bar.css');
 @import url('./blocks/password-control.css');
+@import url('./blocks/password-strength.css');
+@import url('./blocks/visual-editor.css');
 @import url('./sections/site-header.css');
 @import url('./sections/hero.css');
 @import url('./sections/menu.css');
@@ -24,4 +26,6 @@
 @import url('./sections/order-preview.css');
 @import url('./sections/site-footer.css');
 @import url('./sections/admin.css');
+@import url('./sections/checkout.css');
+@import url('./sections/orders.css');
 @import url('./utils/sr-only.css');

@@ -9,7 +9,7 @@ function buildPhpDist(string $root): void
     try {
         $env = array_merge(getenv(), ['APP_DATA_DIR' => $preview, 'APP_UPLOAD_DIR' => $preview . '/media']);
         runBuildProcess([PHP_BINARY, $root . '/bin/migrate.php'], $root, $env);
-        $html = runBuildProcess([PHP_BINARY, '-r', 'require "app/core/bootstrap.php"; $data = landingData(); $data["seo"] = landingSeo($data); render("landing", $data);'], $root, $env);
+        $html = runBuildProcess([PHP_BINARY, '-r', 'require "app/core/bootstrap.php"; $data = landingData(); $data["orderCsrf"] = "build-preview"; $data["seo"] = landingSeo($data); render("landing", $data);'], $root, $env);
         $warnings = checkPageSeo($root, 'index.php', $html);
         if ($warnings) throw new RuntimeException(implode("\n", $warnings));
         $dist = $root . '/dist';
@@ -25,6 +25,7 @@ function buildPhpDist(string $root): void
         }
         // HTTP-маршруты не являются статическими файлами.
         $html = preg_replace('~<link\b[^>]*href="/llms\.txt"[^>]*>~', '', $html);
+        $html = str_replace('href="/checkout"', 'href="#menu"', $html);
         collectAssetsFromHtml($root, 'index.php', $html, $assets);
         // При заданном домене OG может быть абсолютным; исходное изображение всё равно нужно.
         $seed = json_decode(file_get_contents($root . '/config/seed.json'), true, 512, JSON_THROW_ON_ERROR);
@@ -47,7 +48,7 @@ function buildPhpDist(string $root): void
                 writeDistFile($dist, $relative, file_get_contents($file->getPathname()));
             }
         }
-        foreach (['index.php', 'router.php', 'manifest.webmanifest', 'bin/migrate.php', 'bin/create-admin.php', 'bin/doctor.php', 'bin/seed-demo-reviews.php', 'config/app.php', 'config/admin.php', 'config/admin-navigation.php', 'config/routes.php', 'config/deploy.php', 'config/schema.sql', 'config/seed.json', 'config/demo-reviews.json'] as $relative) {
+        foreach (['index.php', 'router.php', 'manifest.webmanifest', 'licenses/eff-wordlist-license.txt', 'bin/migrate.php', 'bin/send-order-mail.php', 'bin/cleanup-orders.php', 'bin/create-admin.php', 'bin/doctor.php', 'bin/seed-demo-reviews.php', 'config/app.php', 'config/passwords.php', 'config/admin.php', 'config/visual-editor.php', 'config/admin-navigation.php', 'config/routes.php', 'config/deploy.php', 'config/schema.sql', 'config/orders-schema.sql', 'config/seed.json', 'config/demo-reviews.json'] as $relative) {
             writeDistFile($dist, $relative, file_get_contents($root . '/' . $relative));
         }
         writeDistFile($dist, 'config/assets.php', "<?php\nreturn " . var_export($versions, true) . ";\n");

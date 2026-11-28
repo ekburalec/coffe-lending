@@ -6,9 +6,20 @@ foreach (socialNetworkDefaults() as $key => $network) {
     $socialFields[$key . '_name'] = ['label' => 'Полное название', 'required' => true, 'max' => 80, 'default' => $network['name']];
     $socialFields[$key . '_label'] = ['label' => 'Подпись в круге (две латинские буквы)', 'required' => true, 'max' => 2, 'default' => $network['label']];
     $socialFields[$key . '_url'] = ['label' => 'URL (пусто — заглушка)', 'type' => 'url', 'max' => 2000];
+    $socialFields[$key . '_visible'] = ['label' => 'Показывать на сайте', 'type' => 'checkbox', 'wide' => true, 'default' => 1];
 }
 
 return [
+    'orders' => ['title' => 'Приём заказов', 'singleton' => true, 'fields' => [
+        'enabled' => ['label' => 'Принимать заказы (после проверки реквизитов и условий)', 'type' => 'checkbox'],
+        'pause_message' => ['label' => 'Сообщение при паузе', 'default' => 'Приём заказов временно приостановлен.', 'required' => true, 'max' => 300],
+        'minimum' => ['label' => 'Минимальная сумма товаров, ₽', 'type' => 'number', 'min' => 0, 'max' => 1000000, 'default' => 0, 'required' => true],
+        'cutoff' => ['label' => 'Последний приём за минут до закрытия', 'type' => 'number', 'min' => 0, 'max' => 180, 'default' => 30, 'required' => true],
+        'horizon' => ['label' => 'Выбор даты вперёд, дней', 'type' => 'number', 'min' => 1, 'max' => 90, 'default' => 30, 'required' => true],
+        'company' => ['label' => 'Полное наименование ИП / ООО', 'max' => 300],
+        'inn' => ['label' => 'ИНН', 'max' => 12],
+        'privacy_email' => ['label' => 'E-mail по вопросам персональных данных', 'max' => 254],
+    ]],
     'social' => ['title' => 'Социальные сети', 'singleton' => true, 'fields' => $socialFields],
     'categories' => ['title' => 'Категории меню', 'fields' => [
         'name' => ['label' => 'Название', 'required' => true, 'max' => 120],
@@ -16,9 +27,10 @@ return [
     'products' => ['title' => 'Товары', 'fields' => [
         'name' => ['label' => 'Название', 'required' => true, 'max' => 180],
         'category' => ['label' => 'Категория', 'type' => 'select', 'required' => true],
-        'description' => ['label' => 'Описание вкуса', 'type' => 'textarea', 'required' => true, 'max' => 2000],
+        'order_type' => ['label' => 'Тип для оформления', 'type' => 'select', 'default' => 'prepared', 'options' => ['prepared' => 'Готовый напиток / десерт', 'beans' => 'Кофе в зёрнах', 'merch' => 'Мерч']],
+        'description' => ['label' => 'Описание товара', 'type' => 'textarea', 'required' => true, 'max' => 2000],
         'ingredients' => ['label' => 'Состав', 'type' => 'textarea', 'required' => true, 'max' => 2000],
-        'portion' => ['label' => 'Порция (например, 300 мл)', 'required' => true, 'max' => 80],
+        'portion' => ['label' => 'Объём, вес или размер (например, 300 мл)', 'required' => true, 'max' => 80],
         'price' => ['label' => 'Цена, ₽', 'type' => 'number', 'required' => true, 'min' => 1, 'max' => 1000000],
         'available' => ['label' => 'В наличии', 'type' => 'checkbox', 'default' => 1],
         'image' => ['label' => 'Фотография', 'type' => 'image', 'required' => true],

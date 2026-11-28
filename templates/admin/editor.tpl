@@ -1,14 +1,19 @@
-<?php if (!in_array($key, ['reviews', 'faq'], true) || $editing): ?><div class="admin__actions"><?php if (!$singleton): ?><a href="/admin/edit?section=<?= e($key) ?>">Список</a><?php if (!($section['fixed'] ?? false)): ?><a class="admin__button" href="/admin/edit?section=<?= e($key) ?>&amp;new=1">Добавить</a><?php endif; ?><?php endif; ?></div><?php endif; ?>
+<?php if (!in_array($key, ['reviews', 'faq'], true) || $editing): ?><div class="admin__actions"><?php if (!$singleton): ?><a class="admin__list-link" href="/admin/edit?section=<?= e($key) ?>">Список</a><?php if (!($section['fixed'] ?? false)): ?><a class="admin__button admin__button--compact" href="/admin/edit?section=<?= e($key) ?>&amp;new=1">Добавить</a><?php endif; ?><?php endif; ?></div><?php endif; ?>
 <?php if ($notice): ?><p class="admin__success" role="status"><?= e($notice) ?></p><?php endif; ?>
 <?php if ($errors): ?><div class="admin__message" role="alert" id="form-errors"><p>Изменения не сохранены:</p><ul><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
 <?php if ($key === 'seo'): ?>
 <?php require __DIR__ . '/seo.tpl'; ?>
 <?php elseif ($key === 'social'): ?>
 <?php require __DIR__ . '/social.tpl'; ?>
+<?php elseif ($formattedContent): ?>
+<p>Этот текст содержит выделение. Изменяйте его на странице, чтобы сохранить оформление.</p>
+<div class="admin__success"><?= $formattedHtml ?></div>
+<a class="admin__button" href="/#<?= e($id) ?>">Изменить на странице</a>
 <?php elseif ($editing): ?>
 <?php if ($id): ?><h2><?= e($recordCaption) ?></h2><?php endif; ?>
 <form class="admin__form admin__form--fields" method="post" enctype="multipart/form-data" autocomplete="off">
 <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+<?php if ($recordVersion !== ''): ?><input type="hidden" name="record_version" value="<?= e($recordVersion) ?>"><?php endif; ?>
 <?php render('admin/fields', ['fields' => $fields]); ?>
 <button class="admin__button admin__button--submit" type="submit" name="action" value="save">Сохранить</button>
 </form>

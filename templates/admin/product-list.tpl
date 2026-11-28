@@ -3,7 +3,7 @@
 <?php foreach ($productGroups as $group): ?>
 <section class="admin__category" id="category-<?= e($group['id']) ?>" aria-labelledby="category-title-<?= e($group['id']) ?>">
     <h2 class="admin__category-title" id="category-title-<?= e($group['id']) ?>"><?= e($group['name']) ?><?php if (!$group['visible']): ?> <span class="admin__badge">Категория скрыта</span><?php endif; ?></h2>
-    <p class="admin__hint" data-reorder-status aria-live="polite" aria-atomic="true"></p>
+    <p class="admin__hint admin__reorder-status" data-reorder-status aria-live="polite" aria-atomic="true"></p>
     <ul class="admin__list" data-reorder-list data-reorder-category="<?= e($group['id']) ?>" data-reorder-version="<?= e($group['version']) ?>" data-reorder-csrf="<?= e($csrf) ?>" data-reorder-url="/admin/products/reorder" data-message-moving="{название}: позиция {позиция} из {всего}." data-message-saving="Сохраняем порядок…" data-message-saved="Порядок товаров сохранён." data-message-cancelled="Перемещение отменено." data-message-error="Порядок не сохранён. Проверьте соединение и обновите страницу.">
     <?php foreach ($group['rows'] as $row): ?>
         <li class="admin__row admin__row--product" data-reorder-id="<?= e($row['id']) ?>" data-reorder-name="<?= e($row['name']) ?>">

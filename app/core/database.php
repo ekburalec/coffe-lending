@@ -14,7 +14,7 @@ function database(): PDO
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ]);
-    $pdo->exec('PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;');
+    $pdo->exec('PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000; PRAGMA secure_delete = ON;');
     $appDatabase = $pdo;
     return $pdo;
 }

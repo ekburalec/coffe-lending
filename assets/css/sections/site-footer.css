@@ -47,5 +47,5 @@
 .site-footer__social-link { display: inline-flex; align-items: center; justify-content: center; width: var(--control-size); height: var(--control-size); padding: 0; border: var(--line-width) solid var(--site-footer-border); border-radius: var(--radius-pill); color: var(--site-footer-link-color); font-size: var(--text-small); font-weight: var(--weight-semibold); text-decoration: none; transition: background-color var(--transition-fast), color var(--transition-fast); }
 .site-footer__social-link:hover, .site-footer__social-link:active { background: var(--site-footer-link-hover-bg); color: var(--site-footer-link-hover-color); }
 .site-footer__social-link:focus-visible { outline: var(--focus-width) solid var(--site-footer-link-hover-bg); outline-offset: var(--focus-offset); }
-.site-footer__social-note { margin-top: var(--space-4); font-size: var(--text-small); max-width: var(--lead-measure); }
+.site-footer__social-icon { display: block; width: var(--site-footer-social-icon-size); height: var(--site-footer-social-icon-size); fill: currentColor; flex-shrink: 0; }
 @media (prefers-reduced-motion: reduce) { .site-footer__social-link { transition: none; } }

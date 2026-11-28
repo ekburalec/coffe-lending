@@ -28,7 +28,7 @@ function validateAdminFields(array $fields, array $previous, ?array $input = nul
     $data = $previous;
     $errors = [];
     foreach ($fields as $name => $field) {
-        $raw = $input[$name] ?? '';
+        $raw = $input[$name] ?? ($name === 'order_type' ? 'prepared' : '');
         $value = is_scalar($raw) ? trim(str_replace(["\r\n", "\r"], "\n", (string) $raw)) : '';
         if (!is_scalar($raw)) $errors[$name] = 'Некорректное значение.';
         $type = $field['type'] ?? 'text';
@@ -53,6 +53,9 @@ function validateAdminRecord(string $kind, array $data, ?array $collections = nu
     $errors = [];
     if ($kind === 'social') foreach (socialNetworkDefaults() as $key => $network) {
         if (!preg_match('/^[a-zA-Z]{2}$/D', $data[$key . '_label'] ?? '')) $errors[$key . '_label'] = 'Укажите ровно две латинские буквы.';
+    }
+    if ($kind === 'orders' && !empty($data['enabled'])) {
+        if (empty($data['company']) || !preg_match('/^(?:[0-9]{10}|[0-9]{12})$/D', $data['inn'] ?? '') || !filter_var($data['privacy_email'] ?? '', FILTER_VALIDATE_EMAIL)) $errors['company'] = 'До включения приёма заполните наименование, ИНН и e-mail для политики.';
     }
     if ($kind === 'reviews') {
         if (empty($data['is_demo']) && empty($data['source'])) $errors['source'] = 'Для реального отзыва укажите ссылку на источник.';

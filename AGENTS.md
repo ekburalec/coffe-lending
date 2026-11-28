@@ -21,7 +21,7 @@
 противоречит документации — остановись и спроси пользователя, а не «улучшай» правила молча.
 
 Серверная часть реализована по [docs/specs/php.md](docs/specs/php.md): один
-администратор, управление контентом, SQLite. Заказ и оплата в неё не входят.
+администратор, управление контентом, SQLite. По решению пользователя добавляется фаза заказов по ORDER-IMPLEMENTATION-PLAN.md; онлайн-оплата исключена.
 
 ### Если проект только что создан из шаблона
 
@@ -232,17 +232,22 @@ dist/                    ← результат сборки, не в git, ру�
 
 | Документ | Что описывает |
 |----------|---------------|
+| [docs/product/logic/orders.md](docs/product/logic/orders.md) | Оформление, доставка, статусы, правки и хранение заказов |
+| [docs/product/logic/visual-editor.md](docs/product/logic/visual-editor.md) | Разрешённые тексты/фото, атомарная публикация, отмена и конфликты |
 | [docs/product/logic/admin-publishing.md](docs/product/logic/admin-publishing.md) | Сохранение данных и согласованное отображение на лендинге |
-| [docs/product/logic/admin-password.md](docs/product/logic/admin-password.md) | Смена пароля администратора и локальное предложение нового |
+| [docs/product/logic/admin-password.md](docs/product/logic/admin-password.md) | Смена пароля, генерация, длина, группы, постоянные исключения и оценка надёжности |
 | [docs/product/logic/product-order.md](docs/product/logic/product-order.md) | Порядок товаров, навигации и FAQ; конфликты сохранения |
 | [docs/product/logic/occasions.md](docs/product/logic/occasions.md) | Подбор напитка для сценария посещения |
 | [docs/product/logic/reviews.md](docs/product/logic/reviews.md) | Видимость отзывов/FAQ, рейтинг и публичные блоки |
-| [docs/product/logic/order-preview.md](docs/product/logic/order-preview.md) | Выбор позиций, количество и расчёт самовывоза/доставки без отправки и оплаты |
+| [docs/product/logic/order-preview.md](docs/product/logic/order-preview.md) | Выбор позиций и расчёт перед серверным оформлением, без онлайн-оплаты |
 
 ### Модули (`docs/modules/`)
 
 | Документ | Что описывает |
 |----------|---------------|
+| [docs/modules/orders.md](docs/modules/orders.md) | Оформление и серверные заказы |
+| [docs/modules/admin-orders.md](docs/modules/admin-orders.md) | Список, карточка и канбан заказов |
+| [docs/modules/visual-editor.md](docs/modules/visual-editor.md) | Верхняя панель на сайте после входа, inline-ввод, форматирование, фото/alt и просмотр |
 | [docs/modules/web-app.md](docs/modules/web-app.md) | Веб-приложение: манифест и иконки для «На экран Домой» |
 | [docs/modules/build-dist.md](docs/modules/build-dist.md) | PHP-дистрибутив, версии ресурсов и приватные данные |
 | [docs/modules/order-preview.md](docs/modules/order-preview.md) | Локальный состав заказа, пересчёт сумм, доступность и состояние без JS |
@@ -253,11 +258,14 @@ dist/                    ← результат сборки, не в git, ру�
 | [docs/design/og-image/README.md](docs/design/og-image/README.md) | Картинка превью ссылки `og:image` 1200×630: шаблон и сборка `bin/build-og-image.php` |
 | [docs/modules/php-app.md](docs/modules/php-app.md) | PHP-приложение: запуск, роутер и приватные данные |
 | [docs/modules/admin-auth.md](docs/modules/admin-auth.md) | Авторизация, генератор/смена пароля, отзыв сессий и CSRF |
-| [docs/modules/admin-auth.md](docs/modules/admin-auth.md#генератор-и-показ-паролей) | admin-password-controls.js: генерация, копирование и показ пароля |
+| [docs/modules/admin-auth.md](docs/modules/admin-auth.md#политика-новых-паролей) | passwords.php: Unicode-длина, локальный список и совместимость Argon2id/bcrypt |
+| [docs/modules/admin-auth.md](docs/modules/admin-auth.md#генератор-и-показ-паролей) | admin-password-controls.js: равномерная генерация, настройки, копирование и показ |
+| [docs/modules/admin-auth.md](docs/modules/admin-auth.md#генератор-и-показ-паролей) | password-words.js: локальный словарь EFF и генерация парольных фраз |
+| [docs/modules/admin-auth.md](docs/modules/admin-auth.md#индикатор-надёжности) | admin-password-strength.js: локальная оценка, четыре сегмента и текущая палитра |
 | [docs/modules/admin-reorder.md](docs/modules/admin-reorder.md) | Перетаскивание товаров, навигации и FAQ; сохранение порядка |
 | [docs/modules/admin-content.md](docs/modules/admin-content.md) | Редакторы и валидация данных админки |
 | [docs/modules/images.md](docs/modules/images.md) | Проверка загрузок и WebP 1x/2x |
-| [docs/modules/social-links.md](docs/modules/social-links.md) | Отдельный редактор соцсетей: названия, подписи и URL; заглушки |
+| [docs/modules/social-links.md](docs/modules/social-links.md) | Редактор соцсетей: названия, URL и видимость; SVG-иконки и заглушки |
 | [docs/modules/occasions.md](docs/modules/occasions.md) | Выбор повода, доступные вкладки и рекомендации из каталога |
 | [docs/modules/reviews.md](docs/modules/reviews.md) | Слайдер, фото и демо-отзывы, управление отзывами и FAQ |
 | [docs/modules/admin-character-count.md](docs/modules/admin-character-count.md) | Подсказки и счётчики символов SEO-форм |
@@ -270,7 +278,9 @@ dist/                    ← результат сборки, не в git, ру�
 
 | Документ | Что описывает |
 |----------|---------------|
+| [docs/integrations/smtp.md](docs/integrations/smtp.md) | Почта заказов, SMTP, Mailpit и очередь |
 | [docs/integrations/github-pages.md](docs/integrations/github-pages.md) | Ручная сборка PHP-артефакта GitHub Actions без публикации |
+| [docs/integrations/pwned-passwords.md](docs/integrations/pwned-passwords.md) | Необязательная серверная проверка HIBP по префиксу хеша, padding и отказ при сбое |
 
 ## Если документация противоречит сама себе
 
@@ -281,3 +291,6 @@ dist/                    ← результат сборки, не в git, ру�
 
 Спецификация: [docs/app/admin-spec.md](docs/app/admin-spec.md).
 План и прогресс: [ADMIN-PLAN.md](ADMIN-PLAN.md).
+
+Генератор и политика паролей: [PASSWORD-GENERATOR-PLAN.md](PASSWORD-GENERATOR-PLAN.md).
+MFA: [проект сценариев](docs/app/admin-mfa-spec.md), пока не реализована и не включена.

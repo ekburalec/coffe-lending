@@ -14,7 +14,7 @@
     line-height: var(--leading-tight);
 }
 .hero__lead {
-    margin-top: var(--space-5);
+    margin-top: var(--space-6);
     max-width: var(--lead-measure);
     color: var(--page-muted-color);
     font-size: var(--text-lead);
@@ -24,17 +24,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-4) var(--space-5);
-    margin-top: var(--space-6);
-}
-.hero__facts {
-    margin-top: var(--space-6);
-    font-size: var(--text-small);
-}
-.hero__note {
-    max-width: var(--lead-measure);
-    margin-top: var(--space-3);
-    color: var(--page-muted-color);
-    font-size: var(--text-small);
+    margin-top: var(--space-7);
 }
 .hero__visual {
     width: 100%;
